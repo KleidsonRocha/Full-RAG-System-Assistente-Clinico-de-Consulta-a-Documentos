@@ -1,0 +1,1 @@
+# Full-RAG-System-Assistente-Cl-nico-de-Consulta-a-Documentos
