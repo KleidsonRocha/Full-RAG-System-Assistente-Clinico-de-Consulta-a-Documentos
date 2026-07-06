@@ -21,3 +21,8 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+
+venv/
+
+#cache auxiliar
+data/processed/translation_cache.json

@@ -1,0 +1,3 @@
+pandas
+pypdf
+deep-translator
