@@ -1,3 +1,5 @@
 pandas
 pypdf
 deep-translator
+langchain-text-splitters
+tiktoken
