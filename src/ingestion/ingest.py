@@ -24,7 +24,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
-OUTPUT_FILE = PROCESSED_DIR / "dados_paciente_teste.json"
+OUTPUT_FILE = PROCESSED_DIR / "dados_paciente.json"
 TRANSLATION_CACHE_FILE = PROCESSED_DIR / "translation_cache.json"
 
 
