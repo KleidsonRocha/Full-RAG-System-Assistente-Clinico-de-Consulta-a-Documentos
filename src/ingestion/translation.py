@@ -27,7 +27,6 @@ def load_translation_cache(cache_file: Path) -> dict[str, str]:
 
 
 def save_translation_cache(cache: dict[str, str], cache_file: Path) -> None:
-    """Salva o cache local de traduções."""
     cache_file.parent.mkdir(parents=True, exist_ok=True)
 
     with cache_file.open("w", encoding="utf-8") as file:
@@ -35,7 +34,6 @@ def save_translation_cache(cache: dict[str, str], cache_file: Path) -> None:
 
 
 def should_translate(value: Any) -> bool:
-    """Verifica se um valor textual deve ser traduzido."""
     if value is None or pd.isna(value):
         return False
 
@@ -68,7 +66,6 @@ def translate_text(
     translator: GoogleTranslator,
     cache: dict[str, str],
 ) -> Any:
-    """Traduz texto do inglês para português mantendo fallback seguro."""
     
     # se o valor original for nulo, a coluna traduzida também deve ser nula.
     if value is None or pd.isna(value):
@@ -89,8 +86,6 @@ def translate_text(
         return translated_text
 
     except Exception:
-        # se a tradução falhar, mantém o valor original
-        cache[cache_key] = text
         return text
 
 

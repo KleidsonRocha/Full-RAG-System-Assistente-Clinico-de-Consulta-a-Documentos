@@ -7,19 +7,16 @@ import pandas as pd
 from deep_translator import GoogleTranslator
 from pypdf import PdfReader
 
-from persistence import save_json
-from translation import (
+from .persistence import save_json
+from .translation import (
     load_translation_cache,
     save_translation_cache,
     translate_dataframe_texts,
 )
 
-# --------------
-# CONFIGURAÇÕES
 
 PATIENT_ID = "1d604da9-9a81-4ba9-80c2-de3375d59b40"
 
-# o script está em: src/ingestion/ingest.py, então parents[2] volta para a raiz do projeto
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
@@ -81,8 +78,6 @@ COLUMNS_TO_REMOVE = {
     ],
 }
 
-# --------------
-# FUNÇÕES AUXILIARES
 
 def normalize_column_name(column_name: str) -> str:
     """Padroniza o nome das colunas para letras minúsculas e snake_case."""
@@ -109,6 +104,7 @@ def clean_text(value: Any, remove_numbers: bool = False) -> Any:
 
     return value or None
 
+
 def clean_pdf_text(text: str) -> str:
     """Limpa o texto do PDF sem remover informações clínicas importantes."""
     text = text.replace("\x00", " ")
@@ -119,7 +115,6 @@ def clean_pdf_text(text: str) -> str:
 
 
 def validate_files() -> None:
-    """Verifica se todos os arquivos esperados existem."""
     missing_files = []
 
     for file_path in CSV_FILES.values():
@@ -138,14 +133,13 @@ def validate_files() -> None:
 
 
 def read_csv(file_path: Path) -> pd.DataFrame:
-    """Lê um CSV e normaliza os nomes das colunas."""
     df = pd.read_csv(file_path)
     df.columns = [normalize_column_name(column) for column in df.columns]
     return df
 
 
 def filter_patient(df: pd.DataFrame, table_name: str) -> pd.DataFrame:
-    """Filtra os registros mantendo apenas o paciente alvo."""
+    """Filtra pelo paciente usando `id` em patients e `patient` nas demais tabelas."""
     id_column = "id" if table_name == "dados_pessoais" else "patient"
 
     if id_column not in df.columns:
@@ -178,13 +172,12 @@ def clean_dataframe(df: pd.DataFrame, table_name: str) -> pd.DataFrame:
 
 
 def dataframe_to_records(df: pd.DataFrame) -> list[dict[str, Any]]:
-    """Converte um DataFrame para uma lista de dicionários."""
     df = df.astype(object).where(pd.notnull(df), None)
     return df.to_dict(orient="records")
 
 
 def extract_pdf_text(pdf_path: Path) -> dict[str, Any]:
-    """Extrai o texto da bula em PDF, mantendo separação por página."""
+    """Extrai a bula em texto completo e também separada por páginas."""
     reader = PdfReader(str(pdf_path))
     pages = []
 
@@ -208,8 +201,6 @@ def extract_pdf_text(pdf_path: Path) -> dict[str, Any]:
         "paginas": pages,
     }
 
-# --------------
-# PIPELINE DE INGESTÃO
 
 def load_patient_data() -> dict[str, list[dict[str, Any]]]:
     """Lê, filtra, limpa e traduz campos textuais dos CSVs do paciente."""
@@ -238,7 +229,6 @@ def load_patient_data() -> dict[str, list[dict[str, Any]]]:
 
 
 def load_bulas() -> list[dict[str, Any]]:
-    """Lê apenas a bula relacionada ao paciente alvo."""
     bulas = []
 
     for pdf_path in PDF_FILES:
@@ -252,7 +242,6 @@ def build_final_json(
     patient_data: dict[str, list[dict[str, Any]]],
     bulas: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    """Monta a estrutura final que será salva em JSON."""
     dados_pessoais = {}
 
     if patient_data["dados_pessoais"]:
@@ -290,7 +279,6 @@ def build_final_json(
     }
 
 def main() -> None:
-    """Executa a ingestão e salva o JSON final."""
     validate_files()
 
     patient_data = load_patient_data()

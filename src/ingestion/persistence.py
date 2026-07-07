@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any
 
 def save_json(data: dict[str, Any], output_file: Path) -> None:
-    """Salva os dados finais em um arquivo JSON."""
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     with output_file.open("w", encoding="utf-8") as file:
