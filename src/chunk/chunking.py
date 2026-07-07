@@ -6,6 +6,12 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 def main():
+    """
+    Funcao principal que le os dados brutos do paciente e da bula,
+    extrai e formata o histórico clinico, realiza o chunking
+    do texto da bula por tokens e salva o resultado estruturado em JSON.
+    """
+    # Caminhos de entrada e saída do projeto
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     input_path = os.path.join(base_dir, "data", "processed", "dados_paciente.json")
     output_path = os.path.join(base_dir, "data", "processed", "dados_paciente_chunk.json")
@@ -17,13 +23,13 @@ def main():
         print(f"Erro: Arquivo não encontrado em {input_path}")
         return
 
+    # Extração das variaveis base
     bula = data["bulas"][0]
     target_med = bula["medicamento"]
     paciente = data["dados_pessoais"]
     patient_id = data["metadata"]["patient_id"]
 
-    # extração e formatação
-
+    # Extrai as condições médicas e ordena por data
     condicoes = []
     for c in data.get("condicoes", []):
         disease = c.get("description_pt")
@@ -32,6 +38,7 @@ def main():
             condicoes.append(f"{start_date}: {disease}")
     condicoes = sorted(list(set(condicoes)))
 
+    # Extrai o histórico de medicamentos e define o período de uso
     medicamentos = []
     for m in data.get("medicamentos", []):
         med_name = m.get("description_pt")
@@ -47,6 +54,7 @@ def main():
                 medicamentos.append(f"[{t_start} até Uso Contínuo]: {med_name}")
     medicamentos = sorted(list(set(medicamentos)))
 
+    # Extrai o histórico de consultas realizadas pelo paciente
     consultas = []
     for c in data.get("consultas", []):
         start_date = c.get("start")
@@ -56,6 +64,7 @@ def main():
             consultas.append(f"{t_start}: {reason}")
     consultas = sorted(list(set(consultas)))
 
+    # Extrai os procedimentos clínicos realizados
     procedimentos = []
     for p in data.get("procedimentos", []):
         proc_name = p.get("description_pt") or p.get("description")
@@ -65,6 +74,7 @@ def main():
             procedimentos.append(f"{t_date}: {proc_name}")
     procedimentos = sorted(list(set(procedimentos)))
 
+    # Extrai observações gerais, sinais vitais e exames laboratoriais
     observacoes = []
     obs_list = data.get("observacoes", [])
     for o in obs_list:
@@ -81,13 +91,16 @@ def main():
                 observacoes.append(f"{t_date}: {obs_type} = {value}")
     observacoes = sorted(list(set(observacoes)))
 
+    # Busca os registros mais recentes de Peso e Altura do paciente
     peso_atual = next((o["value_pt"] for o in reversed(obs_list) if o["description_pt"] == "Peso corporal"),
                       "Não registrado")
     altura_atual = next((o["value_pt"] for o in reversed(obs_list) if o["description_pt"] == "Altura do corpo"),
                         "Não registrado")
 
-    # Text Splitter
+    # Inicializa o tokenizador do tiktoken para contar o tamanho do texto por tokens para LLM
     tokenizer = tiktoken.get_encoding("cl100k_base")
+
+    # Configuracao do chunking, tamanho e overlap
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=250,
         chunk_overlap=40,
@@ -98,18 +111,22 @@ def main():
     chunks_gerados = []
     global_idx = 1
 
+    # Percorre cada página da bula para aplicar a limpeza de texto e o fatiamento
     for p in bula.get("paginas", []):
         page_num = p["pagina"]
         page_text = p["texto"]
 
+        # Limpeza: remove sequências longas de pontos e espaços duplicados
         cleaned_text = re.sub(r'\.{3,}', ' ', page_text)
         final_text = re.sub(r' +', ' ', cleaned_text).strip()
 
         if not final_text:
             continue
 
+        # Divide o texto limpo da página nos chunks menores configurados
         page_chunks = splitter.split_text(final_text)
 
+        # Monta a estrutura final de cada chunk com o histórico mapeado do paciente nos metadados
         for text_chunk in page_chunks:
             chunk_structure = {
                 "chunk_id": f"{patient_id}::chunk_{global_idx:03d}",
@@ -135,10 +152,12 @@ def main():
             chunks_gerados.append(chunk_structure)
             global_idx += 1
 
+    # Atualiza o total de chunks em todos os metadados gerados
     total_chunks = len(chunks_gerados)
     for chunk in chunks_gerados:
         chunk["metadata"]["total_chunks"] = total_chunks
 
+    # Salva o arquivo final estruturado pronto para a base vetorial
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(chunks_gerados, f, ensure_ascii=False, indent=2)
 
