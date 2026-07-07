@@ -1,7 +1,6 @@
 from langchain_chroma import Chroma
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
 from langchain_ollama import ChatOllama
 
 from src.embedding.embeddings import VECTORSTORE, modelo_embedding
@@ -16,40 +15,51 @@ class ClinicalRAG:
 
         self.vector_store = Chroma(
             persist_directory=VECTORSTORE,
-            embedding_function=self.embedding_model,
+            embedding_function=self.embedding_model
         )
 
         self.retriever = self.vector_store.as_retriever(
             search_type="similarity",
-            search_kwargs={"k": 4},
+            search_kwargs={"k": 2}
         )
 
         self.llm = ChatOllama(
-            model="gemma3:12b",
+            model="qwen2.5:3b",
             temperature=0,
-            num_predict=1024,
+            num_predict=1024
         )
 
         self.prompt = ChatPromptTemplate.from_template(SYSTEM_PROMPT)
 
-        self.chain = (
-            RunnablePassthrough.assign(
-                context=lambda x: self._format_context(
-                    self.retriever.invoke(x["question"])
-                )
-            )
-            | self.prompt
-            | self.llm
-            | StrOutputParser()
-        )
+        self.parser = StrOutputParser()
+
+    def _retrieve_documents(self, question: str):
+        return self.retriever.invoke(question)
 
     def _format_context(self, documents):
 
-        return "\n\n".join(doc.page_content for doc in documents)
+        return "\n\n".join(
+            doc.page_content
+            for doc in documents
+        )
 
-    def _get_documents(self, question: str):
+    def _format_patient_metadata(self, documents):
 
-        return self.retriever.invoke(question)
+        metadata_blocks = []
+
+        for doc in documents:
+
+            if not doc.metadata:
+                continue
+
+            metadata_blocks.append(
+                "\n".join(
+                    f"{key}: {value}"
+                    for key, value in doc.metadata.items()
+                )
+            )
+
+        return "\n\n".join(metadata_blocks)
 
     def _get_sources(self, documents):
 
@@ -62,7 +72,7 @@ class ClinicalRAG:
             source = {
                 "chunk": metadata.get("chunk_id"),
                 "pagina": metadata.get("pagina_origem"),
-                "medicamento": metadata.get("medicamento_bula_alvo"),
+                "medicamento": metadata.get("medicamento_bula_alvo")
             }
 
             if source not in sources:
@@ -72,42 +82,50 @@ class ClinicalRAG:
 
     def ask(self, question: str):
 
-        documents = self._get_documents(question)
+        documents = self._retrieve_documents(question)
 
-        answer = self.chain.invoke(
-            {
-                "question": question,
-            }
-        )
+        context = self._format_context(documents)
+        patient_metadata = self._format_patient_metadata(documents)
+
+        messages = self.prompt.invoke({
+            "question": question,
+            "context": context,
+            "patient_metadata": patient_metadata
+        })
+
+        response = self.llm.invoke(messages)
+
+        answer = self.parser.invoke(response)
 
         return {
             "question": question,
             "answer": answer,
             "sources": self._get_sources(documents),
-            "documents": documents,
+            "documents": documents
         }
 
     def stream(self, question: str):
 
-        documents = self._get_documents(question)
+        documents = self._retrieve_documents(question)
+        context = self._format_context(documents)
+        patient_metadata = self._format_patient_metadata(documents)
 
-        answer = ""
-
-        for chunk in self.chain.stream(
-            {
-                "question": question,
-            }
-        ):
-
-            answer += chunk
-            yield chunk
-
-        return {
+        messages = self.prompt.invoke({
             "question": question,
-            "answer": answer,
-            "sources": self._get_sources(documents),
-            "documents": documents,
-        }
+            "context": context,
+            "patient_metadata": patient_metadata
+        })
+
+        for chunk in self.llm.stream(messages):
+
+            if chunk.content:
+                yield chunk.content
+
+    def get_sources(self, question: str):
+
+        documents = self._retrieve_documents(question)
+
+        return self._get_sources(documents)
 
 
 if __name__ == "__main__":
@@ -121,23 +139,14 @@ if __name__ == "__main__":
         if pergunta.lower() == "sair":
             break
 
-        documents = rag._get_documents(pergunta)
+        print("\nResposta:\n")
 
         for token in rag.stream(pergunta):
             print(token, end="", flush=True)
 
-        print("\nDocumentos recuperados: ")
+        print("\n\nFontes:")
 
-        for i, doc in enumerate(documents, start=1):
-
-            print(f"\nDocumento {i}")
-            print("-" * 80)
-            print(doc.page_content)
-            print()
-
-        print("\n")
-
-        print("Fontes: ")
-
-        for source in rag._get_sources(documents):
+        for source in rag.get_sources(pergunta):
             print(source)
+
+        print()
