@@ -108,6 +108,15 @@ Antes de testar o RAG, gere os arquivos processados, os chunks e a base vetorial
 python -m src.ingestion.ingest
 python -m src.chunk.chunking
 python ingest_pipeline.py
+```
+
+Esse processo realiza:
+
+- leitura dos documentos brutos em `data/raw/`;
+- geração do arquivo processado `data/processed/dados_paciente.json`;
+- geração dos chunks em `data/processed/dados_paciente_chunk.json`;
+- criação dos embeddings com Ollama;
+- persistência da base vetorial no ChromaDB em `src/vectorstore/`.
 
 ---
 
@@ -161,6 +170,34 @@ sair
 
 ---
 
+## Executar a interface Streamlit
+
+Após gerar a base vetorial, a interface pode ser executada com:
+
+```bash
+streamlit run src/interface/app.py
+```
+
+No Windows, caso o monitoramento automático de arquivos cause instabilidade, use:
+
+```bash
+streamlit run src/interface/app.py --server.fileWatcherType none
+```
+
+A interface chama o pipeline RAG existente, envia a pergunta para `ClinicalRAG.ask()`, exibe a resposta gerada, as fontes recuperadas, os chunks usados como contexto e os metadados disponíveis do paciente.
+
+Também há uma barra lateral com:
+
+- quantidade de chunks recuperados (`top_k`);
+- opção para mostrar ou ocultar contexto recuperado;
+- opção para mostrar scores, quando disponíveis;
+- modo debug;
+- limpeza do histórico da sessão.
+
+Mais detalhes estão em `src/interface/README_INTERFACE.md`.
+
+---
+
 # Estrutura do projeto
 
 ```text
@@ -173,7 +210,15 @@ src/
 │   └── embeddings.py
 │
 ├── ingestion/
-│   └── ingest_pipeline.py
+│   ├── ingest.py
+│   ├── persistence.py
+│   └── translation.py
+│
+├── interface/
+│   ├── app.py
+│   ├── README_INTERFACE.md
+│   ├── components/
+│   └── services/
 │
 ├── pipeline/
 │   ├── prompts.py
