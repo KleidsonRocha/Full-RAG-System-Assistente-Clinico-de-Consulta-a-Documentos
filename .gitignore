@@ -22,7 +22,10 @@ rad.json
 #Test results file
 TestResults.xml
 
+# Ambientes de execução
 venv/
+.venv/
 
 #cache auxiliar
 data/processed/translation_cache.json
+__pycache__/
