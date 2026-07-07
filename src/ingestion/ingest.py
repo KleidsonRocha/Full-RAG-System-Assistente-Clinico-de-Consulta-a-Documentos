@@ -88,7 +88,6 @@ def normalize_column_name(column_name: str) -> str:
 
 
 def clean_text(value: Any, remove_numbers: bool = False) -> Any:
-    """Converte valores ausentes para None e aplica limpeza leve sem destruir dados clínicos."""
     if pd.isna(value):
         return None
 

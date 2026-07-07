@@ -18,7 +18,6 @@ COLUMNS_TO_TRANSLATE = {
 
 
 def load_translation_cache(cache_file: Path) -> dict[str, str]:
-    """Carrega traduções já feitas para evitar chamadas repetidas."""
     if not cache_file.exists():
         return {}
 
@@ -67,7 +66,6 @@ def translate_text(
     cache: dict[str, str],
 ) -> Any:
     
-    # se o valor original for nulo, a coluna traduzida também deve ser nula.
     if value is None or pd.isna(value):
         return None
     
@@ -108,7 +106,6 @@ def translate_dataframe_texts(
             lambda value: translate_text(value, translator, cache)
         )
 
-    # garante que NaN não vá para o JSON final
     df = df.astype(object).where(pd.notnull(df), None)
 
     return df
