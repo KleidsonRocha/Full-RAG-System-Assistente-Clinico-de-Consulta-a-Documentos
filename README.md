@@ -102,32 +102,58 @@ ollama serve
 
 ## Gerar a base vetorial
 
-Execute o pipeline de ingestão para criar a base vetorial:
+Antes de testar o RAG, gere os arquivos processados, os chunks e a base vetorial:
 
 ```bash
-python -m src.ingestion.ingest_pipeline
-```
-
-Esse processo realiza:
-
-- leitura dos documentos;
-- geração dos chunks;
-- criação dos embeddings;
-- persistência da base vetorial no ChromaDB.
+python -m src.ingestion.ingest
+python -m src.chunk.chunking
+python ingest_pipeline.py
 
 ---
 
-## Testar o pipeline RAG
+## Testar o pipeline RAG no terminal
 
-Para executar o pipeline diretamente pelo terminal:
+Após gerar a base vetorial, execute o pipeline RAG diretamente pelo terminal:
 
 ```bash
 python -m src.pipeline.rag_chain
 ```
 
-Digite uma pergunta quando solicitado.
+Digite uma pergunta relacionada ao acervo carregado. Nesta versão, o RAG está mais focado na bula de **amoxicilina + clavulanato de potássio**, usando os dados do paciente como metadados associados aos chunks recuperados.
 
-Para finalizar:
+Exemplos de perguntas recomendadas:
+
+```text
+Quais são as contraindicações da amoxicilina + clavulanato de potássio?
+```
+
+```text
+Quais reações adversas podem ocorrer com amoxicilina + clavulanato de potássio?
+```
+
+```text
+Qual é a composição da amoxicilina + clavulanato de potássio?
+```
+
+Perguntas sobre o paciente também podem ser feitas, mas podem ter respostas limitadas, pois os dados clínicos do paciente estão armazenados principalmente nos metadados dos chunks e nem todos são enviados explicitamente ao modelo durante a geração da resposta.
+
+Exemplos de perguntas sobre o paciente:
+
+```text
+O paciente já utilizou amoxicilina com clavulanato?
+```
+
+```text
+Quais diagnósticos aparecem no histórico do paciente?
+```
+
+Para testar o comportamento fora do acervo, use uma pergunta não relacionada aos documentos:
+
+```text
+Quem ganhou a Copa do Mundo de 2002?
+```
+
+Para finalizar a execução:
 
 ```text
 sair
