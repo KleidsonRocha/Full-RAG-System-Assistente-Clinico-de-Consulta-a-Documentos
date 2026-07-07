@@ -69,7 +69,7 @@ ollama pull nomic-embed-text
 Modelo responsável pelas respostas:
 
 ```bash
-ollama pull gemma3:12b
+ollama pull qwen2.5:3b
 ```
 
 Verifique se ambos foram instalados:
@@ -82,7 +82,7 @@ A saída deverá conter algo semelhante a:
 
 ```text
 NAME
-gemma3:12b
+qwen2.5:3b
 nomic-embed-text
 ```
 
@@ -234,7 +234,7 @@ src/
 | Finalidade | Modelo |
 |------------|--------|
 | Embeddings | `nomic-embed-text` |
-| LLM | `gemma3:12b` |
+| LLM | `qwen2.5:3b` |
 
 ---
 
