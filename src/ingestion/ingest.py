@@ -80,7 +80,6 @@ COLUMNS_TO_REMOVE = {
 
 
 def normalize_column_name(column_name: str) -> str:
-    """Padroniza o nome das colunas para letras minúsculas e snake_case."""
     column_name = column_name.strip().lower()
     column_name = re.sub(r"\s+", "_", column_name)
     column_name = re.sub(r"[^a-z0-9_]", "_", column_name)
@@ -89,7 +88,6 @@ def normalize_column_name(column_name: str) -> str:
 
 
 def clean_text(value: Any, remove_numbers: bool = False) -> Any:
-    """Remove espaços extras e caracteres desnecessários de valores textuais dos arquivos CSV."""
     if pd.isna(value):
         return None
 
@@ -149,7 +147,6 @@ def filter_patient(df: pd.DataFrame, table_name: str) -> pd.DataFrame:
 
 
 def clean_dataframe(df: pd.DataFrame, table_name: str) -> pd.DataFrame:
-    """Remove colunas desnecessárias e limpa campos textuais."""
     df = df.copy()
 
     df = df.drop(
