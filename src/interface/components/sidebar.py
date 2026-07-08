@@ -12,7 +12,7 @@ def render_sidebar() -> dict[str, object]:
         "Chunks recuperados",
         min_value=1,
         max_value=10,
-        value=4,
+        value=2,
         help="Controla quantos documentos o retriever busca no Chroma.",
     )
     show_context = st.sidebar.checkbox("Mostrar contexto recuperado", value=True)

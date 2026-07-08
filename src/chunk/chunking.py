@@ -102,8 +102,8 @@ def main():
 
     # Configuracao do chunking, tamanho e overlap
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=250,
-        chunk_overlap=40,
+        chunk_size=400,
+        chunk_overlap=80,
         length_function=lambda text: len(tokenizer.encode(text)),
         separators=["\n\n", ". ", "\n", " "]
     )

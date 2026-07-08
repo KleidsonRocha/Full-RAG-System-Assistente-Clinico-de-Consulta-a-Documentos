@@ -50,7 +50,7 @@ def get_runtime_status() -> dict[str, Any]:
     return status
 
 
-def ask_question(question: str, top_k: int = 4, debug: bool = False) -> dict[str, Any]:
+def ask_question(question: str, top_k: int = 2, debug: bool = False) -> dict[str, Any]:
     started_at = time.perf_counter()
     normalized_question = question.strip()
 
