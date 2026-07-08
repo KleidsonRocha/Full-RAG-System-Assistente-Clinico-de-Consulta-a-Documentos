@@ -52,6 +52,38 @@ pip install -r requirements.txt
 
 ---
 
+# Testes e avaliação
+
+Execute a bateria completa de testes com:
+
+```bash
+pytest
+```
+
+Esse comando inclui os testes de integração com RAG real, então depende do Ollama em execução, dos modelos locais e da base vetorial gerada.
+
+Para rodar somente os testes que não chamam o modelo:
+
+### Windows PowerShell
+
+```powershell
+$env:SKIP_RAG_INTEGRATION='1'; pytest
+```
+
+### Linux/macOS
+
+```bash
+SKIP_RAG_INTEGRATION=1 pytest
+```
+
+Para rodar a bateria de avaliação com as perguntas em `eval/test_questions.json` e gerar o relatório em `eval/results.md`:
+
+```bash
+python eval/evaluate_rag.py
+```
+
+---
+
 # Instalação do Ollama
 
 Baixe e instale o Ollama:

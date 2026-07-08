@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sqlite3
 import sys
 import time
 import traceback
@@ -13,7 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-VECTORSTORE_DIR = PROJECT_ROOT / "src" / "vectorstore"
+VECTORSTORE_DIR = PROJECT_ROOT / "src" / "vectorstore_faiss"
 CHUNKS_JSON_PATH = PROJECT_ROOT / "data" / "processed" / "dados_paciente_chunk.json"
 OUT_OF_SCOPE_MESSAGE = "Não encontrei essa informação nos documentos disponíveis."
 
@@ -28,24 +27,17 @@ SAMPLE_QUESTIONS = [
 
 
 def get_runtime_status() -> dict[str, Any]:
-    sqlite_path = VECTORSTORE_DIR / "chroma.sqlite3"
+    index_path = VECTORSTORE_DIR / "index.faiss"
+    metadata_path = VECTORSTORE_DIR / "index.pkl"
     status = {
         "vectorstore_dir": str(VECTORSTORE_DIR),
         "vectorstore_exists": VECTORSTORE_DIR.exists(),
-        "sqlite_exists": sqlite_path.exists(),
+        "faiss_index_exists": index_path.exists(),
+        "faiss_metadata_exists": metadata_path.exists(),
+        "vectorstore_ready": index_path.exists() and metadata_path.exists(),
         "embedding_count": None,
         "chunks_json_exists": CHUNKS_JSON_PATH.exists(),
     }
-
-    if sqlite_path.exists():
-        try:
-            with sqlite3.connect(sqlite_path) as connection:
-                cursor = connection.cursor()
-                status["embedding_count"] = cursor.execute(
-                    "select count(*) from embeddings"
-                ).fetchone()[0]
-        except sqlite3.Error:
-            status["embedding_count"] = None
 
     return status
 
@@ -62,7 +54,7 @@ def ask_question(question: str, top_k: int = 2, debug: bool = False) -> dict[str
         )
 
     runtime_status = get_runtime_status()
-    if not runtime_status["sqlite_exists"]:
+    if not runtime_status["vectorstore_ready"]:
         return _error_response(
             message=(
                 "Base vetorial não encontrada. Gere a base antes de consultar a RAG."
@@ -257,7 +249,7 @@ def _friendly_error_message(exc: Exception) -> str:
     if "connection refused" in error_text or "11434" in error_text or "ollama" in error_text:
         return "Ollama ou modelo local indisponível. Verifique se o Ollama está em execução e se os modelos foram baixados."
 
-    if "chroma" in error_text or "vector" in error_text:
+    if "faiss" in error_text or "chroma" in error_text or "vector" in error_text:
         return "Falha ao acessar a base vetorial. Verifique se a base foi gerada corretamente."
 
     return "Não foi possível consultar o pipeline RAG."
@@ -272,7 +264,7 @@ def _classify_error(exc: Exception) -> str:
     if "connection refused" in error_text or "11434" in error_text or "ollama" in error_text:
         return "ollama_unavailable"
 
-    if "chroma" in error_text or "vector" in error_text:
+    if "faiss" in error_text or "chroma" in error_text or "vector" in error_text:
         return "vectorstore_error"
 
     return "pipeline_error"

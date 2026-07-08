@@ -248,7 +248,7 @@ def _apply_theme() -> None:
 def _render_header() -> None:
     st.title("Assistente Clínico RAG")
     st.caption(
-        "Chat local para consultar o acervo processado com ChromaDB, Ollama e o pipeline RAG existente do projeto."
+        "Chat local para consultar o acervo processado com FAISS, Ollama e o pipeline RAG existente do projeto."
     )
 
 
