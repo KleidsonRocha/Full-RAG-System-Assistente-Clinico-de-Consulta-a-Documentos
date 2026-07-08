@@ -15,7 +15,7 @@ def render_sidebar() -> dict[str, object]:
         min_value=1,
         max_value=10,
         value=2,
-        help="Controla quantos documentos o retriever busca no Chroma.",
+        help="Controla quantos documentos o retriever busca no FAISS.",
     )
     show_context = st.sidebar.checkbox("Mostrar contexto recuperado", value=True)
     show_scores = st.sidebar.checkbox(
@@ -38,7 +38,7 @@ def render_sidebar() -> dict[str, object]:
     st.sidebar.subheader("Estado local")
     status = get_runtime_status()
 
-    if status["sqlite_exists"]:
+    if status["vectorstore_ready"]:
         st.sidebar.success("Vectorstore encontrado")
     else:
         st.sidebar.error("Vectorstore não encontrado")

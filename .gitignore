@@ -29,3 +29,6 @@ venv/
 #cache auxiliar
 data/processed/translation_cache.json
 __pycache__/
+.rag_test_tmp/
+.ruff_cache/
+.pytest_cache/

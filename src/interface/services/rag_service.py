@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sqlite3
 import sys
 import time
 import traceback
@@ -48,20 +47,21 @@ def rebuild_vectorstore() -> dict[str, Any]:
             "elapsed_ms": int((time.perf_counter() - started_at) * 1000)
         }
 def get_runtime_status() -> dict[str, Any]:
-    faiss_path = VECTORSTORE_DIR / "index.faiss"
-    pkl_path = VECTORSTORE_DIR / "index.pkl"
+    index_path = VECTORSTORE_DIR / "index.faiss"
+    metadata_path = VECTORSTORE_DIR / "index.pkl"
+    index_exists = index_path.exists()
+    metadata_exists = metadata_path.exists()
+    vectorstore_ready = index_exists and metadata_exists
+
     status = {
         "vectorstore_dir": str(VECTORSTORE_DIR),
         "vectorstore_exists": VECTORSTORE_DIR.exists(),
-        "sqlite_exists": faiss_path.exists(),
-        "embedding_count": None,
+        "faiss_index_exists": index_exists,
+        "faiss_metadata_exists": metadata_exists,
+        "vectorstore_ready": vectorstore_ready,
+        "embedding_count": "Ativo (FAISS)" if vectorstore_ready else None,
         "chunks_json_exists": CHUNKS_JSON_PATH.exists(),
     }
-
-    if faiss_path.exists() and pkl_path.exists():
-        status["embedding_count"] = "Ativo (FAISS)"
-    else:
-        status["embedding_count"] = None
 
     return status
 
@@ -78,7 +78,7 @@ def ask_question(question: str, top_k: int = 2, debug: bool = False) -> dict[str
         )
 
     runtime_status = get_runtime_status()
-    if not runtime_status["sqlite_exists"]:
+    if not runtime_status["vectorstore_ready"]:
         return _error_response(
             message=(
                 "Base vetorial não encontrada. Gere a base antes de consultar a RAG."

@@ -58,9 +58,8 @@ class ClinicalRAG:
     def __init__(self):
         self.embedding_model = modelo_embedding()
 
-        pasta_faiss = os.path.join(os.path.dirname(__file__), "..", "vectorstore_faiss")
         self.vector_store = FAISS.load_local(
-            folder_path=pasta_faiss,
+            folder_path=VECTORSTORE,
             embeddings=self.embedding_model,
             allow_dangerous_deserialization=True
         )
