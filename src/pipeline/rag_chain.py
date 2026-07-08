@@ -1,4 +1,6 @@
-from langchain_chroma import Chroma
+import json
+import os
+from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
@@ -6,10 +8,11 @@ from langchain_ollama import ChatOllama
 from src.embedding.embeddings import VECTORSTORE, modelo_embedding
 from src.pipeline.prompts import OUT_OF_SCOPE_MESSAGE, SYSTEM_PROMPT
 
-
 MAX_METADATA_ITEMS = 6
 MAX_METADATA_CHARS = 900
 MAX_CONTEXT_CHARS_PER_DOC = 1800
+
+PACIENTE_JSON_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "processed", "perfil_paciente.json")
 
 PATIENT_METADATA_FIELDS = (
     ("paciente_nome", "Paciente"),
@@ -53,12 +56,13 @@ PATIENT_QUESTION_KEYWORDS = (
 class ClinicalRAG:
 
     def __init__(self):
-
         self.embedding_model = modelo_embedding()
 
-        self.vector_store = Chroma(
-            persist_directory=VECTORSTORE,
-            embedding_function=self.embedding_model
+        pasta_faiss = os.path.join(os.path.dirname(__file__), "..", "vectorstore_faiss")
+        self.vector_store = FAISS.load_local(
+            folder_path=pasta_faiss,
+            embeddings=self.embedding_model,
+            allow_dangerous_deserialization=True
         )
 
         self.retriever = self.vector_store.as_retriever(
@@ -73,16 +77,13 @@ class ClinicalRAG:
         )
 
         self.prompt = ChatPromptTemplate.from_template(SYSTEM_PROMPT)
-
         self.parser = StrOutputParser()
 
     def _retrieve_documents(self, question: str):
         return self.retriever.invoke(question)
 
     def _format_context(self, documents):
-
         context_blocks = []
-
         for index, doc in enumerate(documents, start=1):
             metadata = doc.metadata or {}
             text = self._truncate_text(doc.page_content or "", MAX_CONTEXT_CHARS_PER_DOC)
@@ -96,26 +97,20 @@ class ClinicalRAG:
                     ]
                 )
             )
-
         return "\n\n".join(context_blocks)
 
     def _format_patient_metadata(self, documents, question: str):
+        if not self._is_patient_question(question):
+            med_name = documents[0].metadata.get("medicamento_bula_alvo", "N/A") if documents else "N/A"
+            return f"Medicamento da bula: {med_name}"
 
-        merged_metadata = {}
+        if not documents:
+            return "Nenhum metadado relevante recuperado."
 
-        for doc in documents:
-            for key, value in (doc.metadata or {}).items():
-                if key not in merged_metadata and value not in (None, "", []):
-                    merged_metadata[key] = value
-
-        fields = (
-            PATIENT_METADATA_FIELDS
-            if self._is_patient_question(question)
-            else MINIMAL_METADATA_FIELDS
-        )
+        merged_metadata = documents[0].metadata or {}
 
         metadata_lines = []
-        for key, label in fields:
+        for key, label in PATIENT_METADATA_FIELDS:
             value = merged_metadata.get(key)
             if value in (None, "", []):
                 continue
@@ -128,28 +123,20 @@ class ClinicalRAG:
         return "\n".join(metadata_lines)
 
     def _get_sources(self, documents):
-
         sources = []
-
         for doc in documents:
-
             metadata = doc.metadata
-
             source = {
                 "chunk": self._chunk_id(metadata),
                 "pagina": metadata.get("pagina_origem"),
                 "medicamento": metadata.get("medicamento_bula_alvo")
             }
-
             if source not in sources:
                 sources.append(source)
-
         return sources
 
     def ask(self, question: str):
-
         documents = self._retrieve_documents(question)
-
         context = self._format_context(documents)
         patient_metadata = self._format_patient_metadata(documents, question)
 
@@ -160,7 +147,6 @@ class ClinicalRAG:
         })
 
         response = self.llm.invoke(messages)
-
         answer = self._normalize_answer(self.parser.invoke(response))
 
         return {
@@ -171,7 +157,6 @@ class ClinicalRAG:
         }
 
     def stream(self, question: str):
-
         documents = self._retrieve_documents(question)
         context = self._format_context(documents)
         patient_metadata = self._format_patient_metadata(documents, question)
@@ -183,14 +168,11 @@ class ClinicalRAG:
         })
 
         for chunk in self.llm.stream(messages):
-
             if chunk.content:
                 yield chunk.content
 
     def get_sources(self, question: str):
-
         documents = self._retrieve_documents(question)
-
         return self._get_sources(documents)
 
     def _is_patient_question(self, question: str) -> bool:
@@ -239,7 +221,6 @@ class ClinicalRAG:
         clean_text = " ".join(str(text).split())
         if len(clean_text) <= max_chars:
             return clean_text
-
         return f"{clean_text[:max_chars].rstrip()}..."
 
     def _normalize_answer(self, answer: str) -> str:
@@ -253,32 +234,21 @@ class ClinicalRAG:
             "não há informação",
             "nao ha informacao",
         )
-
         if any(marker in normalized_answer for marker in fallback_markers):
             return OUT_OF_SCOPE_MESSAGE
-
         return clean_answer
 
 
 if __name__ == "__main__":
-
     rag = ClinicalRAG()
-
     while True:
-
         pergunta = input("\nPergunta: ")
-
         if pergunta.lower() == "sair":
             break
-
         print("\nResposta:\n")
-
         for token in rag.stream(pergunta):
             print(token, end="", flush=True)
-
         print("\n\nFontes:")
-
         for source in rag.get_sources(pergunta):
             print(source)
-
         print()
