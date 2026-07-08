@@ -56,6 +56,29 @@ def _apply_theme() -> None:
         [data-testid="stAppViewContainer"] * {
             color: #12324a;
         }
+        
+        button[data-testid="stDeployButton"], 
+        .stDeployButton,
+        div[data-testid="stStatusWidget"] + div {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            padding: 0 !important;
+        }
+        
+        header[data-testid="stHeader"] div:first-child {
+            display: none !important;
+        }
+        
+        [data-testid="stStatusWidget"], 
+        [data-testid="stMainMenu"] {
+            display: none !important;
+        }
+        
+        [data-testid="stHeader"] {
+            background: transparent !important;
+        }
 
         .stApp {
             background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
@@ -273,9 +296,12 @@ def _render_assistant_message(result: dict, settings: dict[str, object]) -> None
     if not result.get("ok"):
         st.error(result.get("error") or "Erro ao consultar o pipeline RAG.")
         technical_details = result.get("technical_details")
-        if technical_details:
-            with st.expander("Detalhes técnicos"):
-                st.code(technical_details)
+        if technical_details and bool(settings["debug"]):
+            with st.expander("Detalhes Técnicos de Debug (Exceção Completa)", expanded=True):
+                st.caption("Abaixo está o rastro do erro (Traceback) gerado pelo Python:")
+                st.code(technical_details, language="python")
+        elif technical_details:
+            st.caption("💡 Ative o 'Modo debug' na barra lateral para ver os detalhes técnicos deste erro.")
         return
 
     if result.get("is_out_of_scope"):
@@ -295,6 +321,10 @@ def _render_assistant_message(result: dict, settings: dict[str, object]) -> None
 
     for warning in result.get("warnings") or []:
         st.info(warning)
+
+    if bool(settings["debug"]):
+        with st.expander("Dados brutos do Pipeline (Debug)", expanded=False):
+            st.json(result)
 
     with st.expander("Fontes e contexto recuperado"):
         render_sources(
@@ -331,6 +361,9 @@ def _submit_question(question: str, settings: dict[str, object]) -> None:
     if not question.strip():
         st.warning("Digite uma pergunta antes de consultar.")
         return
+
+    with st.chat_message("user"):
+        st.markdown(question)
 
     with st.spinner("Consultando pipeline RAG..."):
         result = ask_question(

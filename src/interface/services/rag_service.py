@@ -8,7 +8,6 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -26,7 +25,28 @@ SAMPLE_QUESTIONS = [
     "Quem ganhou a Copa do Mundo de 2002?",
 ]
 
+def rebuild_vectorstore() -> dict[str, Any]:
+    """
+    Função que limpa os caches e dispara a recriação da base vetorial FAISS.
+    """
+    import time
+    started_at = time.perf_counter()
 
+    try:
+        from ingest_pipeline import executar_ingestao
+        executar_ingestao()
+        _get_rag.cache_clear()
+        return {
+            "ok": True,
+            "message": "Base vetorial FAISS recriada com sucesso!",
+            "elapsed_ms": int((time.perf_counter() - started_at) * 1000)
+        }
+    except Exception as e:
+        return {
+            "ok": False,
+            "message": f"Erro ao recriar a base: {str(e)}",
+            "elapsed_ms": int((time.perf_counter() - started_at) * 1000)
+        }
 def get_runtime_status() -> dict[str, Any]:
     faiss_path = VECTORSTORE_DIR / "index.faiss"
     pkl_path = VECTORSTORE_DIR / "index.pkl"
@@ -70,11 +90,15 @@ def ask_question(question: str, top_k: int = 2, debug: bool = False) -> dict[str
 
     try:
         rag = _get_rag()
-        _configure_top_k(rag, top_k)
-
+        safe_top_k = max(1, min(int(top_k), 10))
+        docs_and_scores = rag.vector_store.similarity_search_with_score(normalized_question, k=safe_top_k)
+        documents = []
+        for doc, score in docs_and_scores:
+            assertividade = max(0.0, min(100.0, (1.0 - (score / 2.0)) * 100))
+            doc.metadata["score_assertividade"] = round(assertividade, 2)
+            documents.append(doc)
         raw_result = rag.ask(normalized_question)
         answer = str(raw_result.get("answer") or "").strip()
-        documents = raw_result.get("documents") or []
         sources = _normalize_sources(documents)
         retrieved_context = _normalize_context(documents)
         warnings = _build_warnings(answer, sources, retrieved_context)
@@ -142,7 +166,7 @@ def _normalize_sources(documents: list[Any]) -> list[dict[str, Any]]:
                 "document": document_name,
                 "page": page,
                 "chunk_id": chunk_id,
-                "score": None,
+                "score": metadata.get("score_assertividade"),
                 "excerpt": excerpt,
                 "metadata": metadata,
             }
@@ -162,11 +186,11 @@ def _normalize_context(documents: list[Any]) -> list[dict[str, Any]]:
                 "text": getattr(doc, "page_content", "") or "",
                 "metadata": metadata,
                 "source": metadata.get("arquivo_origem")
-                or metadata.get("medicamento_bula_alvo")
-                or "Documento recuperado",
+                          or metadata.get("medicamento_bula_alvo")
+                          or "Documento recuperado",
                 "page": metadata.get("pagina_origem"),
                 "chunk_id": _chunk_id(metadata),
-                "score": None,
+                "score": metadata.get("score_assertividade"),
             }
         )
 
@@ -219,9 +243,9 @@ def _chunk_id(metadata: dict[str, Any]) -> str | None:
 
 
 def _build_warnings(
-    answer: str,
-    sources: list[dict[str, Any]],
-    retrieved_context: list[dict[str, Any]],
+        answer: str,
+        sources: list[dict[str, Any]],
+        retrieved_context: list[dict[str, Any]],
 ) -> list[str]:
     warnings = []
 
@@ -233,7 +257,6 @@ def _build_warnings(
 
     if not retrieved_context:
         warnings.append("Nenhum contexto recuperado foi retornado pelo pipeline.")
-
 
     return warnings
 
@@ -275,10 +298,10 @@ def _classify_error(exc: Exception) -> str:
 
 
 def _error_response(
-    message: str,
-    code: str,
-    started_at: float,
-    technical_details: str | None = None,
+        message: str,
+        code: str,
+        started_at: float,
+        technical_details: str | None = None,
 ) -> dict[str, Any]:
     return {
         "ok": False,

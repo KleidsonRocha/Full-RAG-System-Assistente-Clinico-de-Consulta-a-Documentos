@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import streamlit as st
+import time
 
+from src.interface.services.rag_service import rebuild_vectorstore
 from src.interface.services.rag_service import get_runtime_status
 
 
@@ -19,7 +21,7 @@ def render_sidebar() -> dict[str, object]:
     show_scores = st.sidebar.checkbox(
         "Mostrar scores",
         value=False,
-        help="O pipeline atual não retorna scores; a interface mostra quando estiver indisponível.",
+        help="Exibe as porcentagens de relação entre os documentos exibidos",
     )
     debug = st.sidebar.checkbox(
         "Modo debug",
@@ -51,6 +53,21 @@ def render_sidebar() -> dict[str, object]:
         st.sidebar.caption("Chunks processados não encontrados")
 
     st.sidebar.divider()
+    st.sidebar.subheader("Manutenção")
+
+    if st.sidebar.button("Recriar Base Vetorial", use_container_width=True):
+        with st.sidebar.spinner("Gerando embeddings no FAISS..."):
+            res = rebuild_vectorstore()
+            if res["ok"]:
+                st.session_state.history = []
+                st.session_state.latest_result = None
+                st.sidebar.success("Base recriada com sucesso!")
+                time.sleep(1.5)
+                st.rerun()
+            else:
+                st.sidebar.error(res["message"])
+
+    st.sidebar.divider()
     st.sidebar.caption(
         "Nesta versão, o texto recuperado é focado na bula. Dados do paciente são exibidos pela interface quando aparecem nos metadados."
     )
@@ -61,3 +78,5 @@ def render_sidebar() -> dict[str, object]:
         "show_scores": show_scores,
         "debug": debug,
     }
+
+

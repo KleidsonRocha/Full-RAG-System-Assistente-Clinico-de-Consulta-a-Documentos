@@ -21,7 +21,7 @@ def render_sources(sources: list[dict[str, Any]], show_scores: bool) -> None:
 
             score = source.get("score")
             if show_scores:
-                col_c.metric("Score", "N/A" if score is None else f"{score:.4f}")
+                col_c.metric("Assertividade", "N/A" if score is None else f"{float(score):.2f}%")
             else:
                 col_c.metric("Ordem", source.get("rank") or "N/A")
 
@@ -54,9 +54,9 @@ def render_contexts(
             if show_scores:
                 score = context.get("score")
                 st.caption(
-                    "Score: indisponível"
+                    "Assertividade: indisponível"
                     if score is None
-                    else f"Score: {score:.4f}"
+                    else f"Assertividade: {score}%"
                 )
 
             st.markdown("**Texto enviado como contexto recuperado**")
