@@ -24,28 +24,39 @@ SAMPLE_QUESTIONS = [
     "Quem ganhou a Copa do Mundo de 2002?",
 ]
 
-def rebuild_vectorstore() -> dict[str, Any]:
+
+# Atualize a assinatura da função para receber os parâmetros
+def rebuild_vectorstore(chunk_size: int = 400, chunk_overlap: int = 80) -> dict[str, Any]:
     """
     Função que limpa os caches e dispara a recriação da base vetorial FAISS.
     """
     import time
+
     started_at = time.perf_counter()
 
     try:
+        from src.chunk.chunking import processar_chunks
+
+        processar_chunks(tamanho=chunk_size, overlap=chunk_overlap)
+
         from ingest_pipeline import executar_ingestao
-        executar_ingestao()
+
+        qtd_chunks = executar_ingestao()
+
         _get_rag.cache_clear()
         return {
             "ok": True,
             "message": "Base vetorial FAISS recriada com sucesso!",
-            "elapsed_ms": int((time.perf_counter() - started_at) * 1000)
+            "chunk_count": qtd_chunks,  # ADICIONA NO RETORNO
+            "elapsed_ms": int((time.perf_counter() - started_at) * 1000),
         }
     except Exception as e:
         return {
             "ok": False,
             "message": f"Erro ao recriar a base: {str(e)}",
-            "elapsed_ms": int((time.perf_counter() - started_at) * 1000)
+            "elapsed_ms": int((time.perf_counter() - started_at) * 1000),
         }
+
 def get_runtime_status() -> dict[str, Any]:
     index_path = VECTORSTORE_DIR / "index.faiss"
     metadata_path = VECTORSTORE_DIR / "index.pkl"
@@ -91,7 +102,9 @@ def ask_question(question: str, top_k: int = 2, debug: bool = False) -> dict[str
     try:
         rag = _get_rag()
         safe_top_k = max(1, min(int(top_k), 10))
-        docs_and_scores = rag.vector_store.similarity_search_with_score(normalized_question, k=safe_top_k)
+        docs_and_scores = rag.vector_store.similarity_search_with_score(
+            normalized_question, k=safe_top_k
+        )
         documents = []
         for doc, score in docs_and_scores:
             assertividade = max(0.0, min(100.0, (1.0 - (score / 2.0)) * 100))
@@ -150,9 +163,11 @@ def _normalize_sources(documents: list[Any]) -> list[dict[str, Any]]:
         metadata = _enrich_metadata(getattr(doc, "metadata", {}) or {})
         excerpt = _excerpt(getattr(doc, "page_content", "") or "")
         chunk_id = _chunk_id(metadata)
-        document_name = metadata.get("arquivo_origem") or metadata.get(
-            "medicamento_bula_alvo"
-        ) or "Documento recuperado"
+        document_name = (
+            metadata.get("arquivo_origem")
+            or metadata.get("medicamento_bula_alvo")
+            or "Documento recuperado"
+        )
         page = metadata.get("pagina_origem")
         key = (document_name, page, chunk_id, excerpt)
 
@@ -186,8 +201,8 @@ def _normalize_context(documents: list[Any]) -> list[dict[str, Any]]:
                 "text": getattr(doc, "page_content", "") or "",
                 "metadata": metadata,
                 "source": metadata.get("arquivo_origem")
-                          or metadata.get("medicamento_bula_alvo")
-                          or "Documento recuperado",
+                or metadata.get("medicamento_bula_alvo")
+                or "Documento recuperado",
                 "page": metadata.get("pagina_origem"),
                 "chunk_id": _chunk_id(metadata),
                 "score": metadata.get("score_assertividade"),
@@ -243,9 +258,9 @@ def _chunk_id(metadata: dict[str, Any]) -> str | None:
 
 
 def _build_warnings(
-        answer: str,
-        sources: list[dict[str, Any]],
-        retrieved_context: list[dict[str, Any]],
+    answer: str,
+    sources: list[dict[str, Any]],
+    retrieved_context: list[dict[str, Any]],
 ) -> list[str]:
     warnings = []
 
@@ -273,7 +288,11 @@ def _friendly_error_message(exc: Exception) -> str:
     if isinstance(exc, ImportError) or "no module named" in error_text:
         return "Dependências do projeto indisponíveis. Verifique o ambiente virtual e o requirements.txt."
 
-    if "connection refused" in error_text or "11434" in error_text or "ollama" in error_text:
+    if (
+        "connection refused" in error_text
+        or "11434" in error_text
+        or "ollama" in error_text
+    ):
         return "Ollama ou modelo local indisponível. Verifique se o Ollama está em execução e se os modelos foram baixados."
 
     if "faiss" in error_text or "vector" in error_text or "chroma" in error_text:
@@ -288,7 +307,11 @@ def _classify_error(exc: Exception) -> str:
     if isinstance(exc, ImportError) or "no module named" in error_text:
         return "dependency_error"
 
-    if "connection refused" in error_text or "11434" in error_text or "ollama" in error_text:
+    if (
+        "connection refused" in error_text
+        or "11434" in error_text
+        or "ollama" in error_text
+    ):
         return "ollama_unavailable"
 
     if "faiss" in error_text or "vector" in error_text or "chroma" in error_text:
@@ -298,10 +321,10 @@ def _classify_error(exc: Exception) -> str:
 
 
 def _error_response(
-        message: str,
-        code: str,
-        started_at: float,
-        technical_details: str | None = None,
+    message: str,
+    code: str,
+    started_at: float,
+    technical_details: str | None = None,
 ) -> dict[str, Any]:
     return {
         "ok": False,

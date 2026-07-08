@@ -5,7 +5,7 @@ import tiktoken
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
-def main():
+def processar_chunks(tamanho: int = 400, overlap: int = 80):
     """
     Funcao principal que le os dados brutos do paciente e da bula,
     extrai e formata o histórico clinico, realiza o chunking
@@ -102,8 +102,8 @@ def main():
 
     # Configuracao do chunking, tamanho e overlap
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=400,
-        chunk_overlap=80,
+        chunk_size=tamanho,
+        chunk_overlap=overlap,
         length_function=lambda text: len(tokenizer.encode(text)),
         separators=["\n\n", ". ", "\n", " "]
     )
@@ -166,4 +166,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    processar_chunks()
