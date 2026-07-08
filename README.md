@@ -8,7 +8,7 @@ Sistema de Recuperação Aumentada por Geração (RAG) desenvolvido como parte d
 
 - Python 3.12+
 - LangChain
-- ChromaDB
+- FAISS
 - Ollama
 - Streamlit
 - Pandas
@@ -116,7 +116,7 @@ Esse processo realiza:
 - geração do arquivo processado `data/processed/dados_paciente.json`;
 - geração dos chunks em `data/processed/dados_paciente_chunk.json`;
 - criação dos embeddings com Ollama;
-- persistência da base vetorial no ChromaDB em `src/vectorstore/`.
+- persistência da base vetorial no FAISS em `src/vectorstore_faiss/`.
 
 ---
 
@@ -224,7 +224,7 @@ src/
 │   ├── prompts.py
 │   └── rag_chain.py
 │
-└── vectorstore/
+└── vectorstore_faiss/
 ```
 
 ---
@@ -241,5 +241,5 @@ src/
 # Observações
 
 - O projeto utiliza modelos locais por meio do Ollama.
-- A base vetorial é persistida utilizando ChromaDB.
+- A base vetorial é armazenada em memória utilizando o FAISS.
 - O pipeline RAG foi desenvolvido utilizando LCEL (LangChain Expression Language).
