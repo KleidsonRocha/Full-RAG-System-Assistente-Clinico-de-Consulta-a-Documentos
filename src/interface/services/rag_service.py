@@ -29,13 +29,17 @@ SAMPLE_QUESTIONS = [
 def get_runtime_status() -> dict[str, Any]:
     index_path = VECTORSTORE_DIR / "index.faiss"
     metadata_path = VECTORSTORE_DIR / "index.pkl"
+    index_exists = index_path.exists()
+    metadata_exists = metadata_path.exists()
+    vectorstore_ready = index_exists and metadata_exists
+
     status = {
         "vectorstore_dir": str(VECTORSTORE_DIR),
         "vectorstore_exists": VECTORSTORE_DIR.exists(),
-        "faiss_index_exists": index_path.exists(),
-        "faiss_metadata_exists": metadata_path.exists(),
-        "vectorstore_ready": index_path.exists() and metadata_path.exists(),
-        "embedding_count": None,
+        "faiss_index_exists": index_exists,
+        "faiss_metadata_exists": metadata_exists,
+        "vectorstore_ready": vectorstore_ready,
+        "embedding_count": "Ativo (FAISS)" if vectorstore_ready else None,
         "chunks_json_exists": CHUNKS_JSON_PATH.exists(),
     }
 
@@ -249,8 +253,8 @@ def _friendly_error_message(exc: Exception) -> str:
     if "connection refused" in error_text or "11434" in error_text or "ollama" in error_text:
         return "Ollama ou modelo local indisponível. Verifique se o Ollama está em execução e se os modelos foram baixados."
 
-    if "faiss" in error_text or "chroma" in error_text or "vector" in error_text:
-        return "Falha ao acessar a base vetorial. Verifique se a base foi gerada corretamente."
+    if "faiss" in error_text or "vector" in error_text or "chroma" in error_text:
+        return "Falha ao acessar a base vetorial FAISS. Verifique se a base foi gerada corretamente."
 
     return "Não foi possível consultar o pipeline RAG."
 
@@ -264,7 +268,7 @@ def _classify_error(exc: Exception) -> str:
     if "connection refused" in error_text or "11434" in error_text or "ollama" in error_text:
         return "ollama_unavailable"
 
-    if "faiss" in error_text or "chroma" in error_text or "vector" in error_text:
+    if "faiss" in error_text or "vector" in error_text or "chroma" in error_text:
         return "vectorstore_error"
 
     return "pipeline_error"
