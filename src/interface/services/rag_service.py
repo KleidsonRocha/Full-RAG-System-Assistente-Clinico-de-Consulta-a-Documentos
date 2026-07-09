@@ -25,7 +25,6 @@ SAMPLE_QUESTIONS = [
 ]
 
 
-# Atualize a assinatura da função para receber os parâmetros
 def rebuild_vectorstore(chunk_size: int = 400, chunk_overlap: int = 80) -> dict[str, Any]:
     """
     Função que limpa os caches e dispara a recriação da base vetorial FAISS.
@@ -44,10 +43,12 @@ def rebuild_vectorstore(chunk_size: int = 400, chunk_overlap: int = 80) -> dict[
         qtd_chunks = executar_ingestao()
 
         _get_rag.cache_clear()
+        _chunks_by_number.cache_clear()
+        
         return {
             "ok": True,
             "message": "Base vetorial FAISS recriada com sucesso!",
-            "chunk_count": qtd_chunks,  # ADICIONA NO RETORNO
+            "chunk_count": qtd_chunks,  
             "elapsed_ms": int((time.perf_counter() - started_at) * 1000),
         }
     except Exception as e:
