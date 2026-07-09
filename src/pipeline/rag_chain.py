@@ -5,7 +5,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 
-from src.embedding.embeddings import VECTORSTORE, modelo_embedding
+from src.embedding.embeddings import OLLAMA_BASE_URL, VECTORSTORE, modelo_embedding
 from src.pipeline.prompts import OUT_OF_SCOPE_MESSAGE, SYSTEM_PROMPT
 
 MAX_METADATA_ITEMS = 6
@@ -71,6 +71,7 @@ class ClinicalRAG:
 
         self.llm = ChatOllama(
             model="qwen2.5:3b",
+            base_url=OLLAMA_BASE_URL,
             temperature=0,
             num_predict=256
         )
