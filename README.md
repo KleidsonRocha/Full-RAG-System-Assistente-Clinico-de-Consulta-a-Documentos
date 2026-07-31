@@ -232,11 +232,15 @@ $env:SKIP_RAG_INTEGRATION='1'; .venv\Scripts\python.exe -m pytest
 SKIP_RAG_INTEGRATION=1 python -m pytest
 ```
 
-Para rodar a bateria de avaliação com as perguntas em `eval/test_questions.json` e gerar o relatório em `eval/results.md`:
+Para rodar a bateria de avaliação com o gold set versionado em `eval/golden_set.json` e gerar o relatório em `eval/results.md`:
 
 ```bash
 python eval/evaluate_rag.py
 ```
+
+O gold set possui 30 casos versionados, distribuídos entre `bula`, `dados_paciente` e `fora_do_acervo`.
+Cada item registra resposta esperada, termos obrigatórios/proibidos, fonte esperada, trecho de evidência e afirmações atômicas para avaliação de fidelidade.
+O relatório separa checks de recuperação e geração para facilitar análise de erro.
 
 No Windows PowerShell, também pode ser executado com:
 
