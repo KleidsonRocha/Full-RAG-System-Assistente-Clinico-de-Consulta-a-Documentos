@@ -7,6 +7,12 @@ from langchain_ollama import ChatOllama
 
 from src.embedding.embeddings import OLLAMA_BASE_URL, VECTORSTORE, modelo_embedding
 from src.pipeline.prompts import OUT_OF_SCOPE_MESSAGE, SYSTEM_PROMPT
+from src.pipeline.retrieval import (
+    build_bm25_index,
+    build_reranker,
+    documents_from_vectorstore,
+    retrieve_and_rerank,
+)
 
 MAX_METADATA_ITEMS = 6
 MAX_METADATA_CHARS = 900
@@ -64,10 +70,9 @@ class ClinicalRAG:
             allow_dangerous_deserialization=True
         )
 
-        self.retriever = self.vector_store.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": 2}
-        )
+        self.corpus_documents = documents_from_vectorstore(self.vector_store)
+        self.bm25_index = build_bm25_index(self.corpus_documents)
+        self.reranker = build_reranker()
 
         self.llm = ChatOllama(
             model="qwen2.5:3b",
@@ -79,8 +84,15 @@ class ClinicalRAG:
         self.prompt = ChatPromptTemplate.from_template(SYSTEM_PROMPT)
         self.parser = StrOutputParser()
 
-    def _retrieve_documents(self, question: str):
-        return self.retriever.invoke(question)
+    def _retrieve_documents(self, question: str, top_k: int = 2):
+        return retrieve_and_rerank(
+            question=question,
+            vector_store=self.vector_store,
+            corpus_documents=self.corpus_documents,
+            bm25_index=self.bm25_index,
+            reranker=self.reranker,
+            top_k=top_k,
+        )
 
     def _format_context(self, documents):
         context_blocks = []
@@ -135,8 +147,8 @@ class ClinicalRAG:
                 sources.append(source)
         return sources
 
-    def ask(self, question: str):
-        documents = self._retrieve_documents(question)
+    def ask(self, question: str, top_k: int = 2):
+        documents = self._retrieve_documents(question, top_k=top_k)
         context = self._format_context(documents)
         patient_metadata = self._format_patient_metadata(documents, question)
 
@@ -156,8 +168,8 @@ class ClinicalRAG:
             "documents": documents
         }
 
-    def stream(self, question: str):
-        documents = self._retrieve_documents(question)
+    def stream(self, question: str, top_k: int = 2):
+        documents = self._retrieve_documents(question, top_k=top_k)
         context = self._format_context(documents)
         patient_metadata = self._format_patient_metadata(documents, question)
 
@@ -171,8 +183,8 @@ class ClinicalRAG:
             if chunk.content:
                 yield chunk.content
 
-    def get_sources(self, question: str):
-        documents = self._retrieve_documents(question)
+    def get_sources(self, question: str, top_k: int = 2):
+        documents = self._retrieve_documents(question, top_k=top_k)
         return self._get_sources(documents)
 
     def _is_patient_question(self, question: str) -> bool:

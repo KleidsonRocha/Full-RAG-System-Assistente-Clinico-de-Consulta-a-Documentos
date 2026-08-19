@@ -9,6 +9,8 @@ Sistema de Recuperação Aumentada por Geração (RAG) desenvolvido como parte d
 - Python 3.12+
 - LangChain
 - FAISS
+- BM25
+- FlashRank
 - Ollama
 - Streamlit
 - Pandas
@@ -118,6 +120,33 @@ Esse processo realiza:
 - geração dos chunks em `data/processed/dados_paciente_chunk.json`;
 - criação dos embeddings com Ollama;
 - persistência da base vetorial no FAISS em `src/vectorstore_faiss/`.
+
+O BM25 não cria uma segunda base persistida. Seu corpus é montado em memória
+com os mesmos `Document` armazenados no docstore do FAISS.
+
+---
+
+## Recuperação híbrida e reranking
+
+Para cada pergunta, o pipeline executa:
+
+1. busca vetorial no FAISS;
+2. busca lexical BM25 sobre os mesmos chunks do docstore FAISS;
+3. fusão das duas listas com Reciprocal Rank Fusion (RRF);
+4. reranking dos candidatos com o modelo multilíngue
+   `ms-marco-MultiBERT-L-12` via FlashRank;
+5. seleção dos `top_k` documentos finais.
+
+Os documentos finais reranqueados são usados pela `ClinicalRAG` para construir
+o contexto, gerar a lista de fontes e preencher o campo `documents` da resposta.
+O conteúdo e os metadados originais dos chunks não são modificados durante esse
+fluxo.
+
+Quando os scores do reranker ficam praticamente indistinguíveis, o pipeline
+preserva a ordem do RRF para evitar uma reordenação arbitrária dos chunks.
+
+Na primeira execução, o FlashRank baixa o modelo de reranking para o cache local
+do usuário. As execuções seguintes reutilizam esse arquivo.
 
 ---
 
@@ -288,6 +317,7 @@ src/
 |------------|--------|
 | Embeddings | `nomic-embed-text` |
 | LLM | `qwen2.5:3b` |
+| Reranking | `ms-marco-MultiBERT-L-12` |
 
 ---
 
