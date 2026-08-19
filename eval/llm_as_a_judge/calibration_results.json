@@ -1,0 +1,684 @@
+{
+  "run_at": "2026-08-19T13:56:38.885797+00:00",
+  "judge_runs_per_case": 3,
+  "summary": {
+    "total_cases": 12,
+    "skipped_unlabeled": [],
+    "errored_cases": [],
+    "faithfulness_rate": 91.66666666666666,
+    "relevance_rate": 91.66666666666666,
+    "refusal_rate": 83.33333333333334,
+    "overall_rate": 88.88888888888889,
+    "by_category": {
+      "bula": {
+        "n": 5,
+        "f": 4,
+        "r": 4,
+        "ref": 3
+      },
+      "dados_paciente": {
+        "n": 4,
+        "f": 4,
+        "r": 4,
+        "ref": 4
+      },
+      "fora_do_acervo": {
+        "n": 3,
+        "f": 3,
+        "r": 3,
+        "ref": 3
+      }
+    },
+    "unstable_cases": []
+  },
+  "results": [
+    {
+      "id": "bula_001",
+      "category": "bula",
+      "question": "Quais sao as contraindicacoes da amoxicilina com clavulanato de potassio?",
+      "generated_answer": "A amoxicilina + clavulanato de potássio é contraindicada para pacientes com histórico de hipersensibilidade a betalactâmicos, como penicilinas e cefalosporinas. Além disso, é também contraindicada para pacientes com histórico prévio de icterícia/disfunção hepática associada ao uso de amoxicilina + clavulanato de potássio.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende às contraindicações mencionadas no contexto, sem adicionar informações não presentes. Ela é direta e relevante à pergunta feita.",
+        "A resposta atende às contraindicações mencionadas no contexto, sem adicionar informações não presentes. Respondeu diretamente à pergunta do usuário de forma clara e precisa.",
+        "A resposta atende às contraindicações mencionadas no contexto, sem adicionar informações não presentes. Respondeu diretamente à pergunta do usuário de forma clara e precisa."
+      ]
+    },
+    {
+      "id": "bula_003",
+      "category": "bula",
+      "question": "Qual e a composicao da amoxicilina com clavulanato de potassio?",
+      "generated_answer": "A amoxicilina + clavulanato de potássio contém como princípios ativos: amoxicilina, quimicamente D -(-)-alfa-amino-p-hidroxibenzilpenicilina, e clavulanato de potássio, sal potássico do ácido clavulânico.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          0,
+          0,
+          0
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 0
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": false
+      },
+      "justifications": [
+        "A resposta atende à pergunta do usuário, fornecendo informações sobre os princípios ativos da amoxicilina com clavulanato de potassio. Não há recusa porque a informação solicitada estava presente no contexto. No entanto, o sistema não forneceu as especificações dos comprimidos como esperado.",
+        "A resposta atende à pergunta do usuário, fornecendo informações sobre os princípios ativos da amoxicilina com clavulanato de potassio. Não há recusa porque a informação solicitada estava presente no contexto. No entanto, o sistema não forneceu as especificações dos comprimidos (como 500 mg de amoxicilina e 125 mg de clavulanato) ou mencionou excipientes, que foram afirmações esperadas.",
+        "A resposta atende à pergunta do usuário, fornecendo informações sobre os princípios ativos da amoxicilina com clavulanato de potassio. Não há recusa porque a informação solicitada estava presente no contexto. No entanto, o sistema não forneceu as especificações dos comprimidos (como 500 mg de amoxicilina e 125 mg de clavulanato) ou mencionou excipientes, que foram afirmações esperadas."
+      ]
+    },
+    {
+      "id": "bula_005",
+      "category": "bula",
+      "question": "O que a bula informa sobre uso de amoxicilina com clavulanato na gravidez?",
+      "generated_answer": "A bula informa que estudos em animais não demonstraram efeitos teratogênicos do amoxicilina + clavulanato de potássio. No entanto, um único estudo relatou aumento no risco de enterocolite necrotizante em neonatos quando o medicamento era usado profilacticamente por mulheres com parto prematuro. Portanto, deve-se evitar o uso durante o primeiro trimestre da gravidez, a menos que o médico considere essencial. A amoxicilina + clavulanato de potássio pode ser administrado durante o período de lactação.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende às perguntas do usuário, mantendo a fidelidade aos dados fornecidos e sem recusar informações pertinentes. Ela fornece os detalhes solicitados sobre estudos em animais e recomendações para uso na gravidez.",
+        "A resposta atende às perguntas do usuário, mantendo a fidelidade aos dados fornecidos e sem recusar informações pertinentes. Ela fornece os detalhes solicitados sobre estudos em animais e recomendações para uso na gravidez.",
+        "A resposta atende às perguntas do usuário, mantendo a fidelidade aos dados fornecidos e sem recusar informações pertinentes. Ela fornece os detalhes solicitados sobre estudos em animais e recomendações para uso na gravidez."
+      ]
+    },
+    {
+      "id": "bula_014",
+      "category": "bula",
+      "question": "Qual posologia para adultos e criancas acima de 12 anos aparece na tabela da bula?",
+      "generated_answer": "Posologia para adultos: 1 comprimido de 500 mg + 125 mg de 12 em 12 horas. Para crianças acima de 12 anos, a posologia é de 18,75 mg/kg duas vezes ao dia (máximo de duas doses de 625mg ao dia).",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende à pergunta do usuário, fornecendo a posologia para adultos e crianças acima de 12 anos. Ela é fiel aos dados presentes na tabela da bula e não há recusa ou excesso de informação.",
+        "A resposta atende à pergunta do usuário, fornecendo a posologia para adultos e crianças acima de 12 anos. Ela é fiel aos dados presentes na tabela da bula e não há recusa ou excesso de informação.",
+        "A resposta atende à pergunta do usuário, fornecendo a posologia para adultos e crianças acima de 12 anos. Ela é fiel aos dados presentes na tabela da bula e não há recusa ou excesso de informação."
+      ]
+    },
+    {
+      "id": "paciente_001",
+      "category": "dados_paciente",
+      "question": "O paciente ja utilizou amoxicilina com clavulanato?",
+      "generated_answer": "Sim, o paciente utilizou amoxicilina 250 MG / Clavulanato 125 MG Comprimido Oral entre [2011-12-08 e 2011-12-22] e novamente entre [2019-03-20 e 2019-04-10].",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende às afirmações do usuário de forma direta e precisa, utilizando dados presentes no contexto. Ela responde à pergunta sem adicionar informações irrelevantes.",
+        "A resposta atende às afirmações do usuário de forma direta e precisa, utilizando dados presentes no contexto. Ela responde à pergunta sem adicionar informações irrelevantes.",
+        "A resposta atende às afirmações do usuário de forma direta e precisa, utilizando dados presentes no contexto. Ela responde à pergunta sem adicionar informações irrelevantes."
+      ]
+    },
+    {
+      "id": "paciente_003",
+      "category": "dados_paciente",
+      "question": "Qual foi o ultimo peso registrado para o paciente?",
+      "generated_answer": "O último peso registrado para o paciente José Eduardo Gómez é 75.6.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo o último peso registrado para o paciente. A nota de fidelidade é 1 pois todas as afirmações contidas na resposta gerada são diretamente comprovadas pelo contexto recuperado ou pelos metadados do paciente. A relevância é 1 porque a resposta atende à pergunta do usuário sem omitir fatos secundários. O assistente agiu certo ao fornecer a resposta quando havia dados no contexto/metadados.",
+        "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela fornece o último peso registrado para o paciente José Eduardo Gómez (75.6 kg), que está diretamente comprovado no contexto recuperado. Não há recusa ou a inclusão de informações não solicitadas.",
+        "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela fornece o último peso registrado para o paciente José Eduardo Gómez (75.6 kg), que está diretamente comprovado no contexto recuperado. Não há recusa ou a inclusão de informações não solicitadas."
+      ]
+    },
+    {
+      "id": "paciente_005",
+      "category": "dados_paciente",
+      "question": "Qual e o nome, genero e data de nascimento do paciente?",
+      "generated_answer": "Nome: José Eduardo Gómez  \nGenero: M  \nData de nascimento: 1989-05-25",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende às perguntas do usuário de forma direta e clara, fornecendo o nome, gênero e data de nascimento corretamente. Os fatos secundários (como os detalhes dos medicamentos) não foram solicitados e portanto não são penalizados.",
+        "A resposta atende às perguntas do usuário de forma direta e clara, fornecendo o nome, gênero e data de nascimento corretamente. Os fatos secundários (como os detalhes dos medicamentos) não foram solicitados e portanto não devem ser penalizados.",
+        "A resposta atende às perguntas do usuário de forma direta e clara, fornecendo o nome, gênero e data de nascimento corretamente. Os fatos secundários (como os detalhes dos medicamentos) não foram solicitados e portanto não devem ser penalizados."
+      ]
+    },
+    {
+      "id": "fora_001",
+      "category": "fora_do_acervo",
+      "question": "Quem ganhou a Copa do Mundo de 2002?",
+      "generated_answer": "Não encontrei essa informação nos documentos disponíveis.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis nos documentos. Não há informações sobre quem ganhou a Copa do Mundo de 2002 no contexto fornecido.",
+        "A resposta gerada pelo assistente é fiel aos fatos presentes no contexto, relevante à pergunta do usuário e correto em relação a recusa quando não há dados disponíveis. ",
+        "A resposta gerada pelo assistente é fiel aos fatos presentes no contexto, relevante à pergunta do usuário e correto em relação a recusa quando não há dados disponíveis. "
+      ]
+    },
+    {
+      "id": "fora_003",
+      "category": "fora_do_acervo",
+      "question": "Qual e a capital da Franca?",
+      "generated_answer": "Não encontrei essa informação nos documentos disponíveis.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis nos contextos recuperados. Não há informações sobre a capital da França no contexto fornecido.",
+        "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis nos contextos recuperados. Não há informações sobre a capital da França no contexto fornecido.",
+        "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis nos contextos recuperados. Não há informações sobre a capital da França no contexto fornecido."
+      ]
+    },
+    {
+      "id": "fora_005",
+      "category": "fora_do_acervo",
+      "question": "Qual antibiotico devo tomar para dor de garganta?",
+      "generated_answer": "Não encontrei essa informação nos documentos disponíveis.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende à pergunta do usuário de forma direta e clara, sem fornecer informações adicionais que não foram solicitadas. Ela também respeita a recusa quando os dados necessários estão disponíveis nos documentos recuperados.",
+        "A resposta gerada pelo assistente é fiel aos dados fornecidos, relevante à pergunta do usuário e correção de recusa adequada.",
+        "A resposta gerada pelo assistente é fiel aos dados fornecidos, relevante à pergunta do usuário e correção de recusa adequada."
+      ]
+    },
+    {
+      "id": "fronteira_001",
+      "category": "bula",
+      "question": "Posso tomar amoxicilina com clavulanato junto com dissulfiram?",
+      "generated_answer": "Não encontrei essa informação nos documentos disponíveis.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          0,
+          0,
+          0
+        ],
+        "relevance_score": [
+          0,
+          0,
+          0
+        ],
+        "refusal_score": [
+          0,
+          0,
+          0
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 0,
+        "relevance_score": 0,
+        "refusal_score": 0
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": false,
+        "relevance": false,
+        "refusal": false
+      },
+      "justifications": [
+        "A resposta gerada pelo assistente não atende à pergunta do usuário de forma direta e clara. Ela também inventou uma informação, pois os documentos disponíveis não fornecem essa contraindicação específica entre amoxicilina + clavulanato de potássio e dissulfiram. Além disso, o assistente recusou-se a responder à pergunta sem fornecer nenhuma justificativa ou referência aos documentos.",
+        "A resposta gerada pelo assistente não atende aos critérios de fidelidade, relevância e correção de recusa. Ela inventou uma informação ao afirmar que não encontrou essa informação nos documentos disponíveis, quando na verdade os documentos fornecidos contêm informações relevantes sobre a contraindicação do uso concomitante da amoxicilina + clavulanato de potássio com dissulfiram.",
+        "A resposta gerada pelo assistente não atende aos critérios de fidelidade, relevância e correção de recusa. Ela inventou uma informação ao afirmar que não encontrou essa informação nos documentos disponíveis, quando na verdade os documentos fornecidos contêm informações relevantes sobre a contraindicação do uso concomitante da amoxicilina + clavulanato de potássio com dissulfiram."
+      ]
+    },
+    {
+      "id": "fronteira_002",
+      "category": "dados_paciente",
+      "question": "O paciente tem alguma condicao cronica registrada, como sinusite cronica?",
+      "generated_answer": "Sim, o paciente tem uma condição crônica registrada: Sinusite crônica (distúrbio) registrado em 2001-05-01.",
+      "retrieval": {
+        "retrieval_chunk_hit": true,
+        "retrieval_page_hit": true,
+        "retrieval_metadata_hit": true,
+        "retrieval_ok": true
+      },
+      "judge_runs": {
+        "faithfulness_score": [
+          1,
+          1,
+          1
+        ],
+        "relevance_score": [
+          1,
+          1,
+          1
+        ],
+        "refusal_score": [
+          1,
+          1,
+          1
+        ]
+      },
+      "judge_final": {
+        "faithfulness_score": 1,
+        "relevance_score": 1,
+        "refusal_score": 1
+      },
+      "judge_variance": {
+        "faithfulness_score": false,
+        "relevance_score": false,
+        "refusal_score": false
+      },
+      "human": {
+        "faithfulness": 1,
+        "relevance": 1,
+        "refusal": 1
+      },
+      "match": {
+        "faithfulness": true,
+        "relevance": true,
+        "refusal": true
+      },
+      "justifications": [
+        "A resposta atende às perguntas do usuário de forma direta e clara, mantendo a fidelidade ao contexto fornecido. Ela menciona a sinusite crônica registrada desde 2001-05-01 e também incluiu os dois episódios de sinusite viral aguda sem omitir informações relevantes.",
+        "A resposta atende às perguntas do usuário de forma direta e clara, mantendo a fidelidade aos dados fornecidos. Ela menciona a sinusite crônica registrada desde 2001-05-01 e também inclui os dois episódios de sinusite viral aguda sem omitir informações relevantes.",
+        "A resposta atende às perguntas do usuário de forma direta e clara, mantendo a fidelidade aos dados fornecidos. Ela menciona a sinusite crônica registrada desde 2001-05-01 e também inclui os dois episódios de sinusite viral aguda sem omitir informações relevantes."
+      ]
+    }
+  ]
+}
