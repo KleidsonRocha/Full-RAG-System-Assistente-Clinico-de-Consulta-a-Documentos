@@ -33,16 +33,26 @@ def evaluate_retrieval(item: dict, rag_result: dict) -> dict[str, bool]:
         int(s.get("pagina")) for s in sources if isinstance(s, dict) and s.get("pagina") is not None
     }
 
+    expected_metadata_fields = set(item.get("expected_metadata_fields", []))
+    returned_metadata_fields = set()
+    for doc in documents:
+        meta = getattr(doc, "metadata", {}) or {}
+        returned_metadata_fields.update(
+            k for k in expected_metadata_fields if meta.get(k) not in (None, "", [])
+        )
+
     expected_chunks = set(item.get("expected_source_chunks", []))
     expected_pages = set(item.get("expected_source_pages", []))
 
     chunk_hit = bool(expected_chunks & returned_chunks) if expected_chunks else True
     page_hit = bool(expected_pages & returned_pages) if expected_pages else True
+    metadata_hit = expected_metadata_fields.issubset(returned_metadata_fields) if expected_metadata_fields else True
 
     return {
         "retrieval_chunk_hit": chunk_hit,
         "retrieval_page_hit": page_hit,
-        "retrieval_ok": chunk_hit and page_hit,
+        "retrieval_metadata_hit": metadata_hit,
+        "retrieval_ok": chunk_hit and page_hit and metadata_hit,
     }
 
  
@@ -81,15 +91,9 @@ def main():
             rag_result = rag.ask(question)
             generated_answer = rag_result["answer"]
             documents = rag_result.get("documents", [])
- 
-            context_parts = []
-            for doc in documents:
-                context_parts.append(doc.page_content or "")
-                meta = doc.metadata or {}
-                for k in ("paciente_nome", "paciente_ultimo_peso_kg", "paciente_medicamentos_historico"):
-                    if k in meta:
-                        context_parts.append(f"{k}: {meta[k]}")
-            full_context = "\n\n".join(context_parts)
+            rag_context = rag._format_context(documents)
+            rag_metadata = rag._format_patient_metadata(documents, question)
+            full_context = f"{rag_metadata}\n\n{rag_context}".strip()
 
             run_scores = {"faithfulness_score": [], "relevance_score": [], "refusal_score": []}
             justifications = []

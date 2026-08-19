@@ -10,21 +10,21 @@ from src.embedding.embeddings import OLLAMA_BASE_URL
 
 class JudgeEvaluation(BaseModel):
     faithfulness_score: int = Field(
-        description="1 se a resposta for 100% suportada pelo contexto/metadados fornecidos, 0 caso haja extrapolacao ou alucinacao."
+        description="1 se a resposta for suportada pelo contexto/metadados fornecidos sem inventar dados, 0 caso haja alucinacao."
     )
     relevance_score: int = Field(
-        description="1 se a resposta atende diretamente a pergunta feita, 0 se for evasiva, incorreta ou incompleta."
+        description="1 se a resposta atende diretamente ao que foi perguntado pelo usuario, 0 se fugir ao tema."
     )
     refusal_score: int = Field(
-        description="1 se a acao de recusar ou responder estiver correta conforme o escopo e contexto, 0 caso contrario."
+        description="1 se o assistente agiu corretamente (respondeu quando havia dados ou recusou quando nao havia), 0 caso contrario."
     )
     justification: str = Field(
         description="Justificativa concisa da pontuacao atribuida com base na rubrica."
     )
 
 
-JUDGE_SYSTEM_PROMPT = """Você é um juiz avaliador técnico e imparcial de sistemas RAG clínicos.
-Sua função é avaliar com rigor a resposta gerada por um assistente em relação ao contexto recuperado, metadados do paciente, pergunta do usuário e resposta esperada (gabarito).
+JUDGE_SYSTEM_PROMPT = """Você é um avaliador técnico e equilibrado de respostas de um sistema RAG clínico.
+Seu objetivo é verificar se o assistente respondeu corretamente à dúvida do usuário com base nos dados disponíveis.
 
 RUBRICA DE AVALIAÇÃO:
 
@@ -33,19 +33,19 @@ RUBRICA DE AVALIAÇÃO:
 - Nota 0: A resposta inventa dados, assume premissas não presentes no contexto (alucinação) ou utiliza conhecimento prévio externo aos documentos fornecidos.
 
 2. RELEVÂNCIA (relevance_score):
-- Nota 1: A resposta aborda diretamente a intenção da pergunta do usuário com clareza e precisão.
-- Nota 0: A resposta foge ao tema, responde algo diferente do solicitado ou omite o ponto central da questão.
+- Nota 1: A resposta atende à PERGUNTA DO USUÁRIO de forma direta, clara e compreensível. Omissão de fatos secundários do gabarito que o usuário não perguntou explicitamente não deve ser penalizada.
+- Nota 0: A resposta não responde ao que foi perguntado, foge do tema ou é totalmente vaga.
 
 3. CORREÇÃO DE RECUSA (refusal_score):
-- Para perguntas fora do acervo ou sem evidência no contexto: Nota 1 se o assistente recusou conforme instruído ("Não encontrei essa informação nos documentos disponíveis"), e Nota 0 se respondeu usando memória própria.
-- Para perguntas com evidência suficiente: Nota 1 se o assistente respondeu com os dados, e Nota 0 se recusou indevidamente.
+- Nota 1: O assistente agiu certo: forneceu a resposta quando havia dados no contexto/metadados OU recusou quando a pergunta estava fora do acervo/sem dados.
+- Nota 0: O assistente inventou resposta para algo fora do acervo OU recusou responder tendo os dados necessários no contexto.
 
 Retorne SEMPRE e EXCLUSIVAMENTE um objeto JSON válido no seguinte formato:
 {{
   "faithfulness_score": 1,
   "relevance_score": 1,
   "refusal_score": 1,
-  "justification": "Justificativa da pontuacao."
+  "justification": "Justificativa concisa da pontuacao."
 }}
 """
 
