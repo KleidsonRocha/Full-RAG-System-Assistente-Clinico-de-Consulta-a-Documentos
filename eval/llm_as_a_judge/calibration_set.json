@@ -1,0 +1,179 @@
+[
+  {
+    "id": "bula_001",
+    "category": "bula",
+    "question": "Quais sao as contraindicacoes da amoxicilina com clavulanato de potassio?",
+    "expected_answer": "A bula contraindica amoxicilina + clavulanato de potassio para pacientes com historico de hipersensibilidade a betalactamicos, como penicilinas e cefalosporinas, e para pacientes com historico previo de ictericia ou disfuncao hepatica associada ao uso do medicamento.",
+    "atomic_claims": [
+      "E contraindicada para pacientes com hipersensibilidade a betalactamicos.",
+      "Penicilinas e cefalosporinas sao exemplos de betalactamicos citados.",
+      "Tambem e contraindicada em historico previo de ictericia ou disfuncao hepatica associada ao uso do medicamento."
+    ],
+    "source_document": "bula_amoxicilina_clavulanato_paciente1.pdf",
+    "source_passage": "Secao 4. CONTRAINDICACOES: 'A amoxicilina + clavulanato de potassio e contraindicada para pacientes com historico de hipersensibilidade a betalactamicos, como penicilinas e cefalosporinas. A amoxicilina + clavulanato de potassio e tambem contraindicada para pacientes com historico previo de ictericia/disfuncao hepatica associada ao uso de amoxicilina + clavulanato de potassio.'",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "bula_003",
+    "category": "bula",
+    "question": "Qual e a composicao da amoxicilina com clavulanato de potassio?",
+    "expected_answer": "Cada comprimido revestido de 500 mg + 125 mg contem amoxicilina tri-hidratada equivalente a 500 mg de amoxicilina e clavulanato de potassio equivalente a 125 mg de acido clavulanico, alem de excipientes.",
+    "atomic_claims": [
+      "Cada comprimido revestido contem 500 mg de amoxicilina.",
+      "Cada comprimido revestido contem 125 mg de acido clavulanico.",
+      "A composicao tambem inclui excipientes."
+    ],
+    "source_document": "bula_amoxicilina_clavulanato_paciente1.pdf",
+    "source_passage": "Secao I, COMPOSICAO: 'Cada comprimido revestido de 500 mg + 125 mg contem: amoxicilina tri-hidratada... equivalente a 500 mg de amoxicilina. clavulanato de potassio... equivalente a 125 mg de acido clavulanico. excipiente q.s.p. 1 com rev.'",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "bula_005",
+    "category": "bula",
+    "question": "O que a bula informa sobre uso de amoxicilina com clavulanato na gravidez?",
+    "expected_answer": "A bula informa que estudos em animais nao demonstraram efeitos teratogenicos, mas recomenda evitar o uso na gravidez, especialmente no primeiro trimestre, exceto se o medico considerar essencial. Tambem informa categoria B de risco na gravidez.",
+    "atomic_claims": [
+      "Estudos em animais nao demonstraram efeitos teratogenicos.",
+      "A bula recomenda evitar o uso na gravidez, especialmente no primeiro trimestre.",
+      "O uso pode ocorrer se o medico considerar essencial."
+    ],
+    "source_document": "bula_amoxicilina_clavulanato_paciente1.pdf",
+    "source_passage": "Secao 5, ADVERTENCIAS E PRECAUCOES > Gravidez e Lactacao > Gravidez: 'Estudos sobre reproducao em animais... nao demonstraram efeitos teratogenicos... deve-se evitar o uso de amoxicilina + clavulanato de potassio na gravidez, especialmente durante o primeiro trimestre, a nao ser que o medico o considere essencial... Categoria B de risco na gravidez.'",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "bula_014",
+    "category": "bula",
+    "question": "Qual posologia para adultos e criancas acima de 12 anos aparece na tabela da bula?",
+    "expected_answer": "A tabela da bula informa, para adultos e criancas acima de 12 anos, comprimidos revestidos de 500 mg + 125 mg: 1 comprimido tres vezes ao dia.",
+    "atomic_claims": [
+      "A apresentacao e comprimido revestido de 500 mg + 125 mg.",
+      "A tabela se aplica a adultos e criancas acima de 12 anos.",
+      "A posologia listada e 1 comprimido tres vezes ao dia."
+    ],
+    "source_document": "bula_amoxicilina_clavulanato_paciente1.pdf",
+    "source_passage": "Secao 8, POSOLOGIA E MODO DE USAR > Tabela posologica: 'Adultos e criancas acima de 12 anos | Comprimidos revestidos de 500mg + 125mg | 1 comprimido tres vezes ao dia.'",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "paciente_001",
+    "category": "dados_paciente",
+    "question": "O paciente ja utilizou amoxicilina com clavulanato?",
+    "expected_answer": "Sim. O historico de medicamentos registra Amoxicilina 250 MG / Clavulanato 125 MG Comprimido Oral de 2011-12-08 a 2011-12-22 e de 2019-03-20 a 2019-04-10.",
+    "atomic_claims": [
+      "O paciente utilizou amoxicilina com clavulanato em 2011.",
+      "O paciente utilizou amoxicilina com clavulanato em 2019."
+    ],
+    "source_document": "medications.csv",
+    "source_passage": "PATIENT=1d604da9-9a81-4ba9-80c2-de3375d59b40, CODE=562251, DESCRIPTION='Amoxicillin 250 MG / Clavulanate 125 MG Oral Tablet': linha START=2011-12-08T15:02:18Z STOP=2011-12-22T15:02:18Z; linha START=2019-03-20T15:02:18Z STOP=2019-04-10T15:02:18Z (ambas REASONDESCRIPTION='Viral sinusitis (disorder)').",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "paciente_003",
+    "category": "dados_paciente",
+    "question": "Qual foi o ultimo peso registrado para o paciente?",
+    "expected_answer": "O ultimo peso registrado para o paciente e 75,6 kg.",
+    "atomic_claims": [
+      "O ultimo peso registrado e 75,6 kg."
+    ],
+    "source_document": "observations.csv",
+    "source_passage": "PATIENT=1d604da9-9a81-4ba9-80c2-de3375d59b40, CODE=29463-7, DESCRIPTION='Body Weight': registros em 2011-07-28 (65.8 kg), 2014-07-31 (70.9 kg) e 2017-08-03 (75.6 kg, unidades kg); este ultimo e o mais recente.",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "paciente_005",
+    "category": "dados_paciente",
+    "question": "Qual e o nome, genero e data de nascimento do paciente?",
+    "expected_answer": "O paciente se chama Jose Eduardo Gomez, genero M, com data de nascimento em 1989-05-25.",
+    "atomic_claims": [
+      "O nome do paciente e Jose Eduardo Gomez.",
+      "O genero registrado e M.",
+      "A data de nascimento registrada e 1989-05-25."
+    ],
+    "source_document": "patients.csv",
+    "source_passage": "Id=1d604da9-9a81-4ba9-80c2-de3375d59b40: BIRTHDATE=1989-05-25, FIRST='Jose Eduardo181', LAST='Gomez206', GENDER=M. (Sufixos numericos sao artefato do gerador sintetico Synthea; nome-base = Jose Eduardo Gomez.)",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "fora_001",
+    "category": "fora_do_acervo",
+    "question": "Quem ganhou a Copa do Mundo de 2002?",
+    "expected_answer": "Nao encontrei essa informacao nos documentos disponiveis.",
+    "atomic_claims": [],
+    "source_document": null,
+    "source_passage": null,
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "fora_003",
+    "category": "fora_do_acervo",
+    "question": "Qual e a capital da Franca?",
+    "expected_answer": "Nao encontrei essa informacao nos documentos disponiveis.",
+    "atomic_claims": [],
+    "source_document": null,
+    "source_passage": null,
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "fora_005",
+    "category": "fora_do_acervo",
+    "question": "Qual antibiotico devo tomar para dor de garganta?",
+    "expected_answer": "Nao encontrei essa informacao nos documentos disponiveis.",
+    "atomic_claims": [],
+    "source_document": null,
+    "source_passage": null,
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1
+  },
+  {
+    "id": "fronteira_001",
+    "category": "bula",
+    "question": "Posso tomar amoxicilina com clavulanato junto com dissulfiram?",
+    "expected_answer": "Nao. A bula informa que a amoxicilina + clavulanato de potassio nao deve ser administrada junto com dissulfiram.",
+    "atomic_claims": [
+      "A bula contraindica o uso concomitante com dissulfiram."
+    ],
+    "source_document": "bula_amoxicilina_clavulanato_paciente1.pdf",
+    "source_passage": "Secao 6, INTERACOES MEDICAMENTOSAS: 'A amoxicilina + clavulanato de potassio nao deve ser administrado junto com dissulfiram.'",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1,
+    "note": "Item de fronteira: testa se o sistema recupera a interacao medicamentosa com dissulfiram na secao 6."
+  },
+  {
+    "id": "fronteira_002",
+    "category": "dados_paciente",
+    "question": "O paciente tem alguma condicao cronica registrada, como sinusite cronica?",
+    "expected_answer": "Sim. O paciente tem sinusite cronica (Chronic sinusitis) registrada desde 2001-05-01, sem data de encerramento, alem de dois episodios de sinusite viral aguda (2011-12-08 a 2011-12-22 e 2019-03-20 a 2019-04-10).",
+    "atomic_claims": [
+      "O paciente tem sinusite cronica registrada com inicio em 2001-05-01.",
+      "O registro de sinusite cronica nao tem data de encerramento (STOP em branco).",
+      "O paciente teve tambem dois episodios de sinusite viral aguda, em 2011 e em 2019."
+    ],
+    "source_document": "conditions.csv",
+    "source_passage": "PATIENT=1d604da9-9a81-4ba9-80c2-de3375d59b40: linha START=2001-05-01, STOP=(vazio), CODE=40055000, DESCRIPTION='Chronic sinusitis (disorder)'; linha START=2011-12-08 STOP=2011-12-22 e linha START=2019-03-20 STOP=2019-04-10, ambas DESCRIPTION='Viral sinusitis (disorder)'.",
+    "human_faithfulness": 1,
+    "human_relevance": 1,
+    "human_refusal": 1,
+    "note": "Item de fronteira: testa recuperacao em conditions.csv e diferenciacao entre sinusite cronica e aguda."
+  }
+]
