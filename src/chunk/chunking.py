@@ -109,7 +109,7 @@ def processar_chunks(tamanho: int = 400, overlap: int = 80):
     )
 
     chunks_gerados = []
-    global_idx = 1
+    bula_idx = 1
 
     # Percorre cada página da bula para aplicar a limpeza de texto e o fatiamento
     for p in bula.get("paginas", []):
@@ -129,39 +129,229 @@ def processar_chunks(tamanho: int = 400, overlap: int = 80):
         # Monta a estrutura final de cada chunk com o histórico mapeado do paciente nos metadados
         for text_chunk in page_chunks:
             chunk_structure = {
-                "chunk_id": f"{patient_id}::chunk_{global_idx:03d}",
+                "chunk_id":(f"{patient_id}"
+                            f"::bula"   
+                            f"::chunk_{bula_idx:03d}"),
                 "text": text_chunk.strip(),
                 "metadata": {
-                    "patient_id": patient_id,
-                    "paciente_nome": paciente["nome_completo"],
-                    "paciente_genero": paciente["gender"],
-                    "paciente_data_nascimento": paciente["birthdate"],
-                    "medicamento_bula_alvo": target_med,
-                    "paciente_historico_diagnosticos": condicoes,
-                    "paciente_medicamentos_historico": medicamentos,
-                    "paciente_historico_consultas": consultas,
-                    "paciente_historico_procedimentos": procedimentos,
-                    "paciente_historico_observacoes": observacoes,
-                    "paciente_ultimo_peso_kg": peso_atual,
-                    "paciente_ultima_altura_cm": altura_atual,
-                    "pagina_origem": page_num,
-                    "chunk_number": global_idx,
-                    "total_chunks": 0
+                       "patient_id": patient_id,
+
+                    "tipo_documento": "bula",
+
+                    "fonte": "bula",
+
+                    "medicamento_bula_alvo":
+                        target_med,
+
+                    "pagina_origem":
+                        page_num,
+
+                    "chunk_number":
+                        bula_idx,
+                    # "patient_id": patient_id,
+                    # "paciente_nome": paciente["nome_completo"],
+                    # "paciente_genero": paciente["gender"],
+                    # "paciente_data_nascimento": paciente["birthdate"],
+                    # "medicamento_bula_alvo": target_med,
+                    # "paciente_historico_diagnosticos": condicoes,
+                    # "paciente_medicamentos_historico": medicamentos,
+                    # "paciente_historico_consultas": consultas,
+                    # "paciente_historico_procedimentos": procedimentos,
+                    # "paciente_historico_observacoes": observacoes,
+                    # "paciente_ultimo_peso_kg": peso_atual,
+                    # "paciente_ultima_altura_cm": altura_atual,
+                    # "pagina_origem": page_num,
+                    # "chunk_number": global_idx,
+                    # "total_chunks": 0
                 }
             }
             chunks_gerados.append(chunk_structure)
-            global_idx += 1
+            bula_idx += 1
+    secoes_prontuario = []
+
+    # Dados pessoais
+    dados_pessoais_texto = (
+        "Dados do paciente:\n"
+        f"Nome: {paciente.get('nome_completo', 'Não informado')}\n"
+        f"Gênero: {paciente.get('gender', 'Não informado')}\n"
+        f"Data de nascimento: {paciente.get('birthdate', 'Não informado')}"
+    )
+
+    secoes_prontuario.append(
+        (
+            "dados_pessoais",
+            dados_pessoais_texto
+        )
+    )
+
+    # Diagnósticos
+    if condicoes:
+
+        texto = (
+            "Histórico de diagnósticos do paciente:\n"
+            + "\n".join(condicoes)
+        )
+
+        secoes_prontuario.append(
+            (
+                "diagnosticos",
+                texto
+            )
+        )
+
+    # Cria um histórico de medicamentos utilizados pelo paciente, caso tenha.
+    if medicamentos:
+
+        texto = (
+            "Histórico de medicamentos do paciente:\n"
+            + "\n".join(medicamentos)
+        )
+
+        secoes_prontuario.append(
+            (
+                "medicamentos",
+                texto
+            )
+        )
+
+    # Cria um histórico de consultas realizadas pelo paciente, caso tenha.
+    if consultas:
+
+        texto = (
+            "Histórico de consultas do paciente:\n"
+            + "\n".join(consultas)
+        )
+
+        secoes_prontuario.append(
+            (
+                "consultas",
+                texto
+            )
+        )
+
+    # Cria um histórico de procedimentos realizados pelo pacientes, caso tenha
+    if procedimentos:
+
+        texto = (
+            "Histórico de procedimentos do paciente:\n"
+            + "\n".join(procedimentos)
+        )
+
+        secoes_prontuario.append(
+            (
+                "procedimentos",
+                texto
+            )
+        )
+
+    # Adiciona observações clínicas e exames laboratoriais
+    if observacoes:
+
+        texto = (
+            "Histórico de observações clínicas "
+            "e exames do paciente:\n"
+            + "\n".join(observacoes)
+        )
+
+        secoes_prontuario.append(
+            (
+                "observacoes",
+                texto
+            )
+        )
+
+    # Dados atuais
+    medidas_texto = (
+        "Medidas mais recentes do paciente:\n"
+        f"Último peso registrado: {peso_atual} kg\n"
+        f"Última altura registrada: {altura_atual} cm"
+    )
+
+    secoes_prontuario.append(
+        (
+            "medidas",
+            medidas_texto
+        )
+    )
+
+   #Cria o chunking do prontuário do paciente, com base nas seções extraídas e estruturadas
+    prontuario_idx = 1
+
+    for categoria, texto_secao in secoes_prontuario:
+
+        chunks_secao = splitter.split_text(
+            texto_secao
+        )
+
+        for text_chunk in chunks_secao:
+
+            chunk_structure = {
+
+                "chunk_id": (
+                    f"{patient_id}"
+                    f"::prontuario"
+                    f"::chunk_{prontuario_idx:03d}"
+                ),
+
+                "text": text_chunk.strip(),
+
+                "metadata": {
+
+                    "patient_id":
+                        patient_id,
+
+                    "tipo_documento":
+                        "prontuario",
+
+                    "fonte":
+                        "prontuario_paciente",
+
+                    "categoria_prontuario":
+                        categoria,
+
+                    "chunk_number":
+                        prontuario_idx,
+                }
+            }
+
+            chunks_gerados.append(
+                chunk_structure
+            )
+
+            prontuario_idx += 1
+
+    #Total de chunks gerados, partindo das informações do prontuário e da bula do paciente
+    total_chunks = len(
+        chunks_gerados
+    )
+
+    total_bula = sum(
+        1
+        for chunk in chunks_gerados
+        if chunk["metadata"]["tipo_documento"]
+        == "bula"
+    )
+
+    total_prontuario = sum(
+        1
+        for chunk in chunks_gerados
+        if chunk["metadata"]["tipo_documento"]
+        == "prontuario"
+    )
+
 
     # Atualiza o total de chunks em todos os metadados gerados
-    total_chunks = len(chunks_gerados)
     for chunk in chunks_gerados:
         chunk["metadata"]["total_chunks"] = total_chunks
 
     # Salva o arquivo final estruturado pronto para a base vetorial
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(chunks_gerados, f, ensure_ascii=False, indent=2)
+    print(f"Chunks da bula: "f"{total_bula}")
 
-    print(f"Total de chunks: {total_chunks}")
+    print(f"Chunks do prontuário: "f"{total_prontuario}")
+
+    print(f"Total de chunks: "f"{total_chunks}")
     print(f"Arquivo salvo em: {output_path}")
 
 

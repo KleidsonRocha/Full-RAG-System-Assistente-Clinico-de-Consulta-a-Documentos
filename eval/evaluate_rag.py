@@ -6,6 +6,8 @@ import time
 import unicodedata
 from pathlib import Path
 from typing import Any
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -231,6 +233,7 @@ def evaluate_row(rag: Any, item: dict[str, Any]) -> dict[str, Any]:
         "source_count": len(sources),
         "document_count": len(documents),
         "latency_ms": latency_ms,
+        "expected_refusal": bool(item.get("should_refuse")),
         "is_refusal": is_refusal,
         "status": status,
         "checks": checks,
@@ -316,6 +319,76 @@ def evaluate_checks(
         checks["metadados_recuperados"] = metadata_fields.issubset(returned_metadata_fields)
 
     return checks
+
+def plot_refusal_matrix(rows: list[dict[str, Any]]) -> None:
+    respondeu_correto = 0
+    recusou_indevidamente = 0
+    respondeu_indevidamente = 0
+    recusou_correto = 0
+
+    for row in rows:
+        esperado_recusar = row["expected_refusal"]
+        sistema_recusou = row["is_refusal"]
+
+        if not esperado_recusar and not sistema_recusou:
+            respondeu_correto += 1
+
+        elif not esperado_recusar and sistema_recusou:
+            recusou_indevidamente += 1
+
+        elif esperado_recusar and not sistema_recusou:
+            respondeu_indevidamente += 1
+
+        elif esperado_recusar and sistema_recusou:
+            recusou_correto += 1
+
+    matrix = np.array([
+        [respondeu_correto, recusou_indevidamente],
+        [respondeu_indevidamente, recusou_correto],
+    ])
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    image = ax.imshow(matrix)
+
+    ax.set_xticks([0, 1])
+    ax.set_yticks([0, 1])
+
+    ax.set_xticklabels([
+        "Respondeu",
+        "Recusou"
+    ])
+
+    ax.set_yticklabels([
+        "Deveria responder",
+        "Deveria recusar"
+    ])
+
+    ax.set_xlabel("Comportamento observado")
+    ax.set_ylabel("Comportamento esperado")
+
+    ax.set_title("Matriz de Recusa do RAG")
+
+    for i in range(2):
+        for j in range(2):
+            ax.text(
+                j,
+                i,
+                str(matrix[i, j]),
+                ha="center",
+                va="center",
+                fontsize=16
+            )
+
+    plt.colorbar(image, ax=ax)
+
+    output_path = PROJECT_ROOT / "eval" / "matriz_recusa.png"
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300)
+    plt.close()
+
+    print(f"Matriz de recusa gerada em {output_path}")
 
 
 def build_report(rows: list[dict[str, Any]]) -> str:
@@ -456,6 +529,56 @@ def build_report(rows: list[dict[str, Any]]) -> str:
                 "criterio automatico marcou falha."
             )
 
+    deveria_responder = [
+        row for row in rows
+        if not row["expected_refusal"]
+    ]
+
+    deveria_recusar = [
+        row for row in rows
+        if row["expected_refusal"]
+    ]
+
+    resposta_correta = [
+        row for row in deveria_responder
+        if not row["is_refusal"]
+    ]
+
+    recusa_indevida = [
+        row for row in deveria_responder
+        if row["is_refusal"]
+    ]
+
+    resposta_indevida = [
+        row for row in deveria_recusar
+        if not row["is_refusal"]
+    ]
+
+    recusa_correta = [
+        row for row in deveria_recusar
+        if row["is_refusal"]
+    ]
+
+    lines.extend(
+        [
+            "",
+            "## Matriz de Recusa",
+            "",
+            "A matriz compara o comportamento esperado com o comportamento"
+            "observado do sistema, permitindo identificar recusas corretas,"
+            "respostas indevidas e recusas indevidas."
+            "Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos."
+            ""
+            "| Esperado / Observado | Respondeu | Recusou |",
+            "| --- | ---: | ---: |",
+            f"| Deveria responder | {len(resposta_correta)} | {len(recusa_indevida)} |",
+            f"| Deveria recusar | {len(resposta_indevida)} | {len(recusa_correta)} |",
+            "",
+            "![Matriz de Recusa](matriz_recusa.png)",
+            "",
+        ]
+    )
+
     lines.extend(
         [
             "",
@@ -478,6 +601,9 @@ def main() -> int:
     rows = [evaluate_row(rag, item) for item in questions]
 
     RESULTS_PATH.write_text(build_report(rows), encoding="utf-8")
+
+    plot_refusal_matrix(rows)
+
     print(f"Relatorio gerado em {RESULTS_PATH}")
     return 0
 
