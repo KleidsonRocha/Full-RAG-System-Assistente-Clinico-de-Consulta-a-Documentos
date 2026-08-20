@@ -86,12 +86,17 @@ def retrieve_and_rerank(
         [vector_documents, lexical_documents]
     )
 
-    return rerank_documents(
+    reranked_documents = rerank_documents(
         question,
         fused_documents,
         reranker,
-        final_count,
+        len(fused_documents),
     )
+    final_documents = reciprocal_rank_fusion(
+        [fused_documents, reranked_documents]
+    )
+
+    return final_documents[:final_count]
 
 
 def reciprocal_rank_fusion(

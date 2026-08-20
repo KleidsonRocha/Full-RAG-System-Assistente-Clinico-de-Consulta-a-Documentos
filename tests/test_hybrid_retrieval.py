@@ -171,7 +171,7 @@ def test_reranking_respects_reranker_order_when_scores_are_close():
     assert reranked[1] is documents[1]
 
 
-def test_hybrid_retrieval_applies_reranking_and_top_k_to_final_documents():
+def test_hybrid_retrieval_combines_rrf_and_reranker_before_final_top_k():
     documents = [
         make_document(1, "contraindicacao alergia penicilina"),
         make_document(2, "composicao do medicamento"),
@@ -194,8 +194,8 @@ def test_hybrid_retrieval_applies_reranking_and_top_k_to_final_documents():
     )
 
     assert len(result) == 2
-    assert result[0] is documents[1]
-    assert result[1] is documents[0]
+    assert result[0] is documents[0]
+    assert result[1] is documents[1]
     assert vector_store.last_k == RETRIEVAL_CANDIDATES
     assert reranker.last_query == "alergia a penicilina"
     assert {passage["text"] for passage in reranker.last_passages} == {
@@ -269,8 +269,8 @@ def test_reranker_receives_full_deduplicated_union_before_top_k():
         for document in vector_documents + lexical_documents
     }
     assert len(result) == 2
-    assert result[0].page_content == reranker.last_passages[-1]["text"]
-    assert result[1].page_content == reranker.last_passages[-2]["text"]
+    assert result[0].page_content == reranker.last_passages[0]["text"]
+    assert result[1].page_content == reranker.last_passages[-1]["text"]
 
 
 def test_ask_uses_final_documents_for_context_documents_and_sources():
