@@ -1,20 +1,16 @@
 from __future__ import annotations
 
-import os
 import re
 import unicodedata
 from collections import defaultdict
-from pathlib import Path
 from typing import Any, Sequence
 
-from flashrank import Ranker, RerankRequest
 from langchain_core.documents import Document
 from rank_bm25 import BM25Okapi
 
 
 RETRIEVAL_CANDIDATES = 10
 RRF_RANK_CONSTANT = 60
-RERANKER_MODEL = "ms-marco-MultiBERT-L-12"
 
 
 def documents_from_vectorstore(vector_store: Any) -> list[Document]:
@@ -54,24 +50,18 @@ def build_bm25_index(documents: Sequence[Document]) -> BM25Okapi:
     return BM25Okapi(tokenized_corpus)
 
 
-def build_reranker() -> Ranker:
-    cache_dir = _reranker_cache_dir()
-    return Ranker(model_name=RERANKER_MODEL, cache_dir=str(cache_dir))
-
-
-def retrieve_and_rerank(
+def retrieve_hybrid(
     question: str,
     vector_store: Any,
     corpus_documents: Sequence[Document],
     bm25_index: BM25Okapi,
-    reranker: Any,
     top_k: int = 2,
 ) -> list[Document]:
     final_count = int(top_k)
     if final_count <= 0:
         return []
 
-    candidate_count = RETRIEVAL_CANDIDATES
+    candidate_count = max(RETRIEVAL_CANDIDATES, final_count)
     vector_documents = vector_store.similarity_search(
         question,
         k=candidate_count,
@@ -85,18 +75,7 @@ def retrieve_and_rerank(
     fused_documents = reciprocal_rank_fusion(
         [vector_documents, lexical_documents]
     )
-
-    reranked_documents = rerank_documents(
-        question,
-        fused_documents,
-        reranker,
-        len(fused_documents),
-    )
-    final_documents = reciprocal_rank_fusion(
-        [fused_documents, reranked_documents]
-    )
-
-    return final_documents[:final_count]
+    return fused_documents[:final_count]
 
 
 def reciprocal_rank_fusion(
@@ -116,43 +95,6 @@ def reciprocal_rank_fusion(
         key=lambda document: scores[_document_key(document)],
         reverse=True,
     )
-
-
-def rerank_documents(
-    question: str,
-    documents: Sequence[Document],
-    reranker: Any,
-    top_k: int,
-) -> list[Document]:
-    if top_k <= 0 or not documents:
-        return []
-
-    passages = [
-        {
-            "id": position,
-            "text": document.page_content,
-        }
-        for position, document in enumerate(documents)
-    ]
-    response = reranker.rerank(
-        RerankRequest(query=question, passages=passages)
-    )
-
-    reranked_documents = []
-    seen_positions = set()
-    for result in response:
-        position = int(result["id"])
-        if position in seen_positions or not 0 <= position < len(documents):
-            continue
-
-        seen_positions.add(position)
-        reranked_documents.append(documents[position])
-
-    for position, document in enumerate(documents):
-        if position not in seen_positions:
-            reranked_documents.append(document)
-
-    return reranked_documents[:top_k]
 
 
 def _bm25_search(
@@ -186,10 +128,3 @@ def _document_key(document: Document) -> tuple[Any, Any]:
         )
 
     return patient_id, chunk_number
-
-
-def _reranker_cache_dir() -> Path:
-    local_app_data = os.getenv("LOCALAPPDATA")
-    if local_app_data:
-        return Path(local_app_data) / "flashrank"
-    return Path.home() / ".cache" / "flashrank"

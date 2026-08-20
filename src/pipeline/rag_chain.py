@@ -9,9 +9,8 @@ from src.embedding.embeddings import OLLAMA_BASE_URL, VECTORSTORE, modelo_embedd
 from src.pipeline.prompts import OUT_OF_SCOPE_MESSAGE, SYSTEM_PROMPT
 from src.pipeline.retrieval import (
     build_bm25_index,
-    build_reranker,
     documents_from_vectorstore,
-    retrieve_and_rerank,
+    retrieve_hybrid,
 )
 
 MAX_METADATA_ITEMS = 6
@@ -72,7 +71,6 @@ class ClinicalRAG:
 
         self.corpus_documents = documents_from_vectorstore(self.vector_store)
         self.bm25_index = build_bm25_index(self.corpus_documents)
-        self.reranker = build_reranker()
 
         self.llm = ChatOllama(
             model="qwen2.5:3b",
@@ -85,12 +83,11 @@ class ClinicalRAG:
         self.parser = StrOutputParser()
 
     def _retrieve_documents(self, question: str, top_k: int = 2):
-        return retrieve_and_rerank(
+        return retrieve_hybrid(
             question=question,
             vector_store=self.vector_store,
             corpus_documents=self.corpus_documents,
             bm25_index=self.bm25_index,
-            reranker=self.reranker,
             top_k=top_k,
         )
 

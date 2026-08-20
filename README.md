@@ -10,7 +10,6 @@ Sistema de Recuperação Aumentada por Geração (RAG) desenvolvido como parte d
 - LangChain
 - FAISS
 - BM25
-- FlashRank
 - Ollama
 - Streamlit
 - Pandas
@@ -126,27 +125,31 @@ com os mesmos `Document` armazenados no docstore do FAISS.
 
 ---
 
-## Recuperação híbrida e reranking
+## Recuperação híbrida com RRF
 
 Para cada pergunta, o pipeline executa:
 
 1. busca vetorial no FAISS;
 2. busca lexical BM25 sobre os mesmos chunks do docstore FAISS;
-3. fusão das duas listas com Reciprocal Rank Fusion (RRF);
-4. reranking dos candidatos com o modelo multilíngue
-   `ms-marco-MultiBERT-L-12` via FlashRank;
-5. seleção dos `top_k` documentos finais.
+3. fusão e deduplicação das duas listas com Reciprocal Rank Fusion (RRF);
+4. seleção dos `top_k` documentos finais diretamente no ranking RRF.
 
-Os documentos finais reranqueados são usados pela `ClinicalRAG` para construir
-o contexto, gerar a lista de fontes e preencher o campo `documents` da resposta.
-O conteúdo e os metadados originais dos chunks não são modificados durante esse
-fluxo.
+Cada canal solicita até 10 candidatos por padrão. Quando `top_k` é maior que 10,
+o número solicitado aos canais também aumenta, evitando um limite artificial
+antes da fusão. O `top_k` representa somente a quantidade final de documentos
+selecionados após o RRF.
 
-Quando os scores do reranker ficam praticamente indistinguíveis, o pipeline
-preserva a ordem do RRF para evitar uma reordenação arbitrária dos chunks.
+Para o BM25, diferenças de caixa, acentos e pontuação são removidas apenas durante
+a tokenização lexical. Documentos com score BM25 igual a zero não são adicionados
+ao ranking lexical. O texto original dos chunks, seus metadados e os próprios
+objetos `Document` são preservados durante toda a recuperação.
 
-Na primeira execução, o FlashRank baixa o modelo de reranking para o cache local
-do usuário. As execuções seguintes reutilizam esse arquivo.
+A lista final produzida pelo RRF é a única fonte usada pela `ClinicalRAG` para
+construir o contexto, preencher `documents` e gerar `sources`.
+
+O FlashRank foi avaliado experimentalmente, mas não faz parte do caminho padrão
+atual. No corpus versionado, o RRF sem reranking apresentou melhor qualidade de
+recuperação que as estratégias testadas com FlashRank.
 
 ---
 
@@ -277,6 +280,32 @@ No Windows PowerShell, também pode ser executado com:
 .venv\Scripts\python.exe eval\evaluate_rag.py
 ```
 
+## Resultado atual da avaliação
+
+A avaliação mais recente foi executada com o pipeline FAISS + BM25 + RRF e
+produziu os seguintes resultados:
+
+| Indicador | Resultado |
+|---|---:|
+| Context Recall@2 | 56,2% |
+| Context Precision@2 | 34,4% |
+| Hit Rate@1 | 50,0% |
+| Hit Rate@2 | 62,5% |
+| Hit Rate@5 | 87,5% |
+| Hit Rate@10 | 87,5% |
+| MRR@10 | 0,646 |
+| Perguntas aprovadas | 17/30 |
+| Recuperação geral | 18/24 (75,0%) |
+| Geração geral | 17/30 (56,7%) |
+| Recusas fora do acervo | 6/6 (100,0%) |
+
+As métricas da camada de recuperação consideram os 16 casos `bula_*` que possuem
+chunks positivos anotados no golden set. Context Precision@2 considera somente
+esses chunks positivos; trechos relevantes não anotados são contabilizados como
+não relevantes.
+
+A suíte completa validada possui 62 testes aprovados e nenhum teste falho.
+
 ---
 
 
@@ -304,9 +333,15 @@ src/
 │
 ├── pipeline/
 │   ├── prompts.py
-│   └── rag_chain.py
+│   ├── rag_chain.py
+│   └── retrieval.py
 │
 └── vectorstore_faiss/
+
+eval/
+├── evaluate_rag.py
+├── golden_set.json
+└── results.md
 ```
 
 ---
@@ -317,12 +352,12 @@ src/
 |------------|--------|
 | Embeddings | `nomic-embed-text` |
 | LLM | `qwen2.5:3b` |
-| Reranking | `ms-marco-MultiBERT-L-12` |
 
 ---
 
 # Observações
 
 - O projeto utiliza modelos locais por meio do Ollama.
-- A base vetorial é armazenada em memória utilizando o FAISS.
+- A base vetorial é persistida em `src/vectorstore_faiss/` e carregada pelo FAISS
+  durante a inicialização do RAG.
 - O pipeline RAG foi desenvolvido utilizando LCEL (LangChain Expression Language).
