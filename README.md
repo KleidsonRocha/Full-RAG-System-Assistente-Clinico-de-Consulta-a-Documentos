@@ -9,7 +9,7 @@ Sistema de Recuperação Aumentada por Geração (RAG) desenvolvido como parte d
 - Python 3.12+
 - LangChain
 - FAISS
-- BM25
+- BM25 (`rank-bm25`)
 - Ollama
 - Streamlit
 - Pandas
@@ -134,6 +134,10 @@ Para cada pergunta, o pipeline executa:
 3. fusão e deduplicação das duas listas com Reciprocal Rank Fusion (RRF);
 4. seleção dos `top_k` documentos finais diretamente no ranking RRF.
 
+Fluxo resumido:
+
+`Pergunta → FAISS + BM25 → RRF → top_k → contexto → LLM`
+
 Cada canal solicita até 10 candidatos por padrão. Quando `top_k` é maior que 10,
 o número solicitado aos canais também aumenta, evitando um limite artificial
 antes da fusão. O `top_k` representa somente a quantidade final de documentos
@@ -147,9 +151,10 @@ objetos `Document` são preservados durante toda a recuperação.
 A lista final produzida pelo RRF é a única fonte usada pela `ClinicalRAG` para
 construir o contexto, preencher `documents` e gerar `sources`.
 
-O FlashRank foi avaliado experimentalmente, mas não faz parte do caminho padrão
-atual. No corpus versionado, o RRF sem reranking apresentou melhor qualidade de
-recuperação que as estratégias testadas com FlashRank.
+O reranking com FlashRank foi implementado e avaliado experimentalmente, mas
+reduziu a qualidade da recuperação neste corpus. Por isso, ele não faz parte do
+pipeline padrão; a estratégia final usa FAISS + BM25 + RRF, que apresentou melhor
+desempenho nas métricas avaliadas.
 
 ---
 
@@ -273,6 +278,8 @@ python eval/evaluate_rag.py
 O gold set possui 30 casos versionados, distribuídos entre `bula`, `dados_paciente` e `fora_do_acervo`.
 Cada item registra resposta esperada, termos obrigatórios/proibidos, fonte esperada, trecho de evidência e afirmações atômicas para avaliação de fidelidade.
 O relatório separa checks de recuperação e geração para facilitar análise de erro.
+Para os casos elegíveis, `eval/evaluate_rag.py` também calcula Context Recall@2,
+Context Precision@2, Hit Rate@1, Hit Rate@2, Hit Rate@5, Hit Rate@10 e MRR@10.
 
 No Windows PowerShell, também pode ser executado com:
 
@@ -282,8 +289,8 @@ No Windows PowerShell, também pode ser executado com:
 
 ## Resultado atual da avaliação
 
-A avaliação mais recente foi executada com o pipeline FAISS + BM25 + RRF e
-produziu os seguintes resultados:
+A avaliação mais recente foi executada com o pipeline FAISS + BM25 + RRF. Os
+resultados abaixo correspondem ao golden set atual do projeto:
 
 | Indicador | Resultado |
 |---|---:|
@@ -294,9 +301,7 @@ produziu os seguintes resultados:
 | Hit Rate@5 | 87,5% |
 | Hit Rate@10 | 87,5% |
 | MRR@10 | 0,646 |
-| Perguntas aprovadas | 17/30 |
 | Recuperação geral | 18/24 (75,0%) |
-| Geração geral | 17/30 (56,7%) |
 | Recusas fora do acervo | 6/6 (100,0%) |
 
 As métricas da camada de recuperação consideram os 16 casos `bula_*` que possuem
