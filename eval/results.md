@@ -6,12 +6,12 @@ Relatorio gerado por `python eval/evaluate_rag.py`.
 
 - Total de perguntas: 30
 - Avaliadas automaticamente: 30
-- Aprovadas automaticamente: 17
+- Aprovadas automaticamente: 13
 - Revisao manual: 0
-- Recuperacao ok: 18/24 (75.0%)
-- Geracao ok: 17/30 (56.7%)
+- Recuperacao ok: 10/23 (43.5%)
+- Geracao ok: 18/30 (60.0%)
 - Recusa fora do acervo ok: 6/6 (100.0%)
-- Latencia media: 16226 ms
+- Latencia media: 14870 ms
 
 A avaliacao usa gold set versionado com resposta esperada, termos
 obrigatorios/proibidos, fonte esperada e comportamento de recusa.
@@ -35,36 +35,36 @@ nao relevantes.
 
 | ID           | Categoria      | Status | Recuperacao | Geracao | Latencia | Fontes | Docs | Recusa | Checks com falha                                                |
 | ------------ | -------------- | ------ | ----------- | ------- | -------: | -----: | ---: | ------ | --------------------------------------------------------------- |
-| bula_001     | bula           | ok     | ok          | ok      | 33802 ms |      2 |    2 | nao    | -                                                               |
-| bula_002     | bula           | falha  | falha       | falha   | 21635 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk, fonte_pagina                  |
-| bula_003     | bula           | falha  | falha       | falha   | 22453 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk                                |
-| bula_004     | bula           | falha  | falha       | falha   | 20301 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk                                |
-| bula_005     | bula           | ok     | ok          | ok      | 23005 ms |      2 |    2 | nao    | -                                                               |
-| bula_006     | bula           | falha  | falha       | falha   | 11256 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk, fonte_pagina                  |
-| bula_007     | bula           | falha  | ok          | falha   | 18669 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
-| bula_008     | bula           | ok     | ok          | ok      | 22183 ms |      2 |    2 | nao    | -                                                               |
-| bula_009     | bula           | falha  | falha       | falha   |  2032 ms |      2 |    2 | sim    | recusa_esperada, termos_obrigatorios, fonte_chunk, fonte_pagina |
-| bula_010     | bula           | falha  | ok          | falha   | 18838 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
-| bula_011     | bula           | ok     | ok          | ok      | 22728 ms |      2 |    2 | nao    | -                                                               |
-| bula_012     | bula           | falha  | falha       | falha   | 13303 ms |      2 |    2 | sim    | recusa_esperada, termos_obrigatorios, fonte_chunk               |
-| bula_013     | bula           | ok     | ok          | ok      | 14758 ms |      2 |    2 | nao    | -                                                               |
-| bula_014     | bula           | falha  | ok          | falha   | 17390 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
-| bula_015     | bula           | ok     | ok          | ok      | 13219 ms |      2 |    2 | nao    | -                                                               |
-| bula_016     | bula           | falha  | ok          | falha   | 16573 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
-| paciente_001 | dados_paciente | ok     | ok          | ok      | 29096 ms |      2 |    2 | nao    | -                                                               |
-| paciente_002 | dados_paciente | ok     | ok          | ok      | 20258 ms |      2 |    2 | nao    | -                                                               |
-| paciente_003 | dados_paciente | falha  | ok          | falha   | 10397 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
-| paciente_004 | dados_paciente | ok     | ok          | ok      | 23026 ms |      2 |    2 | nao    | -                                                               |
-| paciente_005 | dados_paciente | ok     | ok          | ok      | 15426 ms |      2 |    2 | nao    | -                                                               |
-| paciente_006 | dados_paciente | falha  | ok          | falha   |  8514 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
-| paciente_007 | dados_paciente | ok     | ok          | ok      | 24305 ms |      2 |    2 | nao    | -                                                               |
-| paciente_008 | dados_paciente | falha  | ok          | falha   | 13896 ms |      2 |    2 | sim    | recusa_esperada, termos_obrigatorios                            |
-| fora_001     | fora_do_acervo | ok     | ok          | ok      |  6429 ms |      2 |    2 | sim    | -                                                               |
-| fora_002     | fora_do_acervo | ok     | ok          | ok      |  7546 ms |      2 |    2 | sim    | -                                                               |
-| fora_003     | fora_do_acervo | ok     | ok          | ok      |  4496 ms |      2 |    2 | sim    | -                                                               |
-| fora_004     | fora_do_acervo | ok     | ok          | ok      |  9311 ms |      2 |    2 | sim    | -                                                               |
-| fora_005     | fora_do_acervo | ok     | ok          | ok      | 14090 ms |      2 |    2 | sim    | -                                                               |
-| fora_006     | fora_do_acervo | ok     | ok          | ok      |  7860 ms |      2 |    2 | sim    | -                                                               |
+| bula_001     | bula           | ok     | ok          | ok      | 34837 ms |      2 |    2 | nao    | -                                                               |
+| bula_002     | bula           | falha  | falha       | falha   | 24033 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk, fonte_pagina                  |
+| bula_003     | bula           | falha  | falha       | falha   | 23400 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk                                |
+| bula_004     | bula           | falha  | falha       | falha   | 13492 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk                                |
+| bula_005     | bula           | falha  | ok          | falha   | 19676 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
+| bula_006     | bula           | falha  | falha       | falha   | 18237 ms |      2 |    2 | nao    | termos_obrigatorios, fonte_chunk, fonte_pagina                  |
+| bula_007     | bula           | falha  | ok          | falha   | 20125 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
+| bula_008     | bula           | ok     | ok          | ok      | 23263 ms |      2 |    2 | nao    | -                                                               |
+| bula_009     | bula           | falha  | falha       | falha   |  1886 ms |      2 |    2 | sim    | recusa_esperada, termos_obrigatorios, fonte_chunk, fonte_pagina |
+| bula_010     | bula           | falha  | ok          | falha   | 19499 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
+| bula_011     | bula           | ok     | ok          | ok      | 26471 ms |      2 |    2 | nao    | -                                                               |
+| bula_012     | bula           | falha  | falha       | falha   | 13945 ms |      2 |    2 | sim    | recusa_esperada, termos_obrigatorios, fonte_chunk               |
+| bula_013     | bula           | ok     | ok          | ok      | 15917 ms |      2 |    2 | nao    | -                                                               |
+| bula_014     | bula           | ok     | ok          | ok      | 24815 ms |      2 |    2 | nao    | -                                                               |
+| bula_015     | bula           | ok     | ok          | ok      | 13063 ms |      2 |    2 | nao    | -                                                               |
+| bula_016     | bula           | falha  | ok          | falha   | 17468 ms |      2 |    2 | nao    | termos_obrigatorios                                             |
+| paciente_001 | dados_paciente | falha  | falha       | ok      | 13067 ms |      2 |    2 | nao    | metadados_recuperados                                           |
+| paciente_002 | dados_paciente | falha  | falha       | falha   |  7492 ms |      2 |    2 | nao    | termos_obrigatorios, metadados_recuperados                      |
+| paciente_003 | dados_paciente | falha  | falha       | ok      |  4208 ms |      2 |    2 | nao    | metadados_recuperados                                           |
+| paciente_004 | dados_paciente | ok     | ok          | ok      | 19434 ms |      2 |    2 | nao    | -                                                               |
+| paciente_005 | dados_paciente | falha  | falha       | ok      |  7075 ms |      2 |    2 | nao    | metadados_recuperados                                           |
+| paciente_006 | dados_paciente | falha  | falha       | ok      |  4394 ms |      2 |    2 | nao    | metadados_recuperados                                           |
+| paciente_007 | dados_paciente | falha  | falha       | falha   |  8118 ms |      2 |    2 | nao    | termos_obrigatorios, metadados_recuperados                      |
+| paciente_008 | dados_paciente | falha  | falha       | ok      | 10638 ms |      2 |    2 | nao    | metadados_recuperados                                           |
+| fora_001     | fora_do_acervo | ok     | ok          | ok      |  6275 ms |      2 |    2 | sim    | -                                                               |
+| fora_002     | fora_do_acervo | ok     | ok          | ok      |  8095 ms |      2 |    2 | sim    | -                                                               |
+| fora_003     | fora_do_acervo | ok     | ok          | ok      | 11651 ms |      2 |    2 | sim    | -                                                               |
+| fora_004     | fora_do_acervo | ok     | ok          | ok      | 12810 ms |      2 |    2 | sim    | -                                                               |
+| fora_005     | fora_do_acervo | ok     | ok          | ok      | 14267 ms |      2 |    2 | sim    | -                                                               |
+| fora_006     | fora_do_acervo | ok     | ok          | ok      |  8440 ms |      2 |    2 | sim    | -                                                               |
 
 ## Metricas de recuperacao por pergunta
 
@@ -92,15 +92,19 @@ nao relevantes.
 - bula_002: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_003: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_004: revisar resposta manualmente; criterio automatico marcou falha.
+- bula_005: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_006: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_007: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_009: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_010: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_012: revisar resposta manualmente; criterio automatico marcou falha.
-- bula_014: revisar resposta manualmente; criterio automatico marcou falha.
 - bula_016: revisar resposta manualmente; criterio automatico marcou falha.
+- paciente_001: revisar resposta manualmente; criterio automatico marcou falha.
+- paciente_002: revisar resposta manualmente; criterio automatico marcou falha.
 - paciente_003: revisar resposta manualmente; criterio automatico marcou falha.
+- paciente_005: revisar resposta manualmente; criterio automatico marcou falha.
 - paciente_006: revisar resposta manualmente; criterio automatico marcou falha.
+- paciente_007: revisar resposta manualmente; criterio automatico marcou falha.
 - paciente_008: revisar resposta manualmente; criterio automatico marcou falha.
 
 ## Matriz de Recusa
@@ -108,7 +112,7 @@ nao relevantes.
 A matriz compara o comportamento esperado com o comportamentoobservado do sistema, permitindo identificar recusas corretas,respostas indevidas e recusas indevidas.Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos.
 | Esperado / Observado | Respondeu | Recusou |
 | --- | ---: | ---: |
-| Deveria responder | 21 | 3 |
+| Deveria responder | 22 | 2 |
 | Deveria recusar | 0 | 6 |
 
 ![Matriz de Recusa](matriz_recusa.png)

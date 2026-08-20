@@ -210,7 +210,12 @@ def evaluate_row(rag: Any, item: dict[str, Any]) -> dict[str, Any]:
     retrieval_checks = {
         name: passed
         for name, passed in checks.items()
-        if name in {"fonte_chunk", "fonte_pagina", "metadados_recuperados"}
+        if name in {
+            "fonte_chunk",
+            "fonte_pagina",
+            "metadados_recuperados",
+            "tipo_documento_correto",
+        }
     }
     generation_checks = {
         name: passed
@@ -256,68 +261,147 @@ def evaluate_checks(
         return {"sem_erro": False}
 
     normalized_answer = normalize_text(answer)
-    expected_refusal = bool(item.get("should_refuse"))
-    required_terms = [normalize_text(term) for term in item.get("must_contain", [])]
-    forbidden_terms = [normalize_text(term) for term in item.get("must_not_contain", [])]
-    expected_chunks = set(item.get("expected_source_chunks") or [])
-    expected_chunk_keys = {
-        key
-        for chunk_id in expected_chunks
-        if (key := _chunk_key_from_identifier(chunk_id)) is not None
-    }
-    expected_pages = {str(page) for page in item.get("expected_source_pages") or []}
 
-    returned_document_chunk_keys = {
-        key
-        for document in documents
-        if (key := _document_chunk_key(document)) is not None
+    expected_refusal = bool(item.get("should_refuse"))
+
+    expected_document_type = item.get("expected_document_type")
+
+    required_terms = [
+        normalize_text(term)
+        for term in item.get("must_contain",[])]
+    forbidden_terms = [normalize_text(term)
+        for term in item.get("must_not_contain",[])
+    ]
+
+    expected_chunks = set(item.get("expected_source_chunks")or [])
+
+    expected_chunk_keys = {key for chunk_id in expected_chunks if ( key := _chunk_key_from_identifier(chunk_id))
+        is not None
     }
-    returned_source_chunk_keys = {
-        key
-        for source in sources
-        if isinstance(source, dict)
-        and (key := _chunk_key_from_identifier(source.get("chunk"))) is not None
+
+    expected_pages = {str(page)for page in (item.get("expected_source_pages")or [])
     }
+
+    returned_document_chunk_keys = {key for document in documents if (key := _document_chunk_key(document))
+        is not None
+    }
+
+    returned_source_chunk_keys = {key for source in sources if isinstance(source, dict) and 
+                                  (key := _chunk_key_from_identifier(
+                source.get("chunk")
+            )
+        )
+        is not None
+    }
+
     returned_chunk_keys = (
         returned_document_chunk_keys
         if returned_document_chunk_keys
         else returned_source_chunk_keys
     )
+
+
     returned_pages = {
         str(source.get("pagina"))
         for source in sources
-        if isinstance(source, dict) and source.get("pagina") is not None
+        if (isinstance(source, dict) and source.get("pagina") is not None)
     }
 
-    metadata_fields = set(item.get("expected_metadata_fields") or [])
+    metadata_fields = set(
+        item.get("expected_metadata_fields") or []
+    )
+
     returned_metadata_fields = set()
+
     for doc in documents:
-        metadata = getattr(doc, "metadata", {}) or {}
-        returned_metadata_fields.update(
-            key for key in metadata_fields if metadata.get(key) not in (None, "", [])
+
+        metadata = (
+            getattr(
+                doc,
+                "metadata",
+                {}
+            )
+            or {}
         )
+
+        returned_metadata_fields.update(
+            key
+            for key in metadata_fields
+            if metadata.get(key)
+            not in (
+                None,
+                "",
+                []
+            )
+        )
+
+    returned_document_types = set()
+
+    for doc in documents:
+
+        metadata = (
+            getattr(
+                doc,
+                "metadata",
+                {}
+            )
+            or {}
+        )
+
+        document_type = metadata.get(
+            "tipo_documento"
+        )
+
+        if document_type not in (
+            None,
+            ""
+        ):
+            returned_document_types.add(
+                document_type
+            )
 
     checks = {
         "sem_erro": True,
-        "resposta_presente": bool(answer),
-        "recusa_esperada": is_refusal if expected_refusal else not is_refusal,
-        "termos_obrigatorios": all(term in normalized_answer for term in required_terms),
-        "termos_proibidos": not any(term in normalized_answer for term in forbidden_terms),
+
+        "resposta_presente":
+            bool(answer),
+
+        "recusa_esperada":
+            (
+                is_refusal
+                if expected_refusal
+                else not is_refusal
+            ),
+
+        "termos_obrigatorios":
+            all(
+                term in normalized_answer
+                for term in required_terms
+            ),
+
+        "termos_proibidos":
+            not any(
+                term in normalized_answer
+                for term in forbidden_terms
+            ),
     }
 
+    if expected_document_type is not None:
+
+        checks["tipo_documento_correto"] = (
+            bool(returned_document_types) and returned_document_types == {expected_document_type})
+
     if expected_chunks:
-        checks["fonte_chunk"] = any(
-            _chunk_keys_match(expected, returned)
-            for expected in expected_chunk_keys
+
+        checks["fonte_chunk"] = any(_chunk_keys_match(expected,returned) for expected in expected_chunk_keys
             for returned in returned_chunk_keys
         )
 
     if expected_pages:
-        checks["fonte_pagina"] = bool(expected_pages & returned_pages)
+        checks["fonte_pagina"] = bool(expected_pages& returned_pages)
 
     if metadata_fields:
-        checks["metadados_recuperados"] = metadata_fields.issubset(returned_metadata_fields)
-
+        checks["metadados_recuperados"] = (metadata_fields.issubset(returned_metadata_fields))
     return checks
 
 def plot_refusal_matrix(rows: list[dict[str, Any]]) -> None:
@@ -567,8 +651,7 @@ def build_report(rows: list[dict[str, Any]]) -> str:
             "A matriz compara o comportamento esperado com o comportamento"
             "observado do sistema, permitindo identificar recusas corretas,"
             "respostas indevidas e recusas indevidas."
-            "Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos."
-            ""
+            "Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos.",
             "| Esperado / Observado | Respondeu | Recusou |",
             "| --- | ---: | ---: |",
             f"| Deveria responder | {len(resposta_correta)} | {len(recusa_indevida)} |",

@@ -133,15 +133,20 @@ class ClinicalRAG:
 
     def _get_sources(self, documents):
         sources = []
+
         for doc in documents:
-            metadata = doc.metadata
+            metadata = doc.metadata or {}
+
             source = {
                 "chunk": self._chunk_id(metadata),
+                "tipo_documento": metadata.get("tipo_documento"),
                 "pagina": metadata.get("pagina_origem"),
-                "medicamento": metadata.get("medicamento_bula_alvo")
+                "medicamento": metadata.get("medicamento_bula_alvo"),
             }
+
             if source not in sources:
                 sources.append(source)
+
         return sources
 
     def ask(self, question: str, top_k: int = 2):
