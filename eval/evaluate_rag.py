@@ -300,14 +300,18 @@ def evaluate_checks(
 
 
 def evaluate_row(
-    rag: Any, item: dict[str, Any], judge: LLMJudge | None = None
+    rag: Any, item: dict[str, Any], judge: LLMJudge | None = None, top_k: int = 2
 ) -> dict[str, Any]:
     started_at = time.perf_counter()
     error = None
     result: dict[str, Any] = {}
 
     try:
-        result = rag.ask(item["question"])
+        if hasattr(rag, "ask"):
+            try:
+                result = rag.ask(item["question"], top_k=top_k)
+            except TypeError:
+                result = rag.ask(item["question"])
     except Exception as exc:
         error = str(exc)
 
@@ -469,7 +473,34 @@ def plot_refusal_matrix(rows: list[dict[str, Any]]) -> None:
     print(f"Matriz de recusa gerada em {output_path}")
 
 
-def build_report(rows: list[dict[str, Any]]) -> str:
+def run_ablation_study(rag: Any, questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    ablation_results = []
+    configs = [1, 2, 4]
+
+    for k in configs:
+        rows = [evaluate_row(rag, item, judge=None, top_k=k) for item in questions]
+        valid_rows = [r for r in rows if not r["is_refusal"] and r["total_claims"] > 0]
+
+        avg_faith = (
+            sum(r["faithfulness_score"] for r in valid_rows) / len(valid_rows)
+            if valid_rows else 0.0
+        )
+        avg_lat = sum(r["latency_ms"] for r in rows) / len(rows) if rows else 0.0
+        success_rate = (
+            sum(1 for r in rows if r["status"] == "ok") / len(rows) * 100
+            if rows else 0.0
+        )
+
+        ablation_results.append({
+            "config": f"top_k = {k}",
+            "avg_faithfulness": f"{avg_faith:.1f}%",
+            "avg_latency": f"{avg_lat:.0f} ms",
+            "success_rate": f"{success_rate:.1f}%",
+        })
+
+    return ablation_results
+
+def build_report(rows: list[dict[str, Any]], ablation: list[dict[str, Any]] = None) -> str:
     automatic_rows = [row for row in rows if row["status"] != "avaliar manualmente"]
     passed_rows = [row for row in automatic_rows if row["status"] == "ok"]
     manual_rows = [row for row in rows if row["status"] == "avaliar manualmente"]
@@ -562,12 +593,30 @@ def build_report(rows: list[dict[str, Any]]) -> str:
             "no golden set; chunks relevantes nao anotados sao contabilizados como",
             "nao relevantes.",
             "",
+        ]
+    )
+    if ablation:
+        lines.extend([
+            "## Estudo de Ablation (Variação de Hiperparâmetros)",
+            "",
+            "Comparação mantendo tamanho de chunk e overlap fixos, alterando apenas o fator `top_k`:",
+            "",
+            "| Configuração | Fidelidade Média | Latência Média | Taxa de Sucesso |",
+            "| --- | ---: | ---: | ---: |",
+        ])
+        for ab in ablation:
+            lines.append(f"| {ab['config']} | {ab['avg_faithfulness']} | {ab['avg_latency']} | {ab['success_rate']} |")
+        lines.extend(["", ""])
+
+    lines.extend(
+        [
             "## Resultados por pergunta",
             "",
             "| ID | Categoria | Status | Recuperacao | Geracao | Juiz (F/R/Ref) | Claims | Fidelidade | Citacao | Latencia | Fontes | Docs | Recusa | Checks com falha |",
             "| --- | --- | --- | --- | --- | --- | --- | ---: | --- | ---: | ---: | ---: | --- | --- |",
         ]
     )
+
 
     for row in rows:
         refusal = "sim" if row["is_refusal"] else "nao"
@@ -671,9 +720,20 @@ def run_evaluation(
 
 
 def main() -> int:
-    rows = run_evaluation()
-    RESULTS_PATH.write_text(build_report(rows), encoding="utf-8")
+    from src.pipeline.rag_chain import ClinicalRAG
+    from eval.llm_as_a_judge.judge import LLMJudge
 
+    questions = load_golden_set()
+    rag_instance = ClinicalRAG()
+    judge_instance = LLMJudge()
+
+    print("-> Executando avaliacao baseline")
+    rows = [evaluate_row(rag_instance, item, judge_instance) for item in questions]
+
+    print("-> Executando ablation")
+    ablation = run_ablation_study(rag_instance, questions)
+
+    RESULTS_PATH.write_text(build_report(rows, ablation), encoding="utf-8")
     plot_refusal_matrix(rows)
 
     print(f"Relatorio gerado em {RESULTS_PATH}")
