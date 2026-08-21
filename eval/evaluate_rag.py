@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -39,6 +40,46 @@ def looks_like_refusal(answer: str) -> bool:
     normalized_answer = " ".join(str(answer or "").lower().split())
     return any(marker in normalized_answer for marker in REFUSAL_MARKERS)
 
+def extract_claims(text: str) -> list[str]:
+    raw_sentences = re.split(r"(?<=[.!?])\s+|\n+", text)
+    claims = [s.strip() for s in raw_sentences if len(s.strip()) > 15]
+    return claims
+
+
+def evaluate_claim_faithfulness(
+    claims: list[str],
+    retrieved_texts: list[str],
+    sources: list[Any],
+) -> dict[str, Any]:
+    if not claims:
+        return {
+            "total_claims": 0,
+            "supported_claims": 0,
+            "faithfulness_score": 0.0,
+            "has_citation": bool(sources),
+        }
+
+    full_context = " ".join(retrieved_texts).lower()
+    supported = 0
+
+    for claim in claims:
+        words = [w.lower() for w in re.findall(r"\b\w{4,}\b", claim)]
+        if not words:
+            continue
+
+        matches = sum(1 for word in words if word in full_context)
+        match_ratio = matches / len(words)
+
+        if match_ratio >= 0.5:
+            supported += 1
+
+    score = round((supported / len(claims)) * 100, 1)
+    return {
+        "total_claims": len(claims),
+        "supported_claims": supported,
+        "faithfulness_score": score,
+        "has_citation": bool(sources),
+    }
 
 def evaluate_row(rag: Any, item: dict[str, Any]) -> dict[str, Any]:
     started_at = time.perf_counter()
@@ -54,8 +95,18 @@ def evaluate_row(rag: Any, item: dict[str, Any]) -> dict[str, Any]:
     answer = str(result.get("answer") or "").strip()
     sources = result.get("sources") or []
     documents = result.get("documents") or []
+
+    retrieved_texts = []
+    for doc in documents:
+        if isinstance(doc, dict):
+            retrieved_texts.append(doc.get("page_content") or doc.get("text") or "")
+        elif hasattr(doc, "page_content"):
+            retrieved_texts.append(doc.page_content)
+
     is_refusal = looks_like_refusal(answer)
     status = classify_status(item, answer, sources, documents, is_refusal, error)
+    claims = extract_claims(answer) if not is_refusal else []
+    faith_metrics = evaluate_claim_faithfulness(claims, retrieved_texts, sources)
 
     return {
         "id": item["id"],
@@ -68,6 +119,10 @@ def evaluate_row(rag: Any, item: dict[str, Any]) -> dict[str, Any]:
         "is_refusal": is_refusal,
         "status": status,
         "error": error,
+        "total_claims": faith_metrics["total_claims"],
+        "supported_claims": faith_metrics["supported_claims"],
+        "faithfulness_score": faith_metrics["faithfulness_score"],
+        "has_citation": faith_metrics["has_citation"],
     }
 
 
@@ -104,6 +159,11 @@ def build_report(rows: list[dict[str, Any]]) -> str:
         if rows
         else 0
     )
+    valid_faith_rows = [r for r in rows if not r["is_refusal"] and r["total_claims"] > 0]
+    avg_faithfulness = (
+        sum(r["faithfulness_score"] for r in valid_faith_rows) / len(valid_faith_rows)
+        if valid_faith_rows else 0.0
+    )
 
     lines = [
         "# Resultados da avaliacao RAG",
@@ -115,6 +175,7 @@ def build_report(rows: list[dict[str, Any]]) -> str:
         f"- Total de perguntas: {len(rows)}",
         f"- Avaliadas automaticamente: {len(automatic_rows)}",
         f"- Aprovadas automaticamente: {len(passed_rows)}",
+        f"- Fidelidade Média (Claim-level):** {avg_faithfulness:.1f}%",
         f"- Revisao manual: {len(manual_rows)}",
         f"- Latencia media: {average_latency:.0f} ms",
         "",
@@ -129,12 +190,11 @@ def build_report(rows: list[dict[str, Any]]) -> str:
 
     for row in rows:
         refusal = "sim" if row["is_refusal"] else "nao"
+        citation = "sim" if row["has_citation"] else "nao"
+        claims_fmt = f"{row['supported_claims']}/{row['total_claims']}"
         lines.append(
-            "| {id} | {category} | {status} | {latency_ms} ms | "
-            "{source_count} | {document_count} | {refusal} |".format(
-                refusal=refusal,
-                **row,
-            )
+            f"| {row['id']} | {row['status']} | {row['latency_ms']} ms | "
+            f"{claims_fmt} | {row['faithfulness_score']}% | {citation} | {refusal} |"
         )
 
     lines.extend(["", "## Observacoes", ""])
