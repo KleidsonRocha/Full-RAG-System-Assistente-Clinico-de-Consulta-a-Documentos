@@ -1,5 +1,6 @@
 import os
 import json
+from collections import Counter
 from langchain_core.documents import Document
 from src.embedding.embeddings import Carregando_embeddings
 
@@ -26,11 +27,27 @@ def ler_chunks_do_json(caminho_json: str) -> list[Document]:
         texto = item.get("page_content", item.get("text", ""))
         metadados = item.get("metadata", {})
 
+        if item.get("chunk_id"):
+            metadados["chunk_id"] = item["chunk_id"]
+
         if texto:
             doc = Document(page_content=texto, metadata=metadados)
             chunks_langchain.append(doc)
 
     print(f"{len(chunks_langchain)} chunks prontos.")
+
+    tipos = Counter(
+        doc.metadata.get("tipo_documento","nao_definido")
+        for doc in chunks_langchain
+    )
+
+    print("\nDistribuição por tipo de documento:")
+
+    for tipo, quantidade in tipos.items():
+        print(
+            f"- {tipo}: {quantidade}"
+        )
+
     return chunks_langchain
 
 
@@ -44,7 +61,7 @@ def executar_ingestao(caminho_json: str = None) -> None:
     lista_de_chunks = ler_chunks_do_json(path_to_use)
 
     if lista_de_chunks:
-        db_local = Carregando_embeddings(
+        Carregando_embeddings(
             chunks=lista_de_chunks, model_name="nomic-embed-text"
         )
         print("\n Vetores foram persistidos com sucesso!")

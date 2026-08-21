@@ -9,6 +9,7 @@ Sistema de Recuperação Aumentada por Geração (RAG) desenvolvido como parte d
 - Python 3.12+
 - LangChain
 - FAISS
+- BM25 (`rank-bm25`)
 - Ollama
 - Streamlit
 - Pandas
@@ -52,51 +53,6 @@ pip install -r requirements.txt
 
 ---
 
-# Testes e avaliação
-
-Execute a bateria completa de testes, incluindo integração com o RAG real, com:
-
-### Windows PowerShell
-
-```powershell
-.venv\Scripts\python.exe -m pytest
-```
-
-### Linux/macOS
-
-```bash
-python -m pytest
-```
-
-Esse comando inclui os testes de integração com RAG real, então depende do Ollama em execução, dos modelos locais e da base vetorial gerada.
-
-Para rodar somente os testes que não chamam o modelo:
-
-### Windows PowerShell
-
-```powershell
-$env:SKIP_RAG_INTEGRATION='1'; .venv\Scripts\python.exe -m pytest
-```
-
-### Linux/macOS
-
-```bash
-SKIP_RAG_INTEGRATION=1 python -m pytest
-```
-
-Para rodar a bateria de avaliação com as perguntas em `eval/test_questions.json` e gerar o relatório em `eval/results.md`:
-
-```bash
-python eval/evaluate_rag.py
-```
-
-No Windows PowerShell, também pode ser executado com:
-
-```powershell
-.venv\Scripts\python.exe eval\evaluate_rag.py
-```
-
----
 
 # Instalação do Ollama
 
@@ -163,6 +119,42 @@ Esse processo realiza:
 - geração dos chunks em `data/processed/dados_paciente_chunk.json`;
 - criação dos embeddings com Ollama;
 - persistência da base vetorial no FAISS em `src/vectorstore_faiss/`.
+
+O BM25 não cria uma segunda base persistida. Seu corpus é montado em memória
+com os mesmos `Document` armazenados no docstore do FAISS.
+
+---
+
+## Recuperação híbrida com RRF
+
+Para cada pergunta, o pipeline executa:
+
+1. busca vetorial no FAISS;
+2. busca lexical BM25 sobre os mesmos chunks do docstore FAISS;
+3. fusão e deduplicação das duas listas com Reciprocal Rank Fusion (RRF);
+4. seleção dos `top_k` documentos finais diretamente no ranking RRF.
+
+Fluxo resumido:
+
+`Pergunta → FAISS + BM25 → RRF → top_k → contexto → LLM`
+
+Cada canal solicita até 10 candidatos por padrão. Quando `top_k` é maior que 10,
+o número solicitado aos canais também aumenta, evitando um limite artificial
+antes da fusão. O `top_k` representa somente a quantidade final de documentos
+selecionados após o RRF.
+
+Para o BM25, diferenças de caixa, acentos e pontuação são removidas apenas durante
+a tokenização lexical. Documentos com score BM25 igual a zero não são adicionados
+ao ranking lexical. O texto original dos chunks, seus metadados e os próprios
+objetos `Document` são preservados durante toda a recuperação.
+
+A lista final produzida pelo RRF é a única fonte usada pela `ClinicalRAG` para
+construir o contexto, preencher `documents` e gerar `sources`.
+
+O reranking com FlashRank foi implementado e avaliado experimentalmente, mas
+reduziu a qualidade da recuperação neste corpus. Por isso, ele não faz parte do
+pipeline padrão; a estratégia final usa FAISS + BM25 + RRF, que apresentou melhor
+desempenho nas métricas avaliadas.
 
 ---
 
@@ -244,6 +236,84 @@ Mais detalhes estão em `src/interface/README_INTERFACE.md`.
 
 ---
 
+
+# Testes e avaliação
+
+Execute a bateria completa de testes, incluindo integração com o RAG real, com:
+
+### Windows PowerShell
+
+```powershell
+.venv\Scripts\python.exe -m pytest
+```
+
+### Linux/macOS
+
+```bash
+python -m pytest
+```
+
+Esse comando inclui os testes de integração com RAG real, então depende do Ollama em execução, dos modelos locais e da base vetorial gerada.
+
+Para rodar somente os testes que não chamam o modelo:
+
+### Windows PowerShell
+
+```powershell
+$env:SKIP_RAG_INTEGRATION='1'; .venv\Scripts\python.exe -m pytest
+```
+
+### Linux/macOS
+
+```bash
+SKIP_RAG_INTEGRATION=1 python -m pytest
+```
+
+Para rodar a bateria de avaliação com o gold set versionado em `eval/golden_set.json` e gerar o relatório em `eval/results.md`:
+
+```bash
+python eval/evaluate_rag.py
+```
+
+O gold set possui 30 casos versionados, distribuídos entre `bula`, `dados_paciente` e `fora_do_acervo`.
+Cada item registra resposta esperada, termos obrigatórios/proibidos, fonte esperada, trecho de evidência e afirmações atômicas para avaliação de fidelidade.
+O relatório separa checks de recuperação e geração para facilitar análise de erro.
+Para os casos elegíveis, `eval/evaluate_rag.py` também calcula Context Recall@2,
+Context Precision@2, Hit Rate@1, Hit Rate@2, Hit Rate@5, Hit Rate@10 e MRR@10.
+
+No Windows PowerShell, também pode ser executado com:
+
+```powershell
+.venv\Scripts\python.exe eval\evaluate_rag.py
+```
+
+## Resultado atual da avaliação
+
+A avaliação mais recente foi executada com o pipeline FAISS + BM25 + RRF. Os
+resultados abaixo correspondem ao golden set atual do projeto:
+
+| Indicador | Resultado |
+|---|---:|
+| Context Recall@2 | 56,2% |
+| Context Precision@2 | 34,4% |
+| Hit Rate@1 | 50,0% |
+| Hit Rate@2 | 62,5% |
+| Hit Rate@5 | 87,5% |
+| Hit Rate@10 | 87,5% |
+| MRR@10 | 0,646 |
+| Recuperação geral | 18/24 (75,0%) |
+| Recusas fora do acervo | 6/6 (100,0%) |
+
+As métricas da camada de recuperação consideram os 16 casos `bula_*` que possuem
+chunks positivos anotados no golden set. Context Precision@2 considera somente
+esses chunks positivos; trechos relevantes não anotados são contabilizados como
+não relevantes.
+
+A suíte completa validada possui 62 testes aprovados e nenhum teste falho.
+
+---
+
+
 # Estrutura do projeto
 
 ```text
@@ -268,9 +338,15 @@ src/
 │
 ├── pipeline/
 │   ├── prompts.py
-│   └── rag_chain.py
+│   ├── rag_chain.py
+│   └── retrieval.py
 │
 └── vectorstore_faiss/
+
+eval/
+├── evaluate_rag.py
+├── golden_set.json
+└── results.md
 ```
 
 ---
@@ -287,5 +363,6 @@ src/
 # Observações
 
 - O projeto utiliza modelos locais por meio do Ollama.
-- A base vetorial é armazenada em memória utilizando o FAISS.
+- A base vetorial é persistida em `src/vectorstore_faiss/` e carregada pelo FAISS
+  durante a inicialização do RAG.
 - O pipeline RAG foi desenvolvido utilizando LCEL (LangChain Expression Language).

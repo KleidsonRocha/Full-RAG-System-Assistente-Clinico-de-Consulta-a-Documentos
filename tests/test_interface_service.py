@@ -13,10 +13,28 @@ class FakeDocument:
 class FakeVectorStore:
     def __init__(self) -> None:
         self.last_search_kwargs: dict[str, Any] | None = None
+        self.last_similarity_search: dict[str, Any] | None = None
 
     def as_retriever(self, search_type: str, search_kwargs: dict[str, Any]) -> object:
         self.last_search_kwargs = search_kwargs
         return {"search_type": search_type, "search_kwargs": search_kwargs}
+
+    def similarity_search_with_score(self, question: str, k: int) -> list[tuple[FakeDocument, float]]:
+        self.last_similarity_search = {"question": question, "k": k}
+        return [
+            (
+                FakeDocument(
+                    page_content="Trecho recuperado da bula.",
+                    metadata={
+                        "arquivo_origem": "bula_amoxicilina_clavulanato_paciente1.pdf",
+                        "pagina_origem": 1,
+                        "chunk_number": 1,
+                        "medicamento_bula_alvo": "amoxicilina + clavulanato",
+                    },
+                ),
+                0.2,
+            )
+        ]
 
 
 class FakeRAG:
@@ -68,7 +86,10 @@ def test_ask_question_returns_normalized_success_payload(monkeypatch):
     assert isinstance(result["latency_ms"], int)
     assert len(result["sources"]) == 1
     assert len(result["retrieved_context"]) == 1
-    assert fake_rag.vector_store.last_search_kwargs == {"k": 2}
+    assert fake_rag.vector_store.last_similarity_search == {
+        "question": "Qual e a composicao do medicamento?",
+        "k": 2,
+    }
 
 
 def test_ask_question_rejects_empty_question():
@@ -105,3 +126,10 @@ def test_ask_question_reports_missing_vectorstore(monkeypatch):
     assert result["ok"] is False
     assert result["error_code"] == "vectorstore_not_found"
     assert result["technical_details"]
+
+
+def test_rebuild_vectorstore_rejects_overlap_greater_than_chunk_size():
+    result = rag_service.rebuild_vectorstore(chunk_size=100, chunk_overlap=300)
+
+    assert result["ok"] is False
+    assert "overlap" in result["message"].lower()

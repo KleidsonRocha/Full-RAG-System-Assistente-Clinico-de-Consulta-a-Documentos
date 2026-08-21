@@ -64,11 +64,13 @@ def render_sidebar() -> dict[str, object]:
         help="Quantidade de tokens por pedaço de documento."
     )
     
+    max_chunk_overlap = min(300, chunk_size - 10)
+
     chunk_overlap = st.sidebar.slider(
         "Overlap do Chunk",
         min_value=0,
-        max_value=300,
-        value=80,
+        max_value=max_chunk_overlap,
+        value=min(80, max_chunk_overlap),
         step=10,
         help="Quantidade de tokens que se sobrepõem entre os pedaços."
     )

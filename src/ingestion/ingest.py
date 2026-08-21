@@ -154,7 +154,12 @@ def clean_dataframe(df: pd.DataFrame, table_name: str) -> pd.DataFrame:
         errors="ignore",
     )
 
-    text_columns = df.select_dtypes(include="object").columns
+    text_columns = [
+        column
+        for column in df.columns
+        if pd.api.types.is_object_dtype(df[column])
+        or pd.api.types.is_string_dtype(df[column])
+    ]
 
     for column in text_columns:
         remove_numbers = column in {"first", "last"}

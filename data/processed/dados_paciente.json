@@ -1,7 +1,7 @@
 {
   "metadata": {
     "patient_id": "1d604da9-9a81-4ba9-80c2-de3375d59b40",
-    "data_geracao": "2026-07-06T14:10:39.874364+00:00",
+    "data_geracao": "2026-07-09T16:48:51.200383+00:00",
     "fontes": {
       "csv": [
         "patients.csv",

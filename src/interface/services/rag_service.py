@@ -32,6 +32,15 @@ def rebuild_vectorstore(chunk_size: int = 400, chunk_overlap: int = 80) -> dict[
     import time
 
     started_at = time.perf_counter()
+    chunk_size = int(chunk_size)
+    chunk_overlap = int(chunk_overlap)
+
+    if chunk_overlap >= chunk_size:
+        return {
+            "ok": False,
+            "message": "O overlap do chunk deve ser menor que o tamanho do chunk.",
+            "elapsed_ms": int((time.perf_counter() - started_at) * 1000),
+        }
 
     try:
         from src.chunk.chunking import processar_chunks
