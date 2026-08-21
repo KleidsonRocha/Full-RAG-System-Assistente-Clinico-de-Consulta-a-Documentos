@@ -6,12 +6,16 @@ Relatorio gerado por `python eval/evaluate_rag.py`.
 
 - Total de perguntas: 30
 - Avaliadas automaticamente: 30
-- Aprovadas totalmente (Checks + Juiz): 14
+- Aprovadas automaticamente: 14
+- Fidelidade Média (Claim-level): 93.5%
 - Revisao manual: 0
 - Recuperacao ok: 10/23 (43.5%)
-- Geracao ok (Regras lexicas): 20/30 (66.7%)
+- Geracao ok: 20/30 (66.7%)
 - Recusa fora do acervo ok: 6/6 (100.0%)
-- Latencia media: 1404 ms
+- Latencia media: 1383 ms
+
+A avaliacao usa gold set versionado com resposta esperada, termos
+obrigatorios/proibidos, fonte esperada e comportamento de recusa.
 
 ## Metricas do LLM as a Judge
 
@@ -30,40 +34,44 @@ Relatorio gerado por `python eval/evaluate_rag.py`.
 - Hit Rate@10: 87.5%
 - MRR@10: 0.646
 
+Context Precision@2 considera somente os chunks positivos anotados
+no golden set; chunks relevantes nao anotados sao contabilizados como
+nao relevantes.
+
 ## Resultados por pergunta
 
-| ID | Categoria | Status | Recuperacao | Geracao | Juiz (F/R/Ref) | Latencia | Fontes | Docs | Recusa | Checks com falha |
-| --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | --- | --- |
-| bula_001 | bula | ok | ok | ok | 1/1/1 | 7446 ms | 2 | 2 | nao | - |
-| bula_002 | bula | falha | falha | falha | 1/0/0 | 1894 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk, fonte_pagina |
-| bula_003 | bula | falha | falha | falha | 0/0/0 | 1762 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk |
-| bula_004 | bula | falha | falha | falha | 1/1/1 | 1471 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk |
-| bula_005 | bula | falha | ok | falha | 1/1/1 | 2243 ms | 2 | 2 | nao | termos_obrigatorios |
-| bula_006 | bula | falha | falha | falha | 1/1/1 | 775 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk, fonte_pagina |
-| bula_007 | bula | falha | ok | falha | 1/1/1 | 1642 ms | 2 | 2 | nao | termos_obrigatorios |
-| bula_008 | bula | ok | ok | ok | 1/1/1 | 1869 ms | 2 | 2 | nao | - |
-| bula_009 | bula | falha | falha | falha | 0/0/0 | 1506 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk, fonte_pagina |
-| bula_010 | bula | ok | ok | ok | 1/1/1 | 1638 ms | 2 | 2 | nao | - |
-| bula_011 | bula | ok | ok | ok | 1/1/1 | 2279 ms | 2 | 2 | nao | - |
-| bula_012 | bula | falha | falha | falha | 0/0/1 | 751 ms | 2 | 2 | sim | recusa_esperada, termos_obrigatorios, fonte_chunk |
-| bula_013 | bula | ok | ok | ok | 1/1/1 | 774 ms | 2 | 2 | nao | - |
-| bula_014 | bula | ok | ok | ok | 1/1/1 | 1329 ms | 2 | 2 | nao | - |
-| bula_015 | bula | ok | ok | ok | 1/1/1 | 897 ms | 2 | 2 | nao | - |
-| bula_016 | bula | falha | ok | falha | 1/1/1 | 1140 ms | 2 | 2 | nao | termos_obrigatorios |
-| paciente_001 | dados_paciente | falha | falha | ok | 1/1/1 | 1659 ms | 2 | 2 | nao | metadados_recuperados |
-| paciente_002 | dados_paciente | falha | falha | ok | 1/1/1 | 1407 ms | 2 | 2 | nao | metadados_recuperados |
-| paciente_003 | dados_paciente | falha | falha | ok | 1/1/1 | 407 ms | 2 | 2 | nao | metadados_recuperados |
-| paciente_004 | dados_paciente | ok | ok | ok | 1/1/1 | 2198 ms | 2 | 2 | nao | - |
-| paciente_005 | dados_paciente | falha | falha | ok | 1/1/1 | 721 ms | 2 | 2 | nao | metadados_recuperados |
-| paciente_006 | dados_paciente | falha | falha | ok | 1/1/1 | 665 ms | 2 | 2 | nao | metadados_recuperados |
-| paciente_007 | dados_paciente | falha | falha | falha | 0/0/0 | 757 ms | 2 | 2 | nao | termos_obrigatorios, metadados_recuperados |
-| paciente_008 | dados_paciente | falha | falha | ok | 1/1/1 | 654 ms | 2 | 2 | nao | metadados_recuperados |
-| fora_001 | fora_do_acervo | ok | ok | ok | 1/1/1 | 593 ms | 2 | 2 | sim | - |
-| fora_002 | fora_do_acervo | ok | ok | ok | 1/1/1 | 725 ms | 2 | 2 | sim | - |
-| fora_003 | fora_do_acervo | ok | ok | ok | 1/1/1 | 622 ms | 2 | 2 | sim | - |
-| fora_004 | fora_do_acervo | ok | ok | ok | 1/1/1 | 783 ms | 2 | 2 | sim | - |
-| fora_005 | fora_do_acervo | ok | ok | ok | 1/1/1 | 714 ms | 2 | 2 | sim | - |
-| fora_006 | fora_do_acervo | ok | ok | ok | 1/1/1 | 812 ms | 2 | 2 | sim | - |
+| ID | Categoria | Status | Recuperacao | Geracao | Juiz (F/R/Ref) | Claims | Fidelidade | Citacao | Latencia | Fontes | Docs | Recusa | Checks com falha |
+| --- | --- | --- | --- | --- | --- | --- | ---: | --- | ---: | ---: | ---: | --- | --- |
+| bula_001 | bula | ok | ok | ok | 1/1/1 | 2/2 | 100.0% | sim | 7073 ms | 2 | 2 | nao | - |
+| bula_002 | bula | falha | falha | falha | 1/0/0 | 3/3 | 100.0% | sim | 2153 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk, fonte_pagina |
+| bula_003 | bula | falha | falha | falha | 0/0/0 | 2/2 | 100.0% | sim | 2323 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk |
+| bula_004 | bula | falha | falha | falha | 1/1/1 | 1/1 | 100.0% | sim | 1644 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk |
+| bula_005 | bula | falha | ok | falha | 1/1/1 | 3/3 | 100.0% | sim | 2448 ms | 2 | 2 | nao | termos_obrigatorios |
+| bula_006 | bula | falha | falha | falha | 1/1/1 | 2/2 | 100.0% | sim | 851 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk, fonte_pagina |
+| bula_007 | bula | falha | ok | falha | 1/1/1 | 2/2 | 100.0% | sim | 1666 ms | 2 | 2 | nao | termos_obrigatorios |
+| bula_008 | bula | ok | ok | ok | 1/1/1 | 6/6 | 100.0% | sim | 1900 ms | 2 | 2 | nao | - |
+| bula_009 | bula | falha | falha | falha | 0/0/0 | 0/2 | 0.0% | sim | 1523 ms | 2 | 2 | nao | termos_obrigatorios, fonte_chunk, fonte_pagina |
+| bula_010 | bula | ok | ok | ok | 1/1/1 | 2/2 | 100.0% | sim | 1689 ms | 2 | 2 | nao | - |
+| bula_011 | bula | ok | ok | ok | 1/1/1 | 3/3 | 100.0% | sim | 2285 ms | 2 | 2 | nao | - |
+| bula_012 | bula | falha | falha | falha | 0/0/1 | 0/0 | 0.0% | sim | 686 ms | 2 | 2 | sim | recusa_esperada, termos_obrigatorios, fonte_chunk |
+| bula_013 | bula | ok | ok | ok | 1/1/1 | 1/1 | 100.0% | sim | 717 ms | 2 | 2 | nao | - |
+| bula_014 | bula | ok | ok | ok | 1/1/1 | 1/1 | 100.0% | sim | 1300 ms | 2 | 2 | nao | - |
+| bula_015 | bula | ok | ok | ok | 1/1/1 | 1/1 | 100.0% | sim | 828 ms | 2 | 2 | nao | - |
+| bula_016 | bula | falha | ok | falha | 1/1/1 | 3/3 | 100.0% | sim | 1093 ms | 2 | 2 | nao | termos_obrigatorios |
+| paciente_001 | dados_paciente | falha | falha | ok | 1/1/1 | 1/2 | 50.0% | sim | 1615 ms | 2 | 2 | nao | metadados_recuperados |
+| paciente_002 | dados_paciente | falha | falha | ok | 1/1/1 | 3/3 | 100.0% | sim | 1344 ms | 2 | 2 | nao | metadados_recuperados |
+| paciente_003 | dados_paciente | falha | falha | ok | 1/1/1 | 1/1 | 100.0% | sim | 440 ms | 2 | 2 | nao | metadados_recuperados |
+| paciente_004 | dados_paciente | ok | ok | ok | 1/1/1 | 7/7 | 100.0% | sim | 2152 ms | 2 | 2 | nao | - |
+| paciente_005 | dados_paciente | falha | falha | ok | 1/1/1 | 2/2 | 100.0% | sim | 669 ms | 2 | 2 | nao | metadados_recuperados |
+| paciente_006 | dados_paciente | falha | falha | ok | 1/1/1 | 1/1 | 100.0% | sim | 487 ms | 2 | 2 | nao | metadados_recuperados |
+| paciente_007 | dados_paciente | falha | falha | falha | 0/0/0 | 1/1 | 100.0% | sim | 585 ms | 2 | 2 | nao | termos_obrigatorios, metadados_recuperados |
+| paciente_008 | dados_paciente | falha | falha | ok | 1/1/1 | 1/1 | 100.0% | sim | 520 ms | 2 | 2 | nao | metadados_recuperados |
+| fora_001 | fora_do_acervo | ok | ok | ok | 1/1/1 | 0/0 | 0.0% | sim | 484 ms | 2 | 2 | sim | - |
+| fora_002 | fora_do_acervo | ok | ok | ok | 1/1/1 | 0/0 | 0.0% | sim | 608 ms | 2 | 2 | sim | - |
+| fora_003 | fora_do_acervo | ok | ok | ok | 1/1/1 | 0/0 | 0.0% | sim | 551 ms | 2 | 2 | sim | - |
+| fora_004 | fora_do_acervo | ok | ok | ok | 1/1/1 | 0/0 | 0.0% | sim | 590 ms | 2 | 2 | sim | - |
+| fora_005 | fora_do_acervo | ok | ok | ok | 1/1/1 | 0/0 | 0.0% | sim | 609 ms | 2 | 2 | sim | - |
+| fora_006 | fora_do_acervo | ok | ok | ok | 1/1/1 | 0/0 | 0.0% | sim | 663 ms | 2 | 2 | sim | - |
 
 ## Metricas de recuperacao por pergunta
 
@@ -107,7 +115,9 @@ Relatorio gerado por `python eval/evaluate_rag.py`.
 
 ## Matriz de Recusa
 
-A matriz compara o comportamento esperado com o comportamentoobservado do sistema, permitindo identificar recusas corretas,respostas indevidas e recusas indevidas.Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos.
+A matriz compara o comportamento esperado com o comportamento observado do sistema, permitindo identificar recusas corretas, respostas indevidas e recusas indevidas.
+Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos.
+
 | Esperado / Observado | Respondeu | Recusou |
 | --- | ---: | ---: |
 | Deveria responder | 23 | 1 |

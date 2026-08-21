@@ -41,13 +41,8 @@ REFUSAL_MARKERS = (
 
 
 def load_golden_set() -> list[dict[str, Any]]:
-    if GOLDEN_SET_PATH.exists():
-        return json.loads(GOLDEN_SET_PATH.read_text(encoding="utf-8"))
-    return load_questions()
-
-
-def load_questions() -> list[dict[str, Any]]:
-    return json.loads(QUESTIONS_PATH.read_text(encoding="utf-8"))
+    path = GOLDEN_SET_PATH if GOLDEN_SET_PATH.exists() else QUESTIONS_PATH
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def looks_like_refusal(answer: str) -> bool:
@@ -63,8 +58,7 @@ def normalize_text(value: Any) -> str:
 
 def extract_claims(text: str) -> list[str]:
     raw_sentences = re.split(r"(?<=[.!?])\s+|\n+", text)
-    claims = [s.strip() for s in raw_sentences if len(s.strip()) > 15]
-    return claims
+    return [s.strip() for s in raw_sentences if len(s.strip()) > 15]
 
 
 def evaluate_claim_faithfulness(
@@ -225,6 +219,86 @@ def calculate_retrieval_metrics(
     return metrics
 
 
+def evaluate_checks(
+    item: dict[str, Any],
+    answer: str,
+    sources: list[Any],
+    documents: list[Any],
+    is_refusal: bool,
+    error: str | None,
+) -> dict[str, bool]:
+    if error:
+        return {"sem_erro": False}
+
+    normalized_answer = normalize_text(answer)
+    expected_refusal = bool(item.get("should_refuse"))
+    expected_document_type = item.get("expected_document_type")
+
+    required_terms = [normalize_text(term) for term in item.get("must_contain", [])]
+    forbidden_terms = [normalize_text(term) for term in item.get("must_not_contain", [])]
+
+    expected_chunks = set(item.get("expected_source_chunks") or [])
+    expected_chunk_keys = {
+        key for chunk_id in expected_chunks if (key := _chunk_key_from_identifier(chunk_id)) is not None
+    }
+    expected_pages = {str(page) for page in (item.get("expected_source_pages") or [])}
+
+    returned_document_chunk_keys = {
+        key for document in documents if (key := _document_chunk_key(document)) is not None
+    }
+    returned_source_chunk_keys = {
+        key for source in sources if isinstance(source, dict) and (key := _chunk_key_from_identifier(source.get("chunk"))) is not None
+    }
+    returned_chunk_keys = returned_document_chunk_keys if returned_document_chunk_keys else returned_source_chunk_keys
+
+    returned_pages = {
+        str(source.get("pagina"))
+        for source in sources
+        if (isinstance(source, dict) and source.get("pagina") is not None)
+    }
+
+    metadata_fields = set(item.get("expected_metadata_fields") or [])
+    returned_metadata_fields = set()
+    returned_document_types = set()
+
+    for doc in documents:
+        metadata = getattr(doc, "metadata", {}) or {}
+        returned_metadata_fields.update(
+            key for key in metadata_fields if metadata.get(key) not in (None, "", [])
+        )
+        doc_type = metadata.get("tipo_documento")
+        if doc_type not in (None, ""):
+            returned_document_types.add(doc_type)
+
+    checks = {
+        "sem_erro": True,
+        "resposta_presente": bool(answer),
+        "recusa_esperada": (is_refusal if expected_refusal else not is_refusal),
+        "termos_obrigatorios": all(term in normalized_answer for term in required_terms),
+        "termos_proibidos": not any(term in normalized_answer for term in forbidden_terms),
+    }
+
+    if expected_document_type is not None:
+        checks["tipo_documento_correto"] = (
+            bool(returned_document_types) and returned_document_types == {expected_document_type}
+        )
+
+    if expected_chunks:
+        checks["fonte_chunk"] = any(
+            _chunk_keys_match(expected, returned)
+            for expected in expected_chunk_keys
+            for returned in returned_chunk_keys
+        )
+
+    if expected_pages:
+        checks["fonte_pagina"] = bool(expected_pages & returned_pages)
+
+    if metadata_fields:
+        checks["metadados_recuperados"] = metadata_fields.issubset(returned_metadata_fields)
+
+    return checks
+
+
 def evaluate_row(
     rag: Any, item: dict[str, Any], judge: LLMJudge | None = None
 ) -> dict[str, Any]:
@@ -234,7 +308,7 @@ def evaluate_row(
 
     try:
         result = rag.ask(item["question"])
-    except Exception as exc:  # pragma: no cover - usado para relatorio manual.
+    except Exception as exc:
         error = str(exc)
 
     latency_ms = int((time.perf_counter() - started_at) * 1000)
@@ -250,7 +324,7 @@ def evaluate_row(
                 item["question"],
                 top_k=RETRIEVAL_METRICS_K,
             )
-        except Exception as exc:  # pragma: no cover - usado para relatorio manual.
+        except Exception as exc:
             error = str(exc)
 
     retrieval_metrics = calculate_retrieval_metrics(
@@ -267,7 +341,6 @@ def evaluate_row(
             retrieved_texts.append(doc.page_content)
 
     is_refusal = looks_like_refusal(answer)
-    status = classify_status(item, answer, sources, documents, is_refusal, error)
     claims = extract_claims(answer) if not is_refusal else []
     faith_metrics = evaluate_claim_faithfulness(claims, retrieved_texts, sources)
 
@@ -293,9 +366,12 @@ def evaluate_row(
             "termos_proibidos",
         }
     }
-    if all(checks.values()) and status != "avaliar manualmente":
+
+    if item.get("category") == "paciente_metadados":
+        status = "avaliar manualmente"
+    elif all(checks.values()):
         status = "ok"
-    elif not all(checks.values()) and status != "avaliar manualmente":
+    else:
         status = "falha"
 
     judge_eval = {"faithfulness_score": 0, "relevance_score": 0, "refusal_score": 0, "justification": ""}
@@ -339,180 +415,6 @@ def evaluate_row(
     }
 
 
-def classify_status(
-    item: dict[str, Any],
-    answer: str,
-    sources: list[Any],
-    documents: list[Any],
-    is_refusal: bool,
-    error: str | None,
-) -> str:
-    if item["category"] == "paciente_metadados":
-        return "avaliar manualmente"
-
-    if error:
-        return "falha"
-
-    if item["category"] == "fora_do_acervo":
-        return "ok" if is_refusal else "falha"
-
-    has_grounding = bool(sources) or bool(documents)
-    if answer and has_grounding and not is_refusal:
-        return "ok"
-
-    return "falha"
-
-
-def evaluate_checks(
-    item: dict[str, Any],
-    answer: str,
-    sources: list[Any],
-    documents: list[Any],
-    is_refusal: bool,
-    error: str | None,
-) -> dict[str, bool]:
-    if error:
-        return {"sem_erro": False}
-
-    normalized_answer = normalize_text(answer)
-
-    expected_refusal = bool(item.get("should_refuse"))
-
-    expected_document_type = item.get("expected_document_type")
-
-    required_terms = [
-        normalize_text(term)
-        for term in item.get("must_contain", [])
-    ]
-    forbidden_terms = [
-        normalize_text(term)
-        for term in item.get("must_not_contain", [])
-    ]
-
-    expected_chunks = set(item.get("expected_source_chunks") or [])
-
-    expected_chunk_keys = {
-        key for chunk_id in expected_chunks if (key := _chunk_key_from_identifier(chunk_id))
-        is not None
-    }
-
-    expected_pages = {
-        str(page) for page in (item.get("expected_source_pages") or [])
-    }
-
-    returned_document_chunk_keys = {
-        key for document in documents if (key := _document_chunk_key(document))
-        is not None
-    }
-
-    returned_source_chunk_keys = {
-        key for source in sources if isinstance(source, dict) and 
-        (key := _chunk_key_from_identifier(source.get("chunk")))
-        is not None
-    }
-
-    returned_chunk_keys = (
-        returned_document_chunk_keys
-        if returned_document_chunk_keys
-        else returned_source_chunk_keys
-    )
-
-    returned_pages = {
-        str(source.get("pagina"))
-        for source in sources
-        if (isinstance(source, dict) and source.get("pagina") is not None)
-    }
-
-    metadata_fields = set(
-        item.get("expected_metadata_fields") or []
-    )
-
-    returned_metadata_fields = set()
-
-    for doc in documents:
-        metadata = (
-            getattr(
-                doc,
-                "metadata",
-                {}
-            )
-            or {}
-        )
-
-        returned_metadata_fields.update(
-            key
-            for key in metadata_fields
-            if metadata.get(key)
-            not in (
-                None,
-                "",
-                []
-            )
-        )
-
-    returned_document_types = set()
-
-    for doc in documents:
-        metadata = (
-            getattr(
-                doc,
-                "metadata",
-                {}
-            )
-            or {}
-        )
-
-        document_type = metadata.get(
-            "tipo_documento"
-        )
-
-        if document_type not in (
-            None,
-            ""
-        ):
-            returned_document_types.add(
-                document_type
-            )
-
-    checks = {
-        "sem_erro": True,
-        "resposta_presente": bool(answer),
-        "recusa_esperada": (
-            is_refusal
-            if expected_refusal
-            else not is_refusal
-        ),
-        "termos_obrigatorios": all(
-            term in normalized_answer
-            for term in required_terms
-        ),
-        "termos_proibidos": not any(
-            term in normalized_answer
-            for term in forbidden_terms
-        ),
-    }
-
-    if expected_document_type is not None:
-        checks["tipo_documento_correto"] = (
-            bool(returned_document_types) and returned_document_types == {expected_document_type}
-        )
-
-    if expected_chunks:
-        checks["fonte_chunk"] = any(
-            _chunk_keys_match(expected, returned)
-            for expected in expected_chunk_keys
-            for returned in returned_chunk_keys
-        )
-
-    if expected_pages:
-        checks["fonte_pagina"] = bool(expected_pages & returned_pages)
-
-    if metadata_fields:
-        checks["metadados_recuperados"] = metadata_fields.issubset(returned_metadata_fields)
-
-    return checks
-
-
 def plot_refusal_matrix(rows: list[dict[str, Any]]) -> None:
     respondeu_correto = 0
     recusou_indevidamente = 0
@@ -538,25 +440,14 @@ def plot_refusal_matrix(rows: list[dict[str, Any]]) -> None:
     ])
 
     fig, ax = plt.subplots(figsize=(8, 6))
-
     image = ax.imshow(matrix)
 
     ax.set_xticks([0, 1])
     ax.set_yticks([0, 1])
-
-    ax.set_xticklabels([
-        "Respondeu",
-        "Recusou"
-    ])
-
-    ax.set_yticklabels([
-        "Deveria responder",
-        "Deveria recusar"
-    ])
-
+    ax.set_xticklabels(["Respondeu", "Recusou"])
+    ax.set_yticklabels(["Deveria responder", "Deveria recusar"])
     ax.set_xlabel("Comportamento observado")
     ax.set_ylabel("Comportamento esperado")
-
     ax.set_title("Matriz de Recusa do RAG")
 
     for i in range(2):
@@ -567,17 +458,14 @@ def plot_refusal_matrix(rows: list[dict[str, Any]]) -> None:
                 str(matrix[i, j]),
                 ha="center",
                 va="center",
-                fontsize=16
+                fontsize=16,
             )
 
     plt.colorbar(image, ax=ax)
-
     output_path = PROJECT_ROOT / "eval" / "matriz_recusa.png"
-
     plt.tight_layout()
     plt.savefig(output_path, dpi=300)
     plt.close()
-
     print(f"Matriz de recusa gerada em {output_path}")
 
 
@@ -605,30 +493,13 @@ def build_report(rows: list[dict[str, Any]]) -> str:
     def average_metric(name: str) -> float:
         if not metric_rows:
             return 0.0
-        return sum(row["retrieval_metrics"][name] for row in metric_rows) / len(
-            metric_rows
-        )
+        return sum(row["retrieval_metrics"][name] for row in metric_rows) / len(metric_rows)
 
-    average_latency = (
-        sum(row["latency_ms"] for row in rows) / len(rows)
-        if rows
-        else 0
-    )
-    retrieval_rate = (
-        len(retrieval_passed_rows) / len(retrieval_rows) * 100
-        if retrieval_rows
-        else 0
-    )
-    generation_rate = (
-        len(generation_passed_rows) / len(rows) * 100
-        if rows
-        else 0
-    )
-    refusal_rate = (
-        len(refusal_passed_rows) / len(refusal_rows) * 100
-        if refusal_rows
-        else 0
-    )
+    average_latency = sum(row["latency_ms"] for row in rows) / len(rows) if rows else 0
+    retrieval_rate = len(retrieval_passed_rows) / len(retrieval_rows) * 100 if retrieval_rows else 0
+    generation_rate = len(generation_passed_rows) / len(rows) * 100 if rows else 0
+    refusal_rate = len(refusal_passed_rows) / len(refusal_rows) * 100 if refusal_rows else 0
+
     valid_faith_rows = [r for r in rows if not r["is_refusal"] and r["total_claims"] > 0]
     avg_faithfulness = (
         sum(r["faithfulness_score"] for r in valid_faith_rows) / len(valid_faith_rows)
@@ -748,45 +619,22 @@ def build_report(rows: list[dict[str, Any]]) -> str:
                 "criterio automatico marcou falha."
             )
 
-    deveria_responder = [
-        row for row in rows
-        if not row["expected_refusal"]
-    ]
-
-    deveria_recusar = [
-        row for row in rows
-        if row["expected_refusal"]
-    ]
-
-    resposta_correta = [
-        row for row in deveria_responder
-        if not row["is_refusal"]
-    ]
-
-    recusa_indevida = [
-        row for row in deveria_responder
-        if row["is_refusal"]
-    ]
-
-    resposta_indevida = [
-        row for row in deveria_recusar
-        if not row["is_refusal"]
-    ]
-
-    recusa_correta = [
-        row for row in deveria_recusar
-        if row["is_refusal"]
-    ]
+    deveria_responder = [row for row in rows if not row["expected_refusal"]]
+    deveria_recusar = [row for row in rows if row["expected_refusal"]]
+    resposta_correta = [row for row in deveria_responder if not row["is_refusal"]]
+    recusa_indevida = [row for row in deveria_responder if row["is_refusal"]]
+    resposta_indevida = [row for row in deveria_recusar if not row["is_refusal"]]
+    recusa_correta = [row for row in deveria_recusar if row["is_refusal"]]
 
     lines.extend(
         [
             "",
             "## Matriz de Recusa",
             "",
-            "A matriz compara o comportamento esperado com o comportamento"
-            "observado do sistema, permitindo identificar recusas corretas,"
-            "respostas indevidas e recusas indevidas."
-            "Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos.",
+            "A matriz compara o comportamento esperado com o comportamento "
+            "observado do sistema, permitindo identificar recusas corretas, "
+            "respostas indevidas e recusas indevidas.\n"
+            "Partindo dos testes do golden set com 30, foi feito um plot da imagem com a matriz de recusa com o casos.\n",
             "| Esperado / Observado | Respondeu | Recusou |",
             "| --- | ---: | ---: |",
             f"| Deveria responder | {len(resposta_correta)} | {len(recusa_indevida)} |",
