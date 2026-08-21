@@ -1,0 +1,3006 @@
+[
+  {
+    "config": {
+      "name": "Configuração 1 (Baseline)",
+      "embedding_model": "nomic-embed-text",
+      "llm_model": "qwen2.5:3b",
+      "description": "Baseline padrão do projeto"
+    },
+    "summary": {
+      "avg_latency_ms": 1387.4666666666667,
+      "context_recall_at_2": 56.25,
+      "context_precision_at_2": 34.375,
+      "hit_rate_at_2": 62.5,
+      "mrr_at_10": 0.6458333333333334,
+      "judge_faithfulness": 86.66666666666667,
+      "judge_relevance": 83.33333333333334,
+      "judge_refusal": 86.66666666666667
+    },
+    "rows": [
+      {
+        "id": "bula_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às contraindicações mencionadas na bula e fornece informações adicionais relevantes. A nota de fidelidade é 1 pois todas as afirmações contidas na resposta gerada são diretamente comprovadas pelo contexto recuperado. A relevância é 1 porque a resposta atende à pergunta do usuário de forma direta, clara e compreensível. O recusa score é 1 porque o assistente forneceu a informação solicitada quando havia dados no contexto/metadados."
+        },
+        "latency_ms": 2549
+      },
+      {
+        "id": "bula_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não responde diretamente à pergunta do usuário sobre reações adversas de amoxicilina com clavulanato. Em vez disso, ela fornece informações sobre a síndrome de enterocolite induzida por medicamentos, que é um tema diferente da pergunta original."
+        },
+        "latency_ms": 2477
+      },
+      {
+        "id": "bula_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não responde diretamente à pergunta do usuário sobre a composição da amoxicilina com clavulanato de potassio. Em vez disso, ela fornece informações gerais sobre o antibiótico e sua fórmula, o que é irrelevante para a pergunta específica feita pelo usuário."
+        },
+        "latency_ms": 2180
+      },
+      {
+        "id": "bula_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário, fornecendo informações relevantes sobre a indicação de amoxicilina com clavulanato para tratamentos de infecções respiratórias e mistas. A informação está diretamente comprovada no contexto recuperado."
+        },
+        "latency_ms": 2773
+      },
+      {
+        "id": "bula_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 1.0,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário de forma direta e clara, mantendo-se fiel aos dados fornecidos na bula. Ela aborda os estudos em animais sem ter que inventar informações, menciona o estudo específico sobre neonatos e evita assumir premissas não presentes no contexto."
+        },
+        "latency_ms": 2796
+      },
+      {
+        "id": "bula_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário fornecendo as advertências presentes na bula, sem inventar dados ou assumir premissas não presentes no contexto. Ela é direta e clara."
+        },
+        "latency_ms": 965
+      },
+      {
+        "id": "bula_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.5,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela menciona os pontos específicos solicitados (uso concomitante de probenecida com amoxicilina + clavulanato de potássio) e não inclui informações irrelevantes. Além disso, o assistente forneceu a informação corretamente."
+        },
+        "latency_ms": 1975
+      },
+      {
+        "id": "bula_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.5,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às informações solicitadas na pergunta, mantendo fiel aos dados fornecidos no contexto e metadados do paciente. Ela fornece os detalhes específicos sobre armazenamento que foram perguntados."
+        },
+        "latency_ms": 2248
+      },
+      {
+        "id": "bula_009",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente inventou uma informação e não respondeu à pergunta do usuário. Além disso, ela recusou-se a fornecer a informação solicitada, mesmo que estivesse disponível nos documentos."
+        },
+        "latency_ms": 451
+      },
+      {
+        "id": "bula_010",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende diretamente à pergunta do usuário, mantendo fiel aos fatos presentes no contexto. Ela aborda o papel do ácido clavulânico em inibir as betalactamases encontradas em microrganismos resistentes a penicilinas e cefalosporinas, protegendo assim a amoxicilina. A resposta é relevante e correta."
+        },
+        "latency_ms": 1291
+      },
+      {
+        "id": "bula_011",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara. Ela inclui todos os organismos inerentemente resistentes mencionados na bula, sem adicionar ou omitir informações não solicitadas. A precisão dos dados está de acordo com o contexto fornecido."
+        },
+        "latency_ms": 2371
+      },
+      {
+        "id": "bula_012",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta do usuário. Além disso, o sistema recusou-se a fornecer uma resposta quando havia dados suficientes no contexto para responder à pergunta."
+        },
+        "latency_ms": 744
+      },
+      {
+        "id": "bula_013",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário diretamente e corretamente, mantendo a fidelidade ao texto da bula. Ela é relevante pois responde claramente à questão sobre o prazo de estendimento sem revisão. Não há recusa, pois os dados necessários estão presentes na bula fornecida."
+        },
+        "latency_ms": 920
+      },
+      {
+        "id": "bula_014",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela fornece a informação solicitada sobre a posologia para adultos e crianças acima de 12 anos, utilizando dados diretamente presentes no contexto da bula. Não há recusa ou invenção de informações."
+        },
+        "latency_ms": 2136
+      },
+      {
+        "id": "bula_015",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, mantendo a fidelidade aos dados fornecidos na bula e não apresenta recusa inapropriada. A informação solicitada está presente no contexto e é claramente relevante para a pergunta."
+        },
+        "latency_ms": 1013
+      },
+      {
+        "id": "bula_016",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo os sinais e sintomas mencionados na bula. A informação é fiel aos dados presentes no contexto recuperado."
+        },
+        "latency_ms": 1319
+      },
+      {
+        "id": "paciente_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, sem omitir fatos secundários. Ela é fiel aos dados presentes no contexto recuperado (utilização da amoxicilina com clavulanato em 2011 e 2019). O assistente também recusou responder sobre períodos fora do período mencionado, conforme o contexto não fornecia informações além desses dois períodos."
+        },
+        "latency_ms": 1876
+      },
+      {
+        "id": "paciente_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário fornecendo os diagnósticos registrados no histórico do paciente. Ela é fiel aos fatos presentes nos documentos e não inventa dados ou premissas não presentes. A resposta é direta, clara e compreensível."
+        },
+        "latency_ms": 497
+      },
+      {
+        "id": "paciente_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel ao contexto e à pergunta, fornecendo o último peso registrado sem adicionar informações não presentes. A relevância está em 1 pois a resposta atende diretamente à pergunta do usuário. O assistente também agiu corretamente ao recusar responder quando a informação estava presente no contexto."
+        },
+        "latency_ms": 479
+      },
+      {
+        "id": "paciente_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário fornecendo os dados presentes no contexto. Não há recusa, pois a informação solicitada estava disponível nos documentos recuperados. A fidelidade é total pois todas as afirmações contidas na resposta gerada são diretamente comprovadas pelo contexto recuperado."
+        },
+        "latency_ms": 2829
+      },
+      {
+        "id": "paciente_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente atende corretamente à pergunta do usuário, fornecendo todos os dados solicitados (nome completo, gênero e data de nascimento) que estão presentes no contexto. Não há recusa inadequada ou criação de informações fora do contexto."
+        },
+        "latency_ms": 925
+      },
+      {
+        "id": "paciente_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo a informação solicitada. A altura registrada foi encontrada no contexto recuperado. O assistente não inventou dados ou assumiu premissas não presentes no contexto."
+        },
+        "latency_ms": 790
+      },
+      {
+        "id": "paciente_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, que pediu os procedimentos no histórico do paciente. A resposta fornecida fala sobre exames gerais do paciente em vários procedimentos de consultas, o que é irrelevante para a pergunta específica dos procedimentos de reconciliação de medicamentos."
+        },
+        "latency_ms": 688
+      },
+      {
+        "id": "paciente_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, é fiel aos dados presentes no contexto e está corretamente formulada."
+        },
+        "latency_ms": 810
+      },
+      {
+        "id": "fora_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis nos documentos. Não há informações sobre a Copa do Mundo de 2002 no contexto fornecido."
+        },
+        "latency_ms": 766
+      },
+      {
+        "id": "fora_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos fatos presentes no contexto e recusa-se a fornecer informações que não estão disponíveis. A pergunta do usuário foi claramente respondida de acordo com os documentos encontrados."
+        },
+        "latency_ms": 823
+      },
+      {
+        "id": "fora_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos dados fornecidos, relevante à pergunta e correção de recusa está correta."
+        },
+        "latency_ms": 741
+      },
+      {
+        "id": "fora_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos fatos presentes no contexto e recusa-se a fornecer informações que não estão disponíveis nos documentos. A pergunta do usuário sobre investimentos em ações não está relacionada ao contexto fornecido, então o sistema recusou de forma correta."
+        },
+        "latency_ms": 697
+      },
+      {
+        "id": "fora_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo a informação solicitada. Ela também respeita os dados disponíveis no contexto/metadados, não incluindo informações que não foram encontradas nos documentos recuperados."
+        },
+        "latency_ms": 720
+      },
+      {
+        "id": "fora_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada atende à pergunta do usuário de forma direta, clara e compreensível. Ela respondeu ao que foi perguntado sem incluir dados secundários não solicitados pelo usuário. A resposta também é correta em termos de recusa, pois o sistema recusou responder quando a informação solicitada não estava disponível nos documentos fornecidos."
+        },
+        "latency_ms": 775
+      }
+    ]
+  },
+  {
+    "config": {
+      "name": "Configuração 2 (Variação Embedding)",
+      "embedding_model": "all-minilm",
+      "llm_model": "qwen2.5:3b",
+      "description": "Avaliação do retriever com all-minilm"
+    },
+    "summary": {
+      "avg_latency_ms": 1144.9333333333334,
+      "context_recall_at_2": 37.5,
+      "context_precision_at_2": 21.875,
+      "hit_rate_at_2": 37.5,
+      "mrr_at_10": 0.42552083333333335,
+      "judge_faithfulness": 66.66666666666666,
+      "judge_relevance": 63.33333333333333,
+      "judge_refusal": 66.66666666666666
+    },
+    "rows": [
+      {
+        "id": "bula_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às contraindicações mencionadas na bula e fornece informações relevantes sobre pacientes com histórico de hipersensibilidade a betalactâmicos (penicilinas e cefalosporinas) e pacientes com histórico prévio de icterícia/disfunção hepática. A resposta é fiel ao contexto e não há recusa ou excesso de informação."
+        },
+        "latency_ms": 2015
+      },
+      {
+        "id": "bula_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não responde diretamente à pergunta do usuário sobre reações adversas de amoxicilina com clavulanato. Em vez disso, ela aborda uma contraindicação e duas advertências relacionadas ao uso da droga, o que é relevante mas não atende a pergunta específica feita pelo usuário."
+        },
+        "latency_ms": 1355
+      },
+      {
+        "id": "bula_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.16666666666666666,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada não responde diretamente à pergunta do usuário sobre a composição específica da amoxicilina com clavulanato de potassio. Ela fornece informações gerais sobre os componentes, mas não especifica as quantidades ou inclui excipientes, o que é necessário para responder corretamente à pergunta."
+        },
+        "latency_ms": 1468
+      },
+      {
+        "id": "bula_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.2,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, que era específica sobre indicações para tratamento de infecções bacterianas. A resposta gera novos fatos sem base no contexto fornecido e inclui informações irrelevantes (como indicação para tratar infecções respiratórias e genitourinárias). Além disso, a resposta não menciona diretamente as indicações específicas de tratamento de infecções bacterianas encontradas na bula."
+        },
+        "latency_ms": 1930
+      },
+      {
+        "id": "bula_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 1.0,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende às afirmações esperadas e tampouco responde diretamente à pergunta do usuário sobre uso de amoxicilina com clavulanato na gravidez. Ela inclui informações irrelevantes (efeitos no leite materno) que não foram solicitados, além de introduzir uma recomendação para orientação médica ou cirurgião-dentista, o que não está presente nos dados fornecidos."
+        },
+        "latency_ms": 1544
+      },
+      {
+        "id": "bula_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 0,
+          "justification": "A resposta atende à pergunta do usuário, fornecendo advertências presentes na bula. Embora não responda diretamente a todas as afirmações esperadas, isso não diminui sua relevância para o contexto da pergunta."
+        },
+        "latency_ms": 1686
+      },
+      {
+        "id": "bula_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.125,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta do usuário sobre interações medicamentosas relevantes para amoxicilina com clavulanato. Além disso, o sistema recusou-se a fornecer a informação solicitada, mesmo que estivesse disponível nos documentos."
+        },
+        "latency_ms": 752
+      },
+      {
+        "id": "bula_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.2,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta do usuário. Além disso, o sistema recusou-se a fornecer uma resposta quando havia dados suficientes no contexto para responder à pergunta."
+        },
+        "latency_ms": 602
+      },
+      {
+        "id": "bula_009",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.2,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta não atende à pergunta do usuário, pois ela não respondeu diretamente sobre o mecanismo de ação da amoxicilina com clavulanato. Ela também recusou responder quando os dados necessários estavam disponíveis nos documentos fornecidos."
+        },
+        "latency_ms": 500
+      },
+      {
+        "id": "bula_010",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela inclui informações relevantes sobre a proteção da amoxicilina por meio das enzimas betalactamases encontradas em microrganismos resistentes às penicilinas e cefalosporinas, conforme solicitado no gabarito."
+        },
+        "latency_ms": 1574
+      },
+      {
+        "id": "bula_011",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.25,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta do usuário. De acordo com o contexto, os documentos disponíveis não mencionam organismos inerentemente resistentes citados na pergunta."
+        },
+        "latency_ms": 717
+      },
+      {
+        "id": "bula_012",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo informações específicas da bula. Ela resume corretamente a recomendação da administração no início da refeição para minimizar a intolerância gastrointestinal e favorecer a absorção. Não há recusa ou excesso de informação."
+        },
+        "latency_ms": 1056
+      },
+      {
+        "id": "bula_013",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, pois ela não fornece a informação solicitada e recusa-se a responder sem fornecer uma explicação clara. Além disso, o sistema deveria ter encontrado a informação na bula, que está disponível nos documentos recuperados."
+        },
+        "latency_ms": 532
+      },
+      {
+        "id": "bula_014",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, fornecendo informações sobre a posologia para adultos e crianças acima de 12 anos. Ela também inclui detalhes adicionais que não foram solicitados diretamente, mas são relevantes para uma compreensão completa da situação."
+        },
+        "latency_ms": 2282
+      },
+      {
+        "id": "bula_015",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, mantendo a fidelidade ao conteúdo da bula e sem recusa inapropriada. É clara e direta."
+        },
+        "latency_ms": 974
+      },
+      {
+        "id": "bula_016",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo os sinais e sintomas mencionados na bula. Ela é fiel aos dados presentes no contexto recuperado."
+        },
+        "latency_ms": 1363
+      },
+      {
+        "id": "paciente_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, sem omitir fatos secundários. Ela é fiel aos dados presentes no contexto recuperado (utilização da amoxicilina com clavulanato em 2011 e 2019). O assistente também recusou responder sobre períodos fora do acervo devido à falta de dados específicos para essas datas."
+        },
+        "latency_ms": 1861
+      },
+      {
+        "id": "paciente_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada inventou diagnósticos (Sinusite e Sinusite viral) que não estão presentes no contexto fornecido. Ela também omitiu a informação de sinusite cronica em 2001-05-01, o que é uma afirmação falsa baseada nos dados disponíveis."
+        },
+        "latency_ms": 762
+      },
+      {
+        "id": "paciente_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente atende à pergunta do usuário de forma direta e clara. Ela fornece o último peso registrado, que está diretamente comprovado no contexto recuperado. A nota de fidelidade é 1 porque todas as afirmações contidas na resposta são diretamente comprovadas pelo contexto recuperado. A relevância é 1 pois a resposta atende à pergunta do usuário. O assistente agiu certo ao fornecer a resposta quando havia dados no contexto/metadados, recebendo nota de correção de recusa igual a 1."
+        },
+        "latency_ms": 482
+      },
+      {
+        "id": "paciente_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário fornecendo todas as consultas e exames presentes no histórico do paciente. Não há recusa, pois todos os dados solicitados estão disponíveis nos documentos recuperados. A fidelidade é total porque todas as afirmações são diretamente comprovadas pelo contexto recuperado."
+        },
+        "latency_ms": 2861
+      },
+      {
+        "id": "paciente_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário de forma direta e clara, mantendo fiel aos dados fornecidos no contexto. Não há recusa ou criação de informações fora do acervo."
+        },
+        "latency_ms": 951
+      },
+      {
+        "id": "paciente_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo a informação solicitada. A altura registrada foi encontrada no contexto e está corretamente resumida na resposta."
+        },
+        "latency_ms": 763
+      },
+      {
+        "id": "paciente_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, que pediu os procedimentos no histórico do paciente. A resposta fornecida fala sobre exames gerais do paciente em vários procedimentos de consultas, o que é irrelevante para a pergunta específica dos procedimentos de reconciliação de medicamentos."
+        },
+        "latency_ms": 663
+      },
+      {
+        "id": "paciente_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é claramente uma recusa, conforme o contexto não contém informações sobre o status de tabagismo do paciente. A nota de fidelidade é zero porque a resposta inventou dados que não estão presentes no contexto. A nota de relevância é um porque a resposta respondeu à pergunta direta do usuário. A nota de recusa é uma porque o assistente agiu corretamente ao recusar responder quando os dados necessários estavam ausentes."
+        },
+        "latency_ms": 420
+      },
+      {
+        "id": "fora_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, sem fornecer dados adicionais que não foram solicitados. Ela também respeita a recusa quando os documentos disponíveis não contêm a informação pedida."
+        },
+        "latency_ms": 538
+      },
+      {
+        "id": "fora_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos dados fornecidos e responde diretamente à pergunta do usuário. Não há informações sobre motores de combustão nos documentos disponíveis, então a recusa foi correta."
+        },
+        "latency_ms": 655
+      },
+      {
+        "id": "fora_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos dados fornecidos e responde diretamente à pergunta do usuário, sem incluir informações irrelevantes. O sistema recusou responder devido a falta de informação nos documentos disponíveis."
+        },
+        "latency_ms": 473
+      },
+      {
+        "id": "fora_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos dados fornecidos, relevante à pergunta e correção de recusa está correta."
+        },
+        "latency_ms": 506
+      },
+      {
+        "id": "fora_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 0,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela fornece informações relevantes sobre a indicação da amoxicilina + clavulanato para dor de garganta com base nos documentos disponíveis."
+        },
+        "latency_ms": 2427
+      },
+      {
+        "id": "fora_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos dados fornecidos, relevante à pergunta e correção de recusa está correta."
+        },
+        "latency_ms": 636
+      }
+    ]
+  },
+  {
+    "config": {
+      "name": "Configuração 3 (Variação Gerador)",
+      "embedding_model": "nomic-embed-text",
+      "llm_model": "ministral-3:3b",
+      "description": "Avaliação do gerador com ministral-3:3b"
+    },
+    "summary": {
+      "avg_latency_ms": 3535.3333333333335,
+      "context_recall_at_2": 56.25,
+      "context_precision_at_2": 34.375,
+      "hit_rate_at_2": 62.5,
+      "mrr_at_10": 0.6458333333333334,
+      "judge_faithfulness": 83.33333333333334,
+      "judge_relevance": 80.0,
+      "judge_refusal": 83.33333333333334
+    },
+    "rows": [
+      {
+        "id": "bula_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às contraindicações mencionadas no contexto e recusa a informação que não estava presente, mantendo-se fiel aos dados disponíveis."
+        },
+        "latency_ms": 8865
+      },
+      {
+        "id": "bula_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário sobre as reações adversas específicas para amoxicilina com clavulanato. Em vez disso, ela fornece informações gerais sobre reações adversas que podem ocorrer em pacientes recebendo este medicamento, mas não especifica quais são as reações adversas descritas na bula consultada."
+        },
+        "latency_ms": 6499
+      },
+      {
+        "id": "bula_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo informações sobre a composição da amoxicilina com clavulanato de potassio. Ela é fiel aos dados disponíveis no contexto e não há recusa ou invenção de informações."
+        },
+        "latency_ms": 3427
+      },
+      {
+        "id": "bula_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário de forma direta e clara. Ela fornece informações relevantes sobre a indicação da amoxicilina + clavulanato de potássio, incluindo as infecções mencionadas na bula e o sucesso clínico no tratamento das otites médias agudas. A fonte foi fornecida corretamente."
+        },
+        "latency_ms": 4649
+      },
+      {
+        "id": "bula_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 1.0,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário de forma direta e clara, mantendo-se fiel aos dados fornecidos na bula. Ela abrange todos os pontos solicitados sem assumir premissas não presentes no contexto."
+        },
+        "latency_ms": 3623
+      },
+      {
+        "id": "bula_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, que era sobre advertências e precauções mencionadas na bula. A resposta fornecida aborda outros assuntos como insuficiência renal, alergias e interrupção do tratamento, mas não menciona as advertências específicas solicitadas pelo usuário."
+        },
+        "latency_ms": 4961
+      },
+      {
+        "id": "bula_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.5,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara. Ela menciona as interações relevantes descritas na bula, sem adicionar informações não presentes no contexto. A fonte fornecida é a mesma que o gabarito esperado."
+        },
+        "latency_ms": 4695
+      },
+      {
+        "id": "bula_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.5,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às afirmações do gabarito, fornecendo informações diretamente retiradas da bula (Fonte 1) e sem introduzir dados ou premissas não presentes no contexto. A resposta é clara e direta à pergunta feita."
+        },
+        "latency_ms": 2937
+      },
+      {
+        "id": "bula_009",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, que era sobre o mecanismo de ação da amoxicilina com clavulanato. A resposta fornecida é sobre um medicamento diferente (amoxicilina) e contém informações irrelevantes para a pergunta original."
+        },
+        "latency_ms": 4578
+      },
+      {
+        "id": "bula_010",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara. Ela inclui informações sobre a inativação das betalactamases por parte do ácido clavulânico, bem como sua função em proteger a amoxicilina contra bactérias resistentes. A fonte fornecida é relevante para essa resposta."
+        },
+        "latency_ms": 3256
+      },
+      {
+        "id": "bula_011",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo os organismos citados na bula como inerentemente resistentes. A informação está corretamente extraída dos dados disponíveis (Fonte 1). Não há recusa ou excesso de detalhes desnecessários."
+        },
+        "latency_ms": 4794
+      },
+      {
+        "id": "bula_012",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta do usuário. Além disso, o sistema recusou responder quando havia dados suficientes no contexto para fornecer uma resposta."
+        },
+        "latency_ms": 3884
+      },
+      {
+        "id": "bula_013",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, é fiel aos dados disponíveis e não há recusa inadequada."
+        },
+        "latency_ms": 3319
+      },
+      {
+        "id": "bula_014",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela fornece a posologia para adultos e crianças acima de 12 anos (comprimidos revestidos de 500 mg + 125 mg) conforme informado na tabela da bula. Além disso, ela menciona a exceção para casos de infecções graves, que está presente no contexto. A resposta é precisa e não há recusa ou invento de informações."
+        },
+        "latency_ms": 4375
+      },
+      {
+        "id": "bula_015",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, pois ela não fornece a informação solicitada sobre os comprimidos para crianças menores de 12 anos. Além disso, o sistema recusou-se a fornecer uma resposta quando havia dados suficientes no contexto/metadados."
+        },
+        "latency_ms": 2638
+      },
+      {
+        "id": "bula_016",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela menciona os sinais e sintomas descritos na bula sem inventar dados ou assumir premissas não presentes no contexto. A fonte fornecida é apropriada e relevante para a resposta dada."
+        },
+        "latency_ms": 4030
+      },
+      {
+        "id": "paciente_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, é fiel aos fatos presentes no contexto e está corretamente formulada. Não há recusa inadequada ou excessiva."
+        },
+        "latency_ms": 3315
+      },
+      {
+        "id": "paciente_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário fornecendo os diagnósticos registrados no histórico do paciente. As afirmações são diretamente comprovadas pelo contexto recuperado e não há recusa de responder questões fora do acervo. A precisão dos dados é mantida conforme o gabarito esperado."
+        },
+        "latency_ms": 2562
+      },
+      {
+        "id": "paciente_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo o último peso registrado. A nota de fidelidade é 1 pois todas as afirmações contidas na resposta gerada são diretamente comprovadas pelo contexto recuperado (Fonte 1). A relevância é 1 porque a resposta atende à pergunta do usuário sem omitir fatos secundários. O assistente agiu certo ao fornecer a resposta quando havia dados no contexto/metadados."
+        },
+        "latency_ms": 2747
+      },
+      {
+        "id": "paciente_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário fornecendo detalhes sobre as consultas e exames documentados no histórico do paciente. Ela é fiel aos fatos presentes nos documentos recuperados, sem inventar dados ou assumir premissas não presentes. A resposta foi direta e clara, respondendo ao que o usuário perguntou explicitamente."
+        },
+        "latency_ms": 4827
+      },
+      {
+        "id": "paciente_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": false,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas específicas feitas pelo usuário, fornecendo o nome completo, gênero e data de nascimento do paciente. Todas as afirmações contidas na resposta gerada são diretamente comprovadas pelos dados presentes no contexto recuperado (Fonte 1). O assistente não inventou nenhum dado ou assumiu premissas não presentes no contexto. Além disso, o assistente forneceu a informação solicitada de forma direta e clara."
+        },
+        "latency_ms": 2105
+      },
+      {
+        "id": "paciente_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara. Ela fornece a informação solicitada (última altura registrada) com base no contexto recuperado (Fonte 1, chunk_005). A nota de fidelidade é 1 porque todas as afirmações na resposta são diretamente comprovadas pelo contexto recuperado. A relevância é 1 pois a resposta atende à pergunta do usuário. O assistente agiu certo ao fornecer a informação solicitada quando havia dados no contexto."
+        },
+        "latency_ms": 1894
+      },
+      {
+        "id": "paciente_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada inventou dados e assumiu premissas não presentes no contexto. Ela menciona exames gerais sem referência nos documentos fornecidos, e também mencionou reconciliação de medicamentos sem evidências nesse sentido."
+        },
+        "latency_ms": 2540
+      },
+      {
+        "id": "paciente_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário diretamente e com base nos dados fornecidos. A nota de fidelidade é 1 pois todas as afirmações na resposta estão diretamente comprovadas pelo contexto recuperado (metadados). A relevância é 1 porque a resposta responde claramente à pergunta do usuário. O assistente agiu certo ao fornecer a informação solicitada quando havia dados no contexto/metadados."
+        },
+        "latency_ms": 1948
+      },
+      {
+        "id": "fora_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis. Não há informações sobre quem ganhou a Copa do Mundo de 2002 no contexto ou metadados fornecidos."
+        },
+        "latency_ms": 1614
+      },
+      {
+        "id": "fora_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela respondeu adequadamente ao que foi perguntado sem fornecer dados irrelevantes ou assumir premissas não presentes no contexto."
+        },
+        "latency_ms": 1818
+      },
+      {
+        "id": "fora_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos dados fornecidos, relevante à pergunta e correção de recusa está correta."
+        },
+        "latency_ms": 2135
+      },
+      {
+        "id": "fora_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é fiel aos dados fornecidos, relevante à pergunta do usuário sobre investimentos em ações e correção de recusa, pois não há informações relacionadas a investimentos em ações nos documentos disponíveis."
+        },
+        "latency_ms": 2422
+      },
+      {
+        "id": "fora_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo a informação solicitada sobre o uso da amoxicilina + clavulanato de potássio para dor de garganta. A fonte foi mencionada corretamente. Não há recusa porque a informação estava disponível no contexto."
+        },
+        "latency_ms": 3689
+      },
+      {
+        "id": "fora_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela respondeu adequadamente ao que foi perguntado sem fornecer dados adicionais irrelevantes."
+        },
+        "latency_ms": 1914
+      }
+    ]
+  },
+  {
+    "config": {
+      "name": "Configuração 4 (Embedding + Gerador)",
+      "embedding_model": "all-minilm",
+      "llm_model": "ministral-3:3b",
+      "description": "Combinação de all-minilm com ministral-3:3b"
+    },
+    "summary": {
+      "avg_latency_ms": 5106.266666666666,
+      "context_recall_at_2": 37.5,
+      "context_precision_at_2": 21.875,
+      "hit_rate_at_2": 37.5,
+      "mrr_at_10": 0.42552083333333335,
+      "judge_faithfulness": 66.66666666666666,
+      "judge_relevance": 66.66666666666666,
+      "judge_refusal": 76.66666666666667
+    },
+    "rows": [
+      {
+        "id": "bula_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às contraindicações mencionadas na pergunta e fornece informações específicas encontradas no contexto. A recusa de dados não presentes foi correta."
+        },
+        "latency_ms": 2140
+      },
+      {
+        "id": "bula_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, fornecendo informações sobre reações adversas relacionadas a hipersensibilidade e síndrome de Kounis. Não há dados que contradizem ou adicione informações não solicitadas no contexto dado."
+        },
+        "latency_ms": 3440
+      },
+      {
+        "id": "bula_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.16666666666666666,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela fornece informações relevantes sobre a composição da amoxicilina com clavulanato de potassio conforme o contexto fornecido."
+        },
+        "latency_ms": 3586
+      },
+      {
+        "id": "bula_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.2,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara. Ela fornece informações relevantes sobre a indicação principal da amoxicilina + clavulanato, incluindo as infeções respiratórias mencionadas na bula. A nota de fonte é fornecida para garantir que o assistente está referenciando corretamente os dados do contexto."
+        },
+        "latency_ms": 9303
+      },
+      {
+        "id": "bula_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 1.0,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário de forma direta e clara, mantendo-se fiel aos dados fornecidos. Ela inclui os pontos específicos mencionados na pergunta (categoria B de risco, evitar uso no primeiro trimestre) e um ponto adicional relevante (risco potencial em mulheres com pPROM). Não há recusa ou invenção de informações."
+        },
+        "latency_ms": 10124
+      },
+      {
+        "id": "bula_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.0,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 0.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, que pediu detalhes específicos sobre advertências e precauções mencionadas na bula. A resposta fornecida é geral e não cita as advertências ou precauções mencionadas no contexto dado."
+        },
+        "latency_ms": 10479
+      },
+      {
+        "id": "bula_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.125,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 0.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta específica do usuário sobre interações medicamentosas relevantes para amoxicilina com clavulanato. Além disso, o sistema recusou responder quando havia dados suficientes no contexto/metadados para fornecer a resposta solicitada."
+        },
+        "latency_ms": 8265
+      },
+      {
+        "id": "bula_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.2,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta do usuário. Além disso, o sistema recusou-se a fornecer uma resposta quando havia dados disponíveis no contexto/metadados."
+        },
+        "latency_ms": 8511
+      },
+      {
+        "id": "bula_009",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.2,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara. Ela fornece informações sobre o mecanismo de ação da amoxicilina + clavulanato, incluindo as funções específicas das duas principais substâncias (amoxicilina e clavulância). A fonte fornecida é relevante e confirma essas afirmações. Não há recusa ou invenção de informações fora do contexto."
+        },
+        "latency_ms": 9581
+      },
+      {
+        "id": "bula_010",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às afirmações do gabarito e está fiel ao contexto fornecido. Ela responde diretamente à pergunta do usuário sobre a função do ácido clavulânico na proteção da amoxicilina contra resistências, sem adicionar informações irrelevantes."
+        },
+        "latency_ms": 8985
+      },
+      {
+        "id": "bula_011",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.25,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 1,
+          "justification": "A resposta gerada inventou uma informação e não respondeu à pergunta do usuário. De acordo com o contexto, a bula cita organismos inerentemente resistentes como Pseudomonas spp., Acinetobacter spp., Mycoplasma spp., entre outros. Portanto, a resposta deve ser considerada incorreta."
+        },
+        "latency_ms": 3209
+      },
+      {
+        "id": "bula_012",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 1.0,
+          "hit_rate_at_1": 1.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário de forma direta e clara, mantendo fiel aos dados fornecidos no contexto. Ela responde especificamente à orientação da bula sobre a administração no início da refeição para minimizar a intolerância gastrointestinal e favorecer sua absorção."
+        },
+        "latency_ms": 9329
+      },
+      {
+        "id": "bula_013",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": false
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, pois ele afirmou que não encontrou a informação nos documentos disponíveis. No entanto, os documentos fornecidos contêm informações sobre o tratamento e sua duração sem revisão. Portanto, a resposta é inapropriada."
+        },
+        "latency_ms": 8046
+      },
+      {
+        "id": "bula_014",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": false,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 0.0,
+          "context_precision_at_2": 0.0,
+          "mrr_at_10": 0.3333333333333333,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 0.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente não atende à pergunta do usuário, pois ela não fornece a informação solicitada e recusa-se a responder. Além disso, os documentos disponíveis contêm informações relevantes para responder à pergunta."
+        },
+        "latency_ms": 10763
+      },
+      {
+        "id": "bula_015",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada inventou uma declaração e não respondeu à pergunta específica do usuário. Ela também recusou responder, o que é incorreto porque a informação solicitada estava disponível nos documentos."
+        },
+        "latency_ms": 6830
+      },
+      {
+        "id": "bula_016",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "fonte_chunk": true,
+          "fonte_pagina": true
+        },
+        "retrieval_metrics": {
+          "context_recall_at_2": 1.0,
+          "context_precision_at_2": 0.5,
+          "mrr_at_10": 0.5,
+          "hit_rate_at_1": 0.0,
+          "hit_rate_at_2": 1.0,
+          "hit_rate_at_5": 1.0,
+          "hit_rate_at_10": 1.0
+        },
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada pelo assistente contém afirmações que não estão presentes no contexto fornecido, como 'náuseas' e 'vômitos', e também menciona distúrbios do equilíbrio hidroeletrolítico de forma genérica sem referência direta ao texto. Além disso, a resposta incluiu uma fonte que não estava presente no contexto fornecido (Fonte 2)."
+        },
+        "latency_ms": 8714
+      },
+      {
+        "id": "paciente_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário, fornecendo informações relevantes presentes no contexto. A resposta é fiel aos fatos contidos nos documentos e não inventa dados ou premissas não presentes."
+        },
+        "latency_ms": 8879
+      },
+      {
+        "id": "paciente_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada inventou diagnósticos (sinusite e sinusite viral) que não estão presentes no contexto fornecido. Ela também omitiu a data de 2019-03-20, o que é uma informação relevante para a pergunta do usuário."
+        },
+        "latency_ms": 2259
+      },
+      {
+        "id": "paciente_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara. Ela fornece o último peso registrado para o paciente, que está diretamente comprovado no contexto recuperado (Fonte: [Prontuário - chunk_012]). A resposta é precisa e completa, sem incluir dados secundários não solicitados pelo usuário."
+        },
+        "latency_ms": 1407
+      },
+      {
+        "id": "paciente_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário fornecendo os dados relevantes encontrados no contexto. Todas as afirmações contidas na resposta gerada são diretamente comprovadas pelo contexto recuperado ou pelos metadados do paciente."
+        },
+        "latency_ms": 2576
+      },
+      {
+        "id": "paciente_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": false,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende às perguntas do usuário fornecendo o nome, gênero e data de nascimento corretamente. Ela é fiel aos dados presentes no contexto recuperado (prontuário). Não há recusa porque a informação solicitada estava disponível nos documentos. A resposta está clara e direta."
+        },
+        "latency_ms": 2027
+      },
+      {
+        "id": "paciente_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo a informação solicitada. A altura registrada foi encontrada no contexto dado. Não há recusa porque o sistema recuperou os dados necessários para responder à pergunta."
+        },
+        "latency_ms": 1693
+      },
+      {
+        "id": "paciente_007",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 0,
+          "refusal_score": 0,
+          "justification": "A resposta gerada inventou dados e não respondeu diretamente à pergunta do usuário. Ela menciona procedimentos que não estão presentes no contexto fornecido, como a reconciliação de medicamentos em 2017-08-03, e também inclui exames gerais sem referência específica no histórico do paciente."
+        },
+        "latency_ms": 1740
+      },
+      {
+        "id": "paciente_008",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true,
+          "tipo_documento_correto": true,
+          "metadados_recuperados": false
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 0,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta gerada pelo assistente é correta em termos de recusa, pois não há dados sobre o status de tabagismo nos documentos disponíveis. A nota de fidelidade é zero porque a resposta inventou uma informação que não está presente no contexto. A nota de relevância é um porque atende à pergunta do usuário de forma direta e clara."
+        },
+        "latency_ms": 950
+      },
+      {
+        "id": "fora_001",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, sem fornecer dados inapropriados. Ela também respeita a recusa quando os documentos não contêm a informação solicitada."
+        },
+        "latency_ms": 934
+      },
+      {
+        "id": "fora_002",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta, clara e compreensível. Ela respondeu adequadamente ao que foi perguntado sem fornecer dados irrelevantes ou inventar informações. O assistente agiu certo ao recusar responder quando a informação solicitada não estava disponível nos documentos disponíveis."
+        },
+        "latency_ms": 990
+      },
+      {
+        "id": "fora_003",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis. Não há informações sobre a capital da Franca nos documentos fornecidos."
+        },
+        "latency_ms": 941
+      },
+      {
+        "id": "fora_004",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis nos documentos. Não há elementos que não estejam presentes no contexto ou metadados fornecidos."
+        },
+        "latency_ms": 2371
+      },
+      {
+        "id": "fora_005",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": false,
+          "termos_obrigatorios": false,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, fornecendo a informação solicitada. Ela é baseada nos dados disponíveis no contexto recuperado da bula de medicamento. Não há recusa porque a informação solicitada estava presente nos documentos. A fidelidade também está completa pois todas as afirmações contidas na resposta gerada são diretamente comprovadas pelo contexto recuperado."
+        },
+        "latency_ms": 2987
+      },
+      {
+        "id": "fora_006",
+        "checks": {
+          "sem_erro": true,
+          "resposta_presente": true,
+          "recusa_esperada": true,
+          "termos_obrigatorios": true,
+          "termos_proibidos": true
+        },
+        "retrieval_metrics": null,
+        "judge_eval": {
+          "faithfulness_score": 1,
+          "relevance_score": 1,
+          "refusal_score": 1,
+          "justification": "A resposta atende à pergunta do usuário de forma direta e clara, respeitando os dados disponíveis. Não há elementos que não estejam presentes no contexto ou metadados fornecidos."
+        },
+        "latency_ms": 2129
+      }
+    ]
+  }
+]
