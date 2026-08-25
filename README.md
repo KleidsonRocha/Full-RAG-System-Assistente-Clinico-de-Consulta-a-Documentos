@@ -287,6 +287,35 @@ No Windows PowerShell, também pode ser executado com:
 .venv\Scripts\python.exe eval\evaluate_rag.py
 ```
 
+## Testes de regressão de configuração
+
+Para validar que uma mudança de configuração não melhora uma métrica degradando
+outra, execute o gate de regressão:
+
+```bash
+python eval/regression.py
+```
+
+No Windows PowerShell:
+
+```powershell
+.venv\Scripts\python.exe eval\regression.py
+```
+
+Esse comando roda o mesmo golden set versionado, calcula as métricas principais
+de recuperação, geração e recusa, e compara o resultado com os limites definidos
+em `eval/regression_config.json`. Se alguma métrica ficar abaixo do mínimo
+configurado ou cair além da tolerância em relação ao baseline, o processo termina
+com código `1`.
+
+O resultado estruturado fica em `eval/regression_results.json` e o resumo em
+`eval/regression_results.md`. Para reaproveitar uma execução já avaliada sem
+chamar o Ollama/RAG novamente, use:
+
+```bash
+python eval/regression.py --rows-json caminho/para/rows.json
+```
+
 ## Resultado atual da avaliação
 
 A avaliação mais recente foi executada com o pipeline FAISS + BM25 + RRF. Os

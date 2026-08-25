@@ -18,6 +18,7 @@ def make_document(chunk_number: int, text: str) -> Document:
         page_content=text,
         metadata={
             "patient_id": "patient-1",
+            "tipo_documento": "prontuario",
             "chunk_number": chunk_number,
             "pagina_origem": chunk_number,
         },
@@ -250,6 +251,7 @@ def test_ask_uses_final_documents_for_context_documents_and_sources():
     assert result["sources"] == [
         {
             "chunk": "chunk_002",
+            "tipo_documento": "prontuario",
             "pagina": 2,
             "medicamento": None,
         }

@@ -6,11 +6,10 @@ import sys
 import time
 import unicodedata
 from pathlib import Path
-from typing import Any
-import matplotlib.pyplot as plt
-import numpy as np
+from typing import TYPE_CHECKING, Any
 
-from eval.llm_as_a_judge.judge import LLMJudge
+if TYPE_CHECKING:
+    from eval.llm_as_a_judge.judge import LLMJudge
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GOLDEN_SET_PATH = PROJECT_ROOT / "eval" / "golden_set.json"
@@ -300,7 +299,7 @@ def evaluate_checks(
 
 
 def evaluate_row(
-    rag: Any, item: dict[str, Any], judge: LLMJudge | None = None, top_k: int = 2
+    rag: Any, item: dict[str, Any], judge: "LLMJudge | None" = None, top_k: int = 2
 ) -> dict[str, Any]:
     started_at = time.perf_counter()
     error = None
@@ -420,6 +419,9 @@ def evaluate_row(
 
 
 def plot_refusal_matrix(rows: list[dict[str, Any]]) -> None:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
     respondeu_correto = 0
     recusou_indevidamente = 0
     respondeu_indevidamente = 0
@@ -709,9 +711,10 @@ def build_report(rows: list[dict[str, Any]], ablation: list[dict[str, Any]] = No
 
 
 def run_evaluation(
-    rag: Any = None, judge: LLMJudge | None = None
+    rag: Any = None, judge: "LLMJudge | None" = None
 ) -> list[dict[str, Any]]:
     from src.pipeline.rag_chain import ClinicalRAG
+    from eval.llm_as_a_judge.judge import LLMJudge
 
     questions = load_golden_set()
     rag_instance = rag or ClinicalRAG()

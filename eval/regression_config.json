@@ -1,0 +1,56 @@
+{
+    "baseline": {
+    "automatic_success_rate": 0.4667,
+    "retrieval_success_rate": 0.4583,
+    "generation_success_rate": 0.6333,
+    "refusal_success_rate": 1.0,
+    "context_recall_at_2": 0.5625,
+    "context_precision_at_2": 0.34375,
+    "hit_rate_at_2": 0.625,
+    "hit_rate_at_5": 0.875,
+    "hit_rate_at_10": 0.875,
+    "mrr_at_10": 0.6458
+  },
+  "thresholds": {
+    "automatic_success_rate": {
+      "min": 0.35,
+      "max_drop": 0.05
+    },
+    "retrieval_success_rate": {
+      "min": 0.4,
+      "max_drop": 0.05
+    },
+    "generation_success_rate": {
+      "min": 0.58,
+      "max_drop": 0.05
+    },
+    "refusal_success_rate": {
+      "min": 1.0,
+      "max_drop": 0.0
+    },
+    "context_recall_at_2": {
+      "min": 0.5,
+      "max_drop": 0.0625
+    },
+    "context_precision_at_2": {
+      "min": 0.3,
+      "max_drop": 0.05
+    },
+    "hit_rate_at_2": {
+      "min": 0.55,
+      "max_drop": 0.075
+    },
+    "hit_rate_at_5": {
+      "min": 0.8,
+      "max_drop": 0.075
+    },
+    "hit_rate_at_10": {
+      "min": 0.8,
+      "max_drop": 0.075
+    },
+    "mrr_at_10": {
+      "min": 0.58,
+      "max_drop": 0.07
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-08-25T14:01:13.174252+00:00",
+  "status": "passed",
+  "summary": {
+    "total_questions": 30,
+    "automatic_questions": 30,
+    "automatic_passed": 14,
+    "automatic_success_rate": 0.4666666666666667,
+    "retrieval_cases": 24,
+    "retrieval_passed": 11,
+    "retrieval_success_rate": 0.4583333333333333,
+    "generation_passed": 19,
+    "generation_success_rate": 0.6333333333333333,
+    "refusal_cases": 6,
+    "refusal_passed": 6,
+    "refusal_success_rate": 1.0,
+    "context_recall_at_2": 0.5625,
+    "context_precision_at_2": 0.34375,
+    "hit_rate_at_1": 0.5,
+    "hit_rate_at_2": 0.625,
+    "hit_rate_at_5": 0.875,
+    "hit_rate_at_10": 0.875,
+    "mrr_at_10": 0.6458333333333334,
+    "avg_latency_ms": 14671.966666666667
+  },
+  "failures": []
+}

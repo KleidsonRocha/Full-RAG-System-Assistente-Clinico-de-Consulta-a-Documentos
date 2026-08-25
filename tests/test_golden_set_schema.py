@@ -97,7 +97,13 @@ def test_patient_metadata_questions_have_metadata_evidence():
 
     assert patient_questions
     for item in patient_questions:
-        assert item["expected_behavior"] == "responder com base nos metadados recuperados"
-        assert item["expected_source_hint"] == "metadata"
-        assert item["expected_metadata_fields"]
+        assert item["expected_behavior"] in {
+            "responder com base nos metadados recuperados",
+            "responder com base no prontuario recuperado",
+        }
+        assert item["expected_source_hint"] in {"metadata", "prontuario"}
+        if item["expected_source_hint"] == "metadata":
+            assert item["expected_metadata_fields"]
+        else:
+            assert item["evidence_quote"].strip()
         assert not item["should_refuse"]
