@@ -17,6 +17,7 @@ def make_document(chunk_number: int, **metadata):
     return SimpleNamespace(
         metadata={
             "patient_id": PATIENT_ID,
+            "tipo_documento": "bula",
             "chunk_number": chunk_number,
             **metadata,
         }
@@ -168,6 +169,34 @@ def test_retrieval_metrics_return_zero_when_relevant_chunk_is_absent():
     assert all(value == 0.0 for value in metrics.values())
 
 
+def test_retrieval_metrics_do_not_match_chunk_from_different_document_type():
+    prontuario_chunk = make_document(3, tipo_documento="prontuario")
+
+    metrics = calculate_retrieval_metrics(
+        [expected_chunk(3)],
+        [prontuario_chunk],
+        [prontuario_chunk],
+        expected_document_type="bula",
+    )
+
+    assert metrics is not None
+    assert all(value == 0.0 for value in metrics.values())
+
+
+def test_retrieval_metrics_match_same_document_type_patient_and_chunk():
+    bula_chunk = make_document(3, tipo_documento="bula")
+
+    metrics = calculate_retrieval_metrics(
+        [expected_chunk(3)],
+        [bula_chunk],
+        [bula_chunk],
+        expected_document_type="bula",
+    )
+
+    assert metrics is not None
+    assert all(value == 1.0 for value in metrics.values())
+
+
 def test_retrieval_metrics_ignore_rows_without_annotated_chunks():
     assert calculate_retrieval_metrics([], [], []) is None
 
@@ -203,6 +232,7 @@ def test_evaluate_row_uses_top_2_context_and_top_10_final_ranking():
         "must_contain": ["resposta"],
         "must_not_contain": [],
         "expected_source_chunks": [expected_chunk(3)],
+        "expected_document_type": "bula",
         "expected_source_pages": [],
         "expected_metadata_fields": [],
     }

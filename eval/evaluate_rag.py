@@ -96,15 +96,18 @@ def evaluate_claim_faithfulness(
     }
 
 
-def _chunk_key_from_identifier(value: Any) -> tuple[str | None, str] | None:
+def _chunk_key_from_identifier(
+    value: Any,
+    document_type: str | None = None,
+) -> tuple[str | None, str | None, str] | None:
     identifier = str(value or "").strip()
     if not identifier:
         return None
 
-    if "::" in identifier:
-        patient_id, chunk_label = identifier.rsplit("::", 1)
-    else:
-        patient_id, chunk_label = None, identifier
+    identifier_parts = identifier.split("::")
+    chunk_label = identifier_parts[-1]
+    identifier_type = identifier_parts[-2] if len(identifier_parts) >= 3 else None
+    patient_id = "::".join(identifier_parts[:-2] if identifier_type else identifier_parts[:-1])
 
     if not chunk_label.startswith("chunk_"):
         return None
@@ -114,12 +117,15 @@ def _chunk_key_from_identifier(value: Any) -> tuple[str | None, str] | None:
     except ValueError:
         pass
 
-    return patient_id or None, chunk_label
+    return patient_id or None, document_type or identifier_type, chunk_label
 
 
-def _document_chunk_key(document: Any) -> tuple[str | None, str] | None:
+def _document_chunk_key(
+    document: Any,
+) -> tuple[str | None, str | None, str] | None:
     metadata = getattr(document, "metadata", {}) or {}
     patient_id = metadata.get("patient_id")
+    document_type = metadata.get("tipo_documento")
     chunk_number = metadata.get("chunk_number")
 
     if chunk_number is not None:
@@ -127,34 +133,42 @@ def _document_chunk_key(document: Any) -> tuple[str | None, str] | None:
             chunk_label = f"chunk_{int(chunk_number):03d}"
         except (TypeError, ValueError):
             chunk_label = str(chunk_number)
-        return str(patient_id) if patient_id not in (None, "") else None, chunk_label
+        return (
+            str(patient_id) if patient_id not in (None, "") else None,
+            str(document_type) if document_type not in (None, "") else None,
+            chunk_label,
+        )
 
-    return _chunk_key_from_identifier(metadata.get("chunk_id"))
+    return _chunk_key_from_identifier(metadata.get("chunk_id"), document_type)
 
 
 def _chunk_keys_match(
-    expected: tuple[str | None, str],
-    returned: tuple[str | None, str],
+    expected: tuple[str | None, str | None, str],
+    returned: tuple[str | None, str | None, str],
 ) -> bool:
-    expected_patient, expected_chunk = expected
-    returned_patient, returned_chunk = returned
+    expected_patient, expected_type, expected_chunk = expected
+    returned_patient, returned_type, returned_chunk = returned
     same_patient = (
         expected_patient is None
         or returned_patient is None
         or expected_patient == returned_patient
     )
-    return same_patient and expected_chunk == returned_chunk
+    same_type = expected_type is None or expected_type == returned_type
+    return same_patient and same_type and expected_chunk == returned_chunk
 
 
 def calculate_retrieval_metrics(
     expected_chunk_ids: list[str],
     context_documents: list[Any],
     ranked_documents: list[Any],
+    expected_document_type: str | None = None,
 ) -> dict[str, float] | None:
     expected_keys = {
         key
         for chunk_id in expected_chunk_ids
-        if (key := _chunk_key_from_identifier(chunk_id)) is not None
+        if (
+            key := _chunk_key_from_identifier(chunk_id, expected_document_type)
+        ) is not None
     }
     if not expected_keys:
         return None
@@ -334,6 +348,7 @@ def evaluate_row(
         expected_chunk_ids,
         documents,
         ranked_documents,
+        item.get("expected_document_type"),
     )
 
     retrieved_texts = []
